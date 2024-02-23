@@ -19,7 +19,7 @@ namespace CalendarCodeTests
     //        // Arrange
 
     //        // Act
-    //        HomeCalendar homeCalendar  = new HomeCalendar("abc.txt");
+    //        HomeCalendar homeCalendar  = new HomeCalendar("abc.db");
 
     //        // Assert 
     //        Assert.IsType<HomeCalendar>(homeCalendar);
