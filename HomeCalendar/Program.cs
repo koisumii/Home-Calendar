@@ -9,7 +9,7 @@ namespace HomeCalendar
         {
 
             //conecting to db 
-            Database.newDatabase("C:\\Users\\2232607\\OneDrive - John Abbott College\\app dev\\HomeCalendar\\HomeCalendar\\testDBInput");
+            Database.newDatabase("C:\\Users\\2232607\\OneDrive - John Abbott College\\app dev\\HomeCalendar\\HomeCalendar\\testDBInput.db");
 
         }
     }
