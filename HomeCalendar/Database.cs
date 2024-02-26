@@ -38,20 +38,38 @@ namespace Calendar
 
         // ===================================================================
         // create and open a new database
+        // filename: full file path to the database file
         // ===================================================================
         public static void newDatabase(string filename)
         {
-
             // If there was a database open before, close it and release the lock
             CloseDatabaseAndReleaseFile();
 
             // your code
+            //connecting and opening to the db 
+            string cs = @"URI=file:"+filename;
+            using var con = new SQLiteConnection(cs);
+            con.Open();
+
+            //put this inside a method 
+            using var cmd = new SQLiteCommand(con);
+            cmd.CommandText = @"CREATE TABLE category_types(id INT PRIMARY KEY, description TEXT);";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE categories(id INT PRIMARY KEY, description TEXT, type_id INT FOREIGN KEY REFERENCES category_types(id));";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE events(id INT PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes DOUBLE, category_id INT FOREIGN KEY REFERENCES categories(id));";
+            cmd.ExecuteNonQuery();
+
+            //populate the tables 
+            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method 
         }
 
-       // ===================================================================
-       // open an existing database
-       // ===================================================================
-       public static void existingDatabase(string filename)
+        // ===================================================================
+        // open an existing database
+        // ===================================================================
+        public static void existingDatabase(string filename)
         {
 
             CloseDatabaseAndReleaseFile();
