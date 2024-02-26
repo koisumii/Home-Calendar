@@ -184,6 +184,7 @@ namespace Calendar
             var query =  from c in _categories.List()
                         join e in _events.List() on c.Id equals e.Category
                         where e.StartDateTime >= Start && e.StartDateTime <= End
+                        orderby e.StartDateTime
                         select new { CatId = c.Id, EventId = e.Id, e.StartDateTime, Category = c.Description, e.Details, e.DurationInMinutes };
 
             // ------------------------------------------------------------------------
@@ -264,7 +265,7 @@ namespace Calendar
         // ============================================================================
         // Group all events by category (ordered by category name)
         // ============================================================================
-        public List<CalendarItemsByCategory> GeCalendarItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<CalendarItemsByCategory> GetCalendarItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
             // get all items first

@@ -29,7 +29,7 @@ namespace CalendarCodeTests
             CalendarItemsByCategory firstRecord = TestConstants.CalendarItemsByCategory_FirstRecord;
 
             // Act
-            List<CalendarItemsByCategory> CalendarItemsByCategory = homeCalendar.GeCalendarItemsByCategory(null, null, false, 9);
+            List<CalendarItemsByCategory> CalendarItemsByCategory = homeCalendar.GetCalendarItemsByCategory(null, null, false, 9);
             CalendarItemsByCategory firstRecordTest = CalendarItemsByCategory[0];
 
             // Assert
