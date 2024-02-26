@@ -46,9 +46,9 @@ namespace Calendar
             CloseDatabaseAndReleaseFile();
 
             // your code
-            //connecting and opening to the db 
+            //connecting to the db and opening it  
             string cs = @"URI=file:"+filename+ "; Foreign Keys=1\";";
-            using var con = new SQLiteConnection(cs);
+            var con = new SQLiteConnection(cs);
             con.Open();
 
             //put this inside a method 
@@ -71,6 +71,8 @@ namespace Calendar
             //populating categories table 
             PopulateCategoriesTable(cmd);
 
+            //now populating the events table 
+            PopulateEventsTable(cmd);
         }
 
         // ===================================================================
@@ -78,31 +80,51 @@ namespace Calendar
         // ===================================================================
         public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
         {
-            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", "Event"); //i feel like this is wrong
+            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method
+            /*cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Event.ToString()); //i feel like this is wrong
             cmd.Prepare();
-            cmd.ExecuteNonQuery(); //row inserted
+            cmd.ExecuteNonQuery(); 
 
             cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", "AllDayEvent");
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.AllDayEvent.ToString());
             cmd.Prepare();
-            cmd.ExecuteNonQuery(); //row inserted
+            cmd.ExecuteNonQuery(); 
 
             cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", "Holiday");
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Holiday.ToString());
             cmd.Prepare();
-            cmd.ExecuteNonQuery(); //row inserted
+            cmd.ExecuteNonQuery();*/
         }
 
+        // ===================================================================
+        // 
+        // ===================================================================
         public static void PopulateCategoriesTable(SQLiteCommand cmd) 
         {
-            Categories c1 = new Categories(); //this would be the default categories ?
+            /*Categories c1 = new Categories(); //this would be the default categories ?
             List<Category> categoriesList = c1.List();
 
             for(int i = 0; i < categoriesList.Count; i++) 
-            { 
-                
-            }
+            {
+                cmd.CommandText = $"INSERT INTO categories(description, type_id) VALUES(@description, @type_id);";
+                cmd.Parameters.AddWithValue("@description", categoriesList[i].Description);
+                cmd.Parameters.AddWithValue("@type_id", categoriesList[i].Type.ToString());
+                cmd.Prepare();
+                cmd.ExecuteNonQuery(); //row inserted
+            }*/
+            Categories c1 = new Categories();
+            c1.SetCategoriesToDefaults();
+
+        }
+
+        public static void PopulateEventsTable(SQLiteCommand cmd) 
+        { 
+            /*Events e1 = new Events();
+            List<Event> eventsList = e1.List();
+
+            //testing date 
+            eventsList[0].StartDateTime.ToString("yyyy-MM-dd");*/
         }
 
         // ===================================================================
