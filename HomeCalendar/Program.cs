@@ -1,4 +1,4 @@
-﻿namespace HomeCalendar
+﻿namespace Calendar
 {
     internal class Program
     {
