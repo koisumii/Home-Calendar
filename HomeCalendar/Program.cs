@@ -9,10 +9,8 @@ namespace HomeCalendar
         {
 
             //conecting to db 
-            Database.newDatabase("C:\\Users\\2232607\\OneDrive - John Abbott College\\app dev\\HomeCalendar\\HomeCalendar\\testDBInput.db");
+            Database.newDatabase("C:\\Users\\2232607\\OneDrive - John Abbott College\\app dev\\HomeCalendar\\Milestone3_tests\\testDBInput.db");
 
-            //Categories c1 = new Categories();
-            //c1.SetCategoriesToDefaults();
         }
     }
 }

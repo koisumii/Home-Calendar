@@ -54,9 +54,6 @@ namespace Calendar
             //put this inside a method 
             using var cmd = new SQLiteCommand(con);
 
-            //cmd.CommandText = "SET FOREIGN_KEY_CHECKS=0; ";
-            //cmd.ExecuteNonQuery();
-
             var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", con);
             pragmaOff.ExecuteNonQuery();
 
@@ -97,10 +94,10 @@ namespace Calendar
         // ===================================================================
         // 
         // ===================================================================
-        public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
+        /*public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
         {
             //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method
-            /*cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
+            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
             cmd.Parameters.AddWithValue("@description", Category.CategoryType.Event.ToString()); //i feel like this is wrong
             cmd.Prepare();
             cmd.ExecuteNonQuery(); 
@@ -113,15 +110,15 @@ namespace Calendar
             cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
             cmd.Parameters.AddWithValue("@description", Category.CategoryType.Holiday.ToString());
             cmd.Prepare();
-            cmd.ExecuteNonQuery();*/
-        }
+            cmd.ExecuteNonQuery();
+        }*/
 
         // ===================================================================
         // 
         // ===================================================================
-        public static void PopulateCategoriesTable(SQLiteCommand cmd) 
+        /*public static void PopulateCategoriesTable(SQLiteCommand cmd) 
         {
-            /*Categories c1 = new Categories(); //this would be the default categories ?
+            Categories c1 = new Categories(); //this would be the default categories ?
             List<Category> categoriesList = c1.List();
 
             for(int i = 0; i < categoriesList.Count; i++) 
@@ -133,18 +130,18 @@ namespace Calendar
                 cmd.ExecuteNonQuery(); //row inserted
             }
             Categories c1 = new Categories();
-            c1.SetCategoriesToDefaults();*/
+            c1.SetCategoriesToDefaults();
 
-        }
+        }*/
 
-        public static void PopulateEventsTable(SQLiteCommand cmd) 
+        /*public static void PopulateEventsTable(SQLiteCommand cmd) 
         { 
-            /*Events e1 = new Events();
+            Events e1 = new Events();
             List<Event> eventsList = e1.List();
 
             //testing date 
-            eventsList[0].StartDateTime.ToString("yyyy-MM-dd");*/
-        }
+            eventsList[0].StartDateTime.ToString("yyyy-MM-dd");
+        }*/
 
         // ===================================================================
         // open an existing database
