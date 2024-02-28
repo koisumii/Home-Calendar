@@ -46,25 +46,39 @@ namespace Calendar
             CloseDatabaseAndReleaseFile();
 
             // your code
-            //connecting and opening to the db 
-            string cs = @"URI=file:"+filename;
-            using var con = new SQLiteConnection(cs);
+            //connecting to the db and opening it  
+            string cs = $"Data Source={filename}; Foreign Keys=1";
+            var con = new SQLiteConnection(cs);
             con.Open();
 
             //put this inside a method 
             using var cmd = new SQLiteCommand(con);
-            cmd.CommandText = @"CREATE TABLE category_types(id INT PRIMARY KEY, description TEXT);";
+
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", con);
+            pragmaOff.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS category_types";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE categories(id INT PRIMARY KEY, description TEXT, type_id INT FOREIGN KEY REFERENCES category_types(id));";
+            cmd.CommandText = "DROP TABLE IF EXISTS categories";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE events(id INT PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes DOUBLE, category_id INT FOREIGN KEY REFERENCES categories(id));";
+            cmd.CommandText = "DROP TABLE IF EXISTS events";
             cmd.ExecuteNonQuery();
 
-            //populate the tables 
-            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method 
+            var pragmaOn = new SQLiteCommand("PRAGMA foreign_keys=ON", con);
+            pragmaOn.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE category_types(id INTEGER PRIMARY KEY, description TEXT);";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE categories(id INTEGER PRIMARY KEY, description TEXT, type_id INT NOT NULL, FOREIGN KEY(type_id) REFERENCES category_types(id));";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id));";
+            cmd.ExecuteNonQuery();
         }
+        
 
         // ===================================================================
         // open an existing database
