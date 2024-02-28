@@ -1,5 +1,3 @@
-﻿namespace Calendar
-=======
 ﻿using Calendar;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
