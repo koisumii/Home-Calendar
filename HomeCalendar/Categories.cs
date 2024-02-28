@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.IO;
 using System.Xml;
+using System.Data.Common;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -23,6 +24,8 @@ namespace Calendar
         private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
+        private DbConnection _dbconnection;
+        private bool _newDB;
 
         // ====================================================================
         // Properties
@@ -36,6 +39,10 @@ namespace Calendar
         public Categories()
         {
             SetCategoriesToDefaults();
+        }
+
+        public Categories(DbConnection dbconnection, bool newDB)
+        {
         }
 
         // ====================================================================
