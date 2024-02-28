@@ -1,15 +1,14 @@
-﻿using Calendar;
+using Calendar;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
-namespace HomeCalendar
+namespace Calendar;
+
+internal class Program
 {
-    internal class Program
+    static void Main(string[] args)
     {
-        static void Main(string[] args)
-        {
 
-            
+        
 
-        }
     }
 }
