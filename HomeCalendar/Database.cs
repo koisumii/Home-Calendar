@@ -47,32 +47,51 @@ namespace Calendar
 
             // your code
             //connecting to the db and opening it  
-            string cs = @"URI=file:"+filename+ "; Foreign Keys=1\";";
+            string cs = $"Data Source={filename}; Foreign Keys=1";
             var con = new SQLiteConnection(cs);
             con.Open();
 
             //put this inside a method 
             using var cmd = new SQLiteCommand(con);
+
+            //cmd.CommandText = "SET FOREIGN_KEY_CHECKS=0; ";
+            //cmd.ExecuteNonQuery();
+
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", con);
+            pragmaOff.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS category_types";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS categories";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS events";
+            cmd.ExecuteNonQuery();
+
+            var pragmaOn = new SQLiteCommand("PRAGMA foreign_keys=ON", con);
+            pragmaOn.ExecuteNonQuery();
+
             cmd.CommandText = @"CREATE TABLE category_types(id INTEGER PRIMARY KEY, description TEXT);";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE categories(id INTEGER PRIMARY KEY, description TEXT, type_id INT FOREIGN KEY REFERENCES category_types(id));";
+            cmd.CommandText = @"CREATE TABLE categories(id INTEGER PRIMARY KEY, description TEXT, type_id INT NOT NULL, FOREIGN KEY(type_id) REFERENCES category_types(id));";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT FOREIGN KEY REFERENCES categories(id));";
+            cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id));";
             cmd.ExecuteNonQuery();
 
             //populate the tables 
             //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method 
 
             //put this in a method, possibly inside a loop? loop over the enum?
-            PopulateCategoriesTypeTable(cmd);
+            //PopulateCategoriesTypeTable(cmd);
 
             //populating categories table 
-            PopulateCategoriesTable(cmd);
+            //PopulateCategoriesTable(cmd);
 
             //now populating the events table 
-            PopulateEventsTable(cmd);
+            //PopulateEventsTable(cmd);
         }
 
         // ===================================================================
@@ -112,9 +131,9 @@ namespace Calendar
                 cmd.Parameters.AddWithValue("@type_id", categoriesList[i].Type.ToString());
                 cmd.Prepare();
                 cmd.ExecuteNonQuery(); //row inserted
-            }*/
+            }
             Categories c1 = new Categories();
-            c1.SetCategoriesToDefaults();
+            c1.SetCategoriesToDefaults();*/
 
         }
 
