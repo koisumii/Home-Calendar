@@ -77,71 +77,8 @@ namespace Calendar
 
             cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id));";
             cmd.ExecuteNonQuery();
-
-            //populate the tables 
-            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method 
-
-            //put this in a method, possibly inside a loop? loop over the enum?
-            //PopulateCategoriesTypeTable(cmd);
-
-            //populating categories table 
-            //PopulateCategoriesTable(cmd);
-
-            //now populating the events table 
-            //PopulateEventsTable(cmd);
         }
-
-        // ===================================================================
-        // 
-        // ===================================================================
-        /*public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
-        {
-            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method
-            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Event.ToString()); //i feel like this is wrong
-            cmd.Prepare();
-            cmd.ExecuteNonQuery(); 
-
-            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", Category.CategoryType.AllDayEvent.ToString());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery(); 
-
-            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Holiday.ToString());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-        }*/
-
-        // ===================================================================
-        // 
-        // ===================================================================
-        /*public static void PopulateCategoriesTable(SQLiteCommand cmd) 
-        {
-            Categories c1 = new Categories(); //this would be the default categories ?
-            List<Category> categoriesList = c1.List();
-
-            for(int i = 0; i < categoriesList.Count; i++) 
-            {
-                cmd.CommandText = $"INSERT INTO categories(description, type_id) VALUES(@description, @type_id);";
-                cmd.Parameters.AddWithValue("@description", categoriesList[i].Description);
-                cmd.Parameters.AddWithValue("@type_id", categoriesList[i].Type.ToString());
-                cmd.Prepare();
-                cmd.ExecuteNonQuery(); //row inserted
-            }
-            Categories c1 = new Categories();
-            c1.SetCategoriesToDefaults();
-
-        }*/
-
-        /*public static void PopulateEventsTable(SQLiteCommand cmd) 
-        { 
-            Events e1 = new Events();
-            List<Event> eventsList = e1.List();
-
-            //testing date 
-            eventsList[0].StartDateTime.ToString("yyyy-MM-dd");
-        }*/
+        
 
         // ===================================================================
         // open an existing database
