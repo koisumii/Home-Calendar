@@ -46,25 +46,102 @@ namespace Calendar
             CloseDatabaseAndReleaseFile();
 
             // your code
-            //connecting and opening to the db 
-            string cs = @"URI=file:"+filename;
-            using var con = new SQLiteConnection(cs);
+            //connecting to the db and opening it  
+            string cs = $"Data Source={filename}; Foreign Keys=1";
+            var con = new SQLiteConnection(cs);
             con.Open();
 
             //put this inside a method 
             using var cmd = new SQLiteCommand(con);
-            cmd.CommandText = @"CREATE TABLE category_types(id INT PRIMARY KEY, description TEXT);";
+
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", con);
+            pragmaOff.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS category_types";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE categories(id INT PRIMARY KEY, description TEXT, type_id INT FOREIGN KEY REFERENCES category_types(id));";
+            cmd.CommandText = "DROP TABLE IF EXISTS categories";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE events(id INT PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes DOUBLE, category_id INT FOREIGN KEY REFERENCES categories(id));";
+            cmd.CommandText = "DROP TABLE IF EXISTS events";
+            cmd.ExecuteNonQuery();
+
+            var pragmaOn = new SQLiteCommand("PRAGMA foreign_keys=ON", con);
+            pragmaOn.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE category_types(id INTEGER PRIMARY KEY, description TEXT);";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE categories(id INTEGER PRIMARY KEY, description TEXT, type_id INT NOT NULL, FOREIGN KEY(type_id) REFERENCES category_types(id));";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id));";
             cmd.ExecuteNonQuery();
 
             //populate the tables 
             //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method 
+
+            //put this in a method, possibly inside a loop? loop over the enum?
+            //PopulateCategoriesTypeTable(cmd);
+
+            //populating categories table 
+            //PopulateCategoriesTable(cmd);
+
+            //now populating the events table 
+            //PopulateEventsTable(cmd);
         }
+
+        // ===================================================================
+        // 
+        // ===================================================================
+        /*public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
+        {
+            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method
+            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Event.ToString()); //i feel like this is wrong
+            cmd.Prepare();
+            cmd.ExecuteNonQuery(); 
+
+            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.AllDayEvent.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery(); 
+
+            cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Holiday.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+        }*/
+
+        // ===================================================================
+        // 
+        // ===================================================================
+        /*public static void PopulateCategoriesTable(SQLiteCommand cmd) 
+        {
+            Categories c1 = new Categories(); //this would be the default categories ?
+            List<Category> categoriesList = c1.List();
+
+            for(int i = 0; i < categoriesList.Count; i++) 
+            {
+                cmd.CommandText = $"INSERT INTO categories(description, type_id) VALUES(@description, @type_id);";
+                cmd.Parameters.AddWithValue("@description", categoriesList[i].Description);
+                cmd.Parameters.AddWithValue("@type_id", categoriesList[i].Type.ToString());
+                cmd.Prepare();
+                cmd.ExecuteNonQuery(); //row inserted
+            }
+            Categories c1 = new Categories();
+            c1.SetCategoriesToDefaults();
+
+        }*/
+
+        /*public static void PopulateEventsTable(SQLiteCommand cmd) 
+        { 
+            Events e1 = new Events();
+            List<Event> eventsList = e1.List();
+
+            //testing date 
+            eventsList[0].StartDateTime.ToString("yyyy-MM-dd");
+        }*/
 
         // ===================================================================
         // open an existing database
