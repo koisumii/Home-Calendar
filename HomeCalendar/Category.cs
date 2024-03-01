@@ -22,8 +22,8 @@ namespace Calendar
         // Properties
         // ====================================================================
         public int Id { get; }
-        public String Description { get; private set; }
-        public CategoryType Type { get; private set; }
+        public String Description { get; }
+        public CategoryType Type { get; }
         public enum CategoryType
         {
             Event,

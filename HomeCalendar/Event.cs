@@ -21,10 +21,10 @@ namespace Calendar
         // Properties
         // ====================================================================
         public int Id { get; }
-        public DateTime StartDateTime { get;  }
-        public Double DurationInMinutes { get; private set; }
-        public String Details { get; private set; }
-        public int Category { get; private set; }
+        public DateTime StartDateTime { get; }
+        public Double DurationInMinutes { get; set; }
+        public String Details { get; set;  }
+        public int Category { get; set;  }
 
         // ====================================================================
         // Constructor
