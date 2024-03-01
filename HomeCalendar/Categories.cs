@@ -43,6 +43,39 @@ namespace Calendar
 
         public Categories(DbConnection dbconnection, bool newDB)
         {
+            _dbconnection = dbconnection;
+            _newDB = newDB;
+
+            if (newDB)
+            {
+                SetCategoriesToDefaults();
+            }
+            else
+            {
+                GetCategoriesFromDB();
+            }
+        }
+        private void GetCategoriesFromDB()
+        {
+            _dbconnection.Open();
+            using (DbCommand cmd = _dbconnection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT id, description, type_id FROM categories";
+
+                using(DbDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int catId = (int)reader["id"];
+                        string catDescription = reader["description"].ToString();
+                        int typeId = (int)reader["type_id"];
+
+
+                        Category.CategoryType catType = (Category.CategoryType)typeId;
+                        Add(new Category(catId, catDescription, catType));
+                    }
+                }
+            }
         }
 
         // ====================================================================
