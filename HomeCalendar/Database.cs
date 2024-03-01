@@ -38,20 +38,52 @@ namespace Calendar
 
         // ===================================================================
         // create and open a new database
+        // filename: full file path to the database file
         // ===================================================================
         public static void newDatabase(string filename)
         {
-
             // If there was a database open before, close it and release the lock
             CloseDatabaseAndReleaseFile();
 
             // your code
-        }
+            //connecting to the db and opening it  
+            string cs = $"Data Source={filename}; Foreign Keys=1";
+            var con = new SQLiteConnection(cs);
+            con.Open();
 
-       // ===================================================================
-       // open an existing database
-       // ===================================================================
-       public static void existingDatabase(string filename)
+            //put this inside a method 
+            using var cmd = new SQLiteCommand(con);
+
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", con);
+            pragmaOff.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS category_types";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS categories";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "DROP TABLE IF EXISTS events";
+            cmd.ExecuteNonQuery();
+
+            var pragmaOn = new SQLiteCommand("PRAGMA foreign_keys=ON", con);
+            pragmaOn.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE category_types(id INTEGER PRIMARY KEY, description TEXT);";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE categories(id INTEGER PRIMARY KEY, description TEXT, type_id INT NOT NULL, FOREIGN KEY(type_id) REFERENCES category_types(id));";
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id));";
+            cmd.ExecuteNonQuery();
+        }
+        
+
+        // ===================================================================
+        // open an existing database
+        // ===================================================================
+        public static void existingDatabase(string filename)
         {
 
             CloseDatabaseAndReleaseFile();
