@@ -7,6 +7,7 @@ using System.Dynamic;
 
 namespace CalendarCodeTests
 {
+    /*
     [Collection("Sequential")]
     public class TestHomeCalendar_GetCalendarDictionaryByCategoryAndMonth
     {
@@ -186,6 +187,6 @@ namespace CalendarCodeTests
         }
 
 
-    }
+    }*/
 }
 

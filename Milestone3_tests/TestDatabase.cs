@@ -262,7 +262,7 @@ namespace CalendarCodeTests
             // open, add some stuff to the database directly, then
             // close it.
             Database.newDatabase(path + "\\" + filename);
-            var cmd = new SQLiteCommand(Database.dbConnection);
+            var cmd = new SQLiteCommand(Database.dbConnection);//returns null
 
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES('Whatever')";
             cmd.ExecuteNonQuery();

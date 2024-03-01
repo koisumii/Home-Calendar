@@ -78,9 +78,6 @@ namespace Calendar
             cmd.CommandText = @"CREATE TABLE events(id INTEGER PRIMARY KEY, start_date_time TEXT, details TEXT, duration_in_minutes REAL, category_id INT NOT NULL, FOREIGN KEY(category_id) REFERENCES categories(id));";
             cmd.ExecuteNonQuery();
 
-            //populate the tables 
-            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method 
-
             //put this in a method, possibly inside a loop? loop over the enum?
             PopulateCategoriesTypeTable(cmd);
 
@@ -93,9 +90,8 @@ namespace Calendar
 
         public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
         {
-            //there is supposed to be a method that gets all the categories and the events and we populate the tables with that method
             cmd.CommandText = "INSERT INTO category_types(description) VALUES(@description);";
-            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Event.ToString()); //i feel like this is wrong
+            cmd.Parameters.AddWithValue("@description", Category.CategoryType.Event.ToString()); 
             cmd.Prepare();
             cmd.ExecuteNonQuery();
 
@@ -119,7 +115,7 @@ namespace Calendar
         
         public static void PopulateCategoriesTable(SQLiteCommand cmd) 
         {
-            Categories c1 = new Categories(); //this would be the default categories ?
+            Categories c1 = new Categories(); 
             c1.SetCategoriesToDefaults();
             List<Category> categoriesList = c1.List();
 
