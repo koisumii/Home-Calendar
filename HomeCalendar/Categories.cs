@@ -4,6 +4,7 @@ using System.Linq;
 using System.IO;
 using System.Xml;
 using System.Data.Common;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -24,8 +25,7 @@ namespace Calendar
         private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
-        private DbConnection _dbconnection;
-        private bool _newDB;
+        private SQLiteConnection dbConnection;
 
         // ====================================================================
         // Properties
@@ -41,8 +41,30 @@ namespace Calendar
             SetCategoriesToDefaults();
         }
 
-        public Categories(DbConnection dbconnection, bool newDB)
+        public Categories(SQLiteConnection dbConnection, bool newDB)
         {
+            // Use flag to determine whether to load categories from the/existing database or set them to defaults
+            if (!newDB)
+            {
+                dbConnection.Open();
+                string query = "SELECT Id, Description, Type FROM Categories ORDER BY Id";
+                var cmd = new SQLiteCommand(query, dbConnection);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    string description = reader.GetString(1);
+                    if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
+                    {
+                        _Categories.Add(new Category(id, description, categoryType));
+                    }
+                }
+                dbConnection.Close();
+            }
+            else
+            {
+                SetCategoriesToDefaults();
+            }
         }
 
         // ====================================================================
@@ -172,6 +194,29 @@ namespace Calendar
             _Categories.Add(new Category(new_num, desc, type));
         }
 
+        public void UpdateCategory(int id, string newDescription, Category.CategoryType newType)
+        {
+            int index = _Categories.FindIndex(c => c.Id == id);
+            if(index == -1)
+            {
+                throw new Exception("Category with ID of: {id} was not found! =(");
+            }
+            using var cmd = new SQLiteCommand(dbConnection);
+            dbConnection.Open();
+            cmd.CommandText = "UPDATE Categories SET Description = @newDescription, Type = @newType WHERE Id = @Id";
+            // used to assign actual values to these placeholders
+            // the placeholders in the SQL query above will be replaced with the value of these variables
+            cmd.Parameters.AddWithValue("@newDescription", newDescription); 
+            cmd.Parameters.AddWithValue("@newType", newType.ToString());
+            cmd.Parameters.AddWithValue("@Id", id);
+
+            cmd.ExecuteNonQuery();
+
+            dbConnection.Close();
+
+            //should check if update failed and no category was updated? row = 0
+        }
+
         // ====================================================================
         // Delete category
         // ====================================================================
@@ -242,6 +287,7 @@ namespace Calendar
             }
 
         }
+
 
 
         // ====================================================================
