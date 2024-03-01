@@ -69,6 +69,7 @@ namespace Calendar
             _events = new Events();
             ReadFromFile(calendarFileName);
         }
+        //remove all xml
         public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
         {
             if (!newDB && File.Exists(databaseFile))

@@ -21,7 +21,7 @@ namespace Calendar
     public class Categories
     {
         private static String DefaultFileName = "calendarCategories.txt";
-        private List<Category> _Categories = new List<Category>();
+        //private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
         private DbConnection _dbconnection;
@@ -43,33 +43,39 @@ namespace Calendar
 
         public Categories(DbConnection dbconnection, bool newDB)
         {
+            //clear the categories list
+            //_Categories.Clear();
+
             _dbconnection = dbconnection;
             _newDB = newDB;
 
+            //if there is an existing db
             if (newDB)
             {
                 SetCategoriesToDefaults();
             }
-            else
-            {
-                GetCategoriesFromDB();
-            }
+            //if there isn't a db use the default categories.
+           // else
+            //{
+            //    SetCategoriesToDefaults();
+            //}
         }
-        private void GetCategoriesFromDB()
+        
+        //retrieves category information from db and makes new Categories instances with it.
+        private void SetCategoriesUsingDB()
         {
             _dbconnection.Open();
             using (DbCommand cmd = _dbconnection.CreateCommand())
             {
                 cmd.CommandText = "SELECT id, description, type_id FROM categories";
 
-                using(DbDataReader reader = cmd.ExecuteReader())
+                using (DbDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         int catId = (int)reader["id"];
                         string catDescription = reader["description"].ToString();
                         int typeId = (int)reader["type_id"];
-
 
                         Category.CategoryType catType = (Category.CategoryType)typeId;
                         Add(new Category(catId, catDescription, catType));
