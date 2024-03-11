@@ -105,7 +105,7 @@ namespace CalendarCodeTests
             // Arrange
             string path = TestConstants.GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "id", "category_id", "duration_in_minutes", "start_date_time", "details" }; //original: { "Id", "CategoryId", "DurationInMinutes", "StartDateTime", "Details" }
+            List<String> columns = new List<string>() { "Id", "CategoryId", "DurationInMinutes", "StartDateTime", "Details" }; //original: { "Id", "CategoryId", "DurationInMinutes", "StartDateTime", "Details" }
 
             // Act
             Database.newDatabase(path + "\\" + filename);
@@ -133,7 +133,7 @@ namespace CalendarCodeTests
             // Arrange
             string path = TestConstants.GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "id", "description", "type_id" }; // original: { "Id", "Description", "TypeId" }
+            List<String> columns = new List<string>() { "Id", "Description", "TypeId" }; // original: { "Id", "Description", "TypeId" }
 
             // Act
             Database.newDatabase(path + "\\" + filename);
@@ -161,13 +161,13 @@ namespace CalendarCodeTests
             // Arrange
             string path = TestConstants.GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "id", "description" }; //original: { "Id", "Description" }
+            List<String> columns = new List<string>() { "Id", "Description" }; //original: { "Id", "Description" }
 
             // Act
             Database.newDatabase(path + "\\" + filename);
 
             // Assert
-            string cmd = " \".mode list\" \"pragma table_info(category_types)\""; //original: pragma table_info(categoryTypes)\"
+            string cmd = " \".mode list\" \"pragma table_info(categoryTypes)\""; //original: pragma table_info(categoryTypes)\"
             List<String> DatabaseOutput = DatabaseCommandLine.ExecuteAndReturnOutput(path + "\\" + filename + cmd);
             if (DatabaseOutput.Count < 1)
             {
