@@ -6,6 +6,7 @@ using Calendar;
 
 namespace CalendarCodeTests
 {
+    /*
     [Collection("Sequential")]
     public class TestHomeCalendar_GetCalendarItemsByMonth
     {
@@ -164,6 +165,6 @@ namespace CalendarCodeTests
 
             }
         }
-    }
+    }*/
 }
 

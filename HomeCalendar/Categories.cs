@@ -5,6 +5,7 @@ using System.IO;
 using System.Xml;
 using System.Data.Common;
 using System.Data.SQLite;
+
 using System.Data;
 
 
@@ -27,8 +28,7 @@ namespace Calendar
         private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
-        private DbConnection _dbconnection;
-        private bool _newDB;
+        private SQLiteConnection dbConnection;
 
         // ====================================================================
         // Properties
@@ -100,6 +100,7 @@ namespace Calendar
                         Add(new Category(catId, catDescription, catType));
                     }
                 }
+
 
 
             }
@@ -232,6 +233,29 @@ namespace Calendar
             _Categories.Add(new Category(new_num, desc, type));
         }
 
+        public void UpdateCategory(int id, string newDescription, Category.CategoryType newType)
+        {
+            int index = _Categories.FindIndex(c => c.Id == id);
+            if(index == -1)
+            {
+                throw new Exception("Category with ID of: {id} was not found! =(");
+            }
+            using var cmd = new SQLiteCommand(dbConnection);
+            dbConnection.Open();
+            cmd.CommandText = "UPDATE Categories SET Description = @newDescription, Type = @newType WHERE Id = @Id";
+            // used to assign actual values to these placeholders
+            // the placeholders in the SQL query above will be replaced with the value of these variables
+            cmd.Parameters.AddWithValue("@newDescription", newDescription); 
+            cmd.Parameters.AddWithValue("@newType", newType.ToString());
+            cmd.Parameters.AddWithValue("@Id", id);
+
+            cmd.ExecuteNonQuery();
+
+            dbConnection.Close();
+
+            //should check if update failed and no category was updated? row = 0
+        }
+
         // ====================================================================
         // Delete category
         // ====================================================================
@@ -302,6 +326,7 @@ namespace Calendar
             }
 
         }
+
 
 
         // ====================================================================

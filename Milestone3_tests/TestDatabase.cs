@@ -105,7 +105,7 @@ namespace CalendarCodeTests
             // Arrange
             string path = TestConstants.GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "Id", "CategoryId", "DurationInMinutes", "StartDateTime", "Details" };
+            List<String> columns = new List<string>() { "Id", "CategoryId", "DurationInMinutes", "StartDateTime", "Details" }; //original: { "Id", "CategoryId", "DurationInMinutes", "StartDateTime", "Details" }
 
             // Act
             Database.newDatabase(path + "\\" + filename);
@@ -133,7 +133,7 @@ namespace CalendarCodeTests
             // Arrange
             string path = TestConstants.GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "Id", "Description", "TypeId" };
+            List<String> columns = new List<string>() { "Id", "Description", "TypeId" }; // original: { "Id", "Description", "TypeId" }
 
             // Act
             Database.newDatabase(path + "\\" + filename);
@@ -161,13 +161,13 @@ namespace CalendarCodeTests
             // Arrange
             string path = TestConstants.GetSolutionDir();
             string filename = "newdb.db";
-            List<String> columns = new List<string>() { "Id", "Description" };
+            List<String> columns = new List<string>() { "Id", "Description" }; //original: { "Id", "Description" }
 
             // Act
             Database.newDatabase(path + "\\" + filename);
 
             // Assert
-            string cmd = " \".mode list\" \"pragma table_info(categoryTypes)\"";
+            string cmd = " \".mode list\" \"pragma table_info(categoryTypes)\""; //original: pragma table_info(categoryTypes)\"
             List<String> DatabaseOutput = DatabaseCommandLine.ExecuteAndReturnOutput(path + "\\" + filename + cmd);
             if (DatabaseOutput.Count < 1)
             {
@@ -262,7 +262,7 @@ namespace CalendarCodeTests
             // open, add some stuff to the database directly, then
             // close it.
             Database.newDatabase(path + "\\" + filename);
-            var cmd = new SQLiteCommand(Database.dbConnection);
+            var cmd = new SQLiteCommand(Database.dbConnection);//returns null
 
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES('Whatever')";
             cmd.ExecuteNonQuery();
