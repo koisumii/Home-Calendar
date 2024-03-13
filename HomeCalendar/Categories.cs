@@ -6,6 +6,9 @@ using System.Xml;
 using System.Data.Common;
 using System.Data.SQLite;
 
+using System.Data;
+
+
 // ============================================================================
 // (c) Sandy Bultena 2018
 // * Released under the GNU General Public License
@@ -64,6 +67,42 @@ namespace Calendar
             else
             {
                 SetCategoriesToDefaults();
+
+
+                _dbconnection = dbconnection;
+                _newDB = newDB;
+
+                //if there is an existing db
+                if (newDB)
+                {
+                    SetCategoriesToDefaults();
+                }
+            }
+        }
+
+        //retrieves category information from db and makes new Categories instances with it.
+        private void SetCategoriesUsingDB()
+        {
+            _dbconnection.Open();
+            using (DbCommand cmd = _dbconnection.CreateCommand())
+            {
+                cmd.CommandText = "SELECT id, description, type_id FROM categories";
+
+                using (DbDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        int catId = (int)reader["id"];
+                        string catDescription = reader["description"].ToString();
+                        int typeId = (int)reader["type_id"];
+
+                        Category.CategoryType catType = (Category.CategoryType)typeId;
+                        Add(new Category(catId, catDescription, catType));
+                    }
+                }
+
+
+
             }
         }
 
