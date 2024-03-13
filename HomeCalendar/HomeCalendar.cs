@@ -67,7 +67,7 @@ namespace Calendar
         {
             _categories = new Categories();
             _events = new Events();
-            ReadFromFile(calendarFileName);
+            _events.ReadFromFile(calendarFileName);
         }
         //remove all xml
         public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
@@ -214,8 +214,11 @@ namespace Calendar
                 // filter out unwanted categories if filter flag is on
                 if (FilterFlag && CategoryID != e.CatId)
                 {
+                    //Category Id only used for filtering if the filter flag is set to true.
                     continue;
                 }
+
+                // TODO write sql query:
 
                 // keep track of running totals
                 totalBusyTime = totalBusyTime + e.DurationInMinutes;

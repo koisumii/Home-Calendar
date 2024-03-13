@@ -4,6 +4,8 @@ using System.Linq;
 using System.IO;
 using System.Xml;
 using System.Data.Common;
+using System.Data.SQLite;
+using System.Data;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -21,7 +23,7 @@ namespace Calendar
     public class Categories
     {
         private static String DefaultFileName = "calendarCategories.txt";
-        //private List<Category> _Categories = new List<Category>();
+        private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
         private DbConnection _dbconnection;
@@ -41,26 +43,41 @@ namespace Calendar
             SetCategoriesToDefaults();
         }
 
-        public Categories(DbConnection dbconnection, bool newDB)
+        public Categories(SQLiteConnection dbConnection, bool newDB)
         {
-            //clear the categories list
-            //_Categories.Clear();
-
-            _dbconnection = dbconnection;
-            _newDB = newDB;
-
-            //if there is an existing db
-            if (newDB)
+            // Use flag to determine whether to load categories from the/existing database or set them to defaults
+            if (!newDB)
+            {
+                dbConnection.Open();
+                string query = "SELECT Id, Description, Type FROM Categories ORDER BY Id";
+                var cmd = new SQLiteCommand(query, dbConnection);
+                using var reader = cmd.ExecuteReader();
+                while (reader.Read())
+                {
+                    int id = reader.GetInt32(0);
+                    string description = reader.GetString(1);
+                    if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
+                    {
+                        _Categories.Add(new Category(id, description, categoryType));
+                    }
+                }
+                dbConnection.Close();
+            }
+            else
             {
                 SetCategoriesToDefaults();
+
+                _dbconnection = dbconnection;
+                _newDB = newDB;
+
+                //if there is an existing db
+                if (newDB)
+                {
+                    SetCategoriesToDefaults();
+                }
             }
-            //if there isn't a db use the default categories.
-           // else
-            //{
-            //    SetCategoriesToDefaults();
-            //}
         }
-        
+
         //retrieves category information from db and makes new Categories instances with it.
         private void SetCategoriesUsingDB()
         {
