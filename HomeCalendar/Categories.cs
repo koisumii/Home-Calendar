@@ -7,6 +7,7 @@ using System.Data.Common;
 using System.Data.SQLite;
 using System.Data;
 
+
 // ============================================================================
 // (c) Sandy Bultena 2018
 // * Released under the GNU General Public License
@@ -67,6 +68,7 @@ namespace Calendar
             {
                 SetCategoriesToDefaults();
 
+
                 _dbconnection = dbconnection;
                 _newDB = newDB;
 
@@ -98,6 +100,8 @@ namespace Calendar
                         Add(new Category(catId, catDescription, catType));
                     }
                 }
+
+
             }
         }
 
