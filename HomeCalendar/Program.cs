@@ -10,7 +10,7 @@ namespace HomeCalendar
             Events e1 = new Events();
 
             //conecting to db 
-            Database.newDatabase("C:\\Users\\2256255\\Downloads\\Sprint2_Team\\Milestone3_tests\\testDBInput.db");
+            Database.newDatabase("C:\\Users\\2232607\\Documents\\Sprint2_Homecalendar\\Milestone3_tests\\testDBInput.db");
         }
     }
 }
