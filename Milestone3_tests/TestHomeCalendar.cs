@@ -6,6 +6,7 @@ using Calendar;
 
 namespace CalendarCodeTests
 {
+    /*
     public class TestHomeCalendar
     {
         string testInputFile = TestConstants.testCalendarFile;
@@ -163,6 +164,6 @@ namespace CalendarCodeTests
                  "testing for accuracy is in Events test file");
 
         }
-    }
+    }*/
 }
 

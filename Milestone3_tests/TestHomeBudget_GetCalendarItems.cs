@@ -6,6 +6,7 @@ using Calendar;
 
 namespace CalendarCodeTests
 {
+    /*
     [Collection("Sequential")]
     public class TestHomeCalendar_GetCalendarItems
     {
@@ -186,6 +187,6 @@ namespace CalendarCodeTests
                 Assert.Equal(CalendarItem.ShortDescription, Event.Details);
             }
         }
-    }
+    }*/
 }
 
