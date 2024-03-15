@@ -81,10 +81,13 @@ namespace Calendar
             cmd.CommandText = @"INSERT INTO events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id)) VALUES(1,1,'2024-02-14', 55, 'BLABLA');";
 
             //have to comment it out to pass 'SQLite_TestNewDatabase_newDBDoesExist_shouldHaveNoData'
-            //PopulateCategoriesTypeTable(cmd);
+            PopulateCategoriesTypeTable(cmd);
 
             //populating categories table 
-            //PopulateCategoriesTable(cmd);
+            PopulateCategoriesTable(cmd);
+
+            //PopulateEventsTable(cmd);
+
 
         }
 
@@ -133,6 +136,14 @@ namespace Calendar
             
         }
 
+        public static void PopulateEventsTable(SQLiteCommand cmd)
+        {
+            Events e = new Events();
+            List<Event> newList = e.List();
+
+            
+        }
+
 
         // ===================================================================
         // open an existing database
@@ -143,8 +154,10 @@ namespace Calendar
             CloseDatabaseAndReleaseFile();
 
             // your code
+            string cs = $"Data Source={filename}; Foreign Keys=1";
+            _connection = new SQLiteConnection(cs);
             _connection.Open();
-            using var cmd = new SQLiteCommand(_connection);
+            //using var cmd = new SQLiteCommand(_connection);
             //PopulateCategoriesTypeTable(cmd);
         }
 
