@@ -5,6 +5,8 @@ using System.IO;
 using System.Xml;
 using System.Data.Common;
 using System.Data.SQLite;
+using static Calendar.Category;
+using System.Net.Http.Headers;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -44,27 +46,80 @@ namespace Calendar
         public Categories(SQLiteConnection dbConnection, bool newDB)
         {
             // Use flag to determine whether to load categories from the/existing database or set them to defaults
+             //should this be the opposite ?? if it is NOT a new db set it to the default 
             if (!newDB)
             {
-                dbConnection.Open();
-                string query = "SELECT Id, Description, Type FROM Categories ORDER BY Id";
-                var cmd = new SQLiteCommand(query, dbConnection);
-                using var reader = cmd.ExecuteReader();
+                //no need,, already open
+                //dbConnection.Open();
+                string query = "SELECT Id, Description, TypeId FROM categories ORDER BY Id";
+                using var cmd = new SQLiteCommand(query, dbConnection);
+                using SQLiteDataReader reader = cmd.ExecuteReader();
+                _Categories.Clear();
                 while (reader.Read())
                 {
                     int id = reader.GetInt32(0);
                     string description = reader.GetString(1);
-                    if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
+                    int typeId = reader.GetInt32(2);
+                    CategoryType categoryType = GetCategoryTypeFromTypeId(typeId);
+                    
+                    
+                    //Populating table 
+                    //cmd.CommandText = @"INSERT INTO categories(Id, Description, TypeId) VALUES(@Id, @Description, @TypeId)";
+                    //cmd.Parameters.AddWithValue("@Id", id);
+                    //cmd.Parameters.AddWithValue("@Description", description);
+                    //cmd.Parameters.AddWithValue("@TypeId", typeId);
+                    //cmd.ExecuteNonQuery();
+
+                    _Categories.Add(new Category(id, description, categoryType));
+                    /*if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
                     {
                         _Categories.Add(new Category(id, description, categoryType));
-                    }
+                    }*/
                 }
-                dbConnection.Close();
+                //reader.Close();
+                //PopulateCategoriesTable(cmd);
+                //dbConnection.Close(); //??
             }
             else
             {
+                //when it is a new db it should have no data 
                 SetCategoriesToDefaults();
             }
+        }
+
+        public CategoryType GetCategoryTypeFromTypeId(int typeId)
+        {
+            if (typeId == 1)
+            {
+                return CategoryType.Event; 
+            }
+            if(typeId == 2)
+            {
+                return CategoryType.Availability;
+            }
+            if(typeId == 3)
+            {
+                return CategoryType.AllDayEvent; 
+            }
+
+            return CategoryType.Holiday; 
+        }
+
+        public static void PopulateCategoriesTable(SQLiteCommand cmd)
+        {
+            Categories c1 = new Categories();
+            List<Category> categoriesList = c1.List();
+
+            for (int i = 0; i < categoriesList.Count; i++)
+            {
+                cmd.CommandText = $"INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId);";
+                cmd.Parameters.AddWithValue("@Description", categoriesList[i].Description);
+                int temp = (int)categoriesList[i].Type;
+                cmd.Parameters.AddWithValue("@TypeId", temp);
+                cmd.Prepare();
+                cmd.ExecuteNonQuery(); //row inserted
+            }
+
         }
 
         // ====================================================================
@@ -191,6 +246,7 @@ namespace Calendar
                 new_num = (from c in _Categories select c.Id).Max();
                 new_num++;
             }
+            //AddToDatabase
             _Categories.Add(new Category(new_num, desc, type));
         }
 
@@ -223,7 +279,11 @@ namespace Calendar
         public void Delete(int Id)
         {
             int i = _Categories.FindIndex(x => x.Id == Id);
-            _Categories.RemoveAt(i);
+            if ( i >= 0)
+            {
+                _Categories.RemoveAt(i);
+            }
+            
         }
 
         // ====================================================================

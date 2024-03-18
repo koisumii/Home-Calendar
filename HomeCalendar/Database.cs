@@ -86,6 +86,9 @@ namespace Calendar
             //populating categories table 
             //PopulateCategoriesTable(cmd);
 
+            //PopulateEventsTable(cmd);
+
+
         }
 
         //tested and it works
@@ -115,21 +118,13 @@ namespace Calendar
         }
 
         
-        public static void PopulateCategoriesTable(SQLiteCommand cmd) 
-        {
-            Categories c1 = new Categories(); 
-            c1.SetCategoriesToDefaults();
-            List<Category> categoriesList = c1.List();
+        
 
-            for(int i = 0; i < categoriesList.Count; i++) 
-            {
-                cmd.CommandText = $"INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId);";
-                cmd.Parameters.AddWithValue("@Description", categoriesList[i].Description);
-                int temp = (int)categoriesList[i].Type;
-                cmd.Parameters.AddWithValue("@TypeId", temp);
-                cmd.Prepare();
-                cmd.ExecuteNonQuery(); //row inserted
-            }
+        public static void PopulateEventsTable(SQLiteCommand cmd)
+        {
+            Events e = new Events();
+            List<Event> newList = e.List();
+
             
         }
 
@@ -143,8 +138,10 @@ namespace Calendar
             CloseDatabaseAndReleaseFile();
 
             // your code
+            string cs = $"Data Source={filename}; Foreign Keys=1";
+            _connection = new SQLiteConnection(cs);
             _connection.Open();
-            using var cmd = new SQLiteCommand(_connection);
+            //using var cmd = new SQLiteCommand(_connection);
             //PopulateCategoriesTypeTable(cmd);
         }
 
