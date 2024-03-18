@@ -28,7 +28,7 @@ namespace Calendar
         private List<Category> _Categories = new List<Category>();
         private string? _FileName;
         private string? _DirName;
-        private SQLiteConnection _dbConnection;
+        private SQLiteConnection dbConnection;
 
         // ====================================================================
         // Properties
@@ -49,7 +49,7 @@ namespace Calendar
             // Use flag to determine whether to load categories from the/existing database or set them to defaults
             if (!newDB)
             {
-                //dbConnection.Open();
+                dbConnection.Open();
                 string query = "SELECT Id, Description, Type FROM Categories ORDER BY Id";
                 var cmd = new SQLiteCommand(query, dbConnection);
                 using var reader = cmd.ExecuteReader();
@@ -69,8 +69,8 @@ namespace Calendar
                 SetCategoriesToDefaults();
 
 
-                _dbConnection = dbConnection;
-         
+                _dbconnection = dbconnection;
+                _newDB = newDB;
 
                 //if there is an existing db
                 if (newDB)
@@ -83,8 +83,8 @@ namespace Calendar
         //retrieves category information from db and makes new Categories instances with it.
         private void SetCategoriesUsingDB()
         {
-            _dbConnection.Open();
-            using (DbCommand cmd = _dbConnection.CreateCommand())
+            _dbconnection.Open();
+            using (DbCommand cmd = _dbconnection.CreateCommand())
             {
                 cmd.CommandText = "SELECT id, description, type_id FROM categories";
 
@@ -240,8 +240,8 @@ namespace Calendar
             {
                 throw new Exception("Category with ID of: {id} was not found! =(");
             }
-            using var cmd = new SQLiteCommand(_dbConnection);
-            _dbConnection.Open();
+            using var cmd = new SQLiteCommand(dbConnection);
+            dbConnection.Open();
             cmd.CommandText = "UPDATE Categories SET Description = @newDescription, Type = @newType WHERE Id = @Id";
             // used to assign actual values to these placeholders
             // the placeholders in the SQL query above will be replaced with the value of these variables
@@ -251,7 +251,7 @@ namespace Calendar
 
             cmd.ExecuteNonQuery();
 
-            _dbConnection.Close();
+            dbConnection.Close();
 
             //should check if update failed and no category was updated? row = 0
         }

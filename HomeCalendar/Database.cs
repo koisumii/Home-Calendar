@@ -32,7 +32,7 @@ namespace Calendar
 {
     public class Database
     {
-        // Rename TypeId to just Type
+
         public static SQLiteConnection dbConnection { get { return _connection; } }
         private static SQLiteConnection _connection;
 
