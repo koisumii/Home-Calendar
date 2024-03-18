@@ -70,7 +70,7 @@ namespace Calendar
             _events.ReadFromFile(calendarFileName);
         }
         //remove all xml
-        public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
+        public HomeCalendar(string databaseFile, string inputFile, bool newDB)
         {
             if (!newDB && File.Exists(databaseFile))
             {
@@ -83,7 +83,8 @@ namespace Calendar
             }
             _categories = new Categories(Database.dbConnection, newDB);
             _events = new Events();
-            _events.ReadFromFile(eventsXMLFile);
+            _FileName = inputFile;
+            _DirName = Path.GetDirectoryName(inputFile);
         }
 
         #region OpenNewAndSave
@@ -218,7 +219,7 @@ namespace Calendar
                     continue;
                 }
 
-                // TODO write sql query:
+
 
                 // keep track of running totals
                 totalBusyTime = totalBusyTime + e.DurationInMinutes;

@@ -1,7 +1,7 @@
 using Calendar;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
-namespace HomeCalendar
+namespace Calendar
 {
     internal class Program
     {
