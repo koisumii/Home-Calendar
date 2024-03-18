@@ -215,30 +215,30 @@ namespace Calendar
         {
             // delete from database
 
-        //    int i = _Categories.FindIndex(x => x.Id == Id);
+            //int i = _Categories.FindIndex(x => x.Id == Id);
+            
+            try
+            {
+                var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
+                pragmaOff.ExecuteNonQuery();
 
-        //    using var cmd = new SQLiteCommand(dbConnection);
-        //    dbConnection.Open();
-        //    cmd.CommandText = "DELETE FROM Categories WHERE Id = @Id";
-        //    cmd.Parameters.AddWithValue("@Id", Id);
+                using var cmd = new SQLiteCommand(this.dbConnection);
+                cmd.CommandText = "DELETE FROM categories WHERE Id = @Id";
+                cmd.Parameters.AddWithValue("@Id", Id);
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected == 0)
+                {
+                    //
+                }
+            }
 
-        //    try
-        //    {
-        //        int rowsAffected = cmd.ExecuteNonQuery();
-        //        if (rowsAffected > 0)
-        //        {
-        //            _Categories.RemoveAt(i);
-        //        }
-        //    }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred when deleting the category from the database.", e);
+            }
 
-        //    catch (Exception e)
-        //    {
-        //        throw new Exception("An error occurred when deleting the category from the database.", e);
-        //    }
 
-        //    dbConnection.Close();
 
-        //
         }
 
         // ====================================================================
