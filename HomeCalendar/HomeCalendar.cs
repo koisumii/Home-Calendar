@@ -56,8 +56,8 @@ namespace Calendar
         // -------------------------------------------------------------------
         public HomeCalendar()
         {
-            _categories = new Categories();
-            _events = new Events();
+            //_categories = new Categories();
+            //_events = new Events();
         }
 
         // -------------------------------------------------------------------
@@ -65,9 +65,9 @@ namespace Calendar
         // -------------------------------------------------------------------
         public HomeCalendar(String calendarFileName)
         {
-            _categories = new Categories();
-            _events = new Events();
-            ReadFromFile(calendarFileName);
+            //_categories = new Categories();
+            //_events = new Events();
+            //ReadFromFile(calendarFileName);
         }
         public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
         {
@@ -90,7 +90,7 @@ namespace Calendar
         // Read
         // Throws Exception if any problem reading this file
         // ---------------------------------------------------------------
-        public void ReadFromFile(String? calendarFileName)
+        /*public void ReadFromFile(String? calendarFileName)
         {
             // ---------------------------------------------------------------
             // read the calendar file and process
@@ -127,7 +127,7 @@ namespace Calendar
                 throw new Exception("Could not read calendar info: \n" + e.Message);
             }
 
-        }
+        }*/
 
         // ====================================================================
         // save to a file
@@ -137,58 +137,59 @@ namespace Calendar
         //  filepath # a file containing the names of the events and categories files.
         //  Throws exception if we cannot write to that file (ex: invalid dir, wrong permissions)
         // ====================================================================
-        public void SaveToFile(String filepath)
-        {
+        //public void SaveToFile(String filepath)
+        //{
 
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
+        //    ---------------------------------------------------------------
+        //    just in case filepath doesn't exist, reset path info
+        //    -------------------------------------------------------------- -
+        //   _DirName = null;
+        //        _FileName = null;
 
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if we can't write to the file)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, "");
+        //        ---------------------------------------------------------------
+        //        get filepath name(throws exception if we can't write to the file)
+        //        -------------------------------------------------------------- -
+        //       filepath = CalendarFiles.VerifyWriteToFileName(filepath, "");
 
-            String? path = Path.GetDirectoryName(Path.GetFullPath(filepath));
-            String file = Path.GetFileNameWithoutExtension(filepath);
-            String ext = Path.GetExtension(filepath);
+        //        String? path = Path.GetDirectoryName(Path.GetFullPath(filepath));
+        //        String file = Path.GetFileNameWithoutExtension(filepath);
+        //        String ext = Path.GetExtension(filepath);
 
-            // ---------------------------------------------------------------
-            // construct file names for events and categories
-            // ---------------------------------------------------------------
-            String eventpath = path + "\\" + file + "_events" + ".evts";
-            String categorypath = path + "\\" + file + "_categories" + ".cats";
+        //        ---------------------------------------------------------------
+        //        construct file names for events and categories
+        //        -------------------------------------------------------------- -
+        //       String eventpath = path + "\\" + file + "_events" + ".evts";
+        //        String categorypath = path + "\\" + file + "_categories" + ".cats";
 
-            // ---------------------------------------------------------------
-            // save the events and categories into their own files
-            // ---------------------------------------------------------------
-            _events.SaveToFile(eventpath);
-            _categories.SaveToFile(categorypath);
+        //        ---------------------------------------------------------------
+        //        save the events and categories into their own files
+        //     ---------------------------------------------------------------
+        //    _events.SaveToFile(eventpath);
+        //        _categories.SaveToFile(categorypath);
 
-            // ---------------------------------------------------------------
-            // save filenames of events and categories to calendar file
-            // ---------------------------------------------------------------
-            string[] files = { Path.GetFileName(categorypath), Path.GetFileName(eventpath) };
-            System.IO.File.WriteAllLines(filepath, files);
+        //        ---------------------------------------------------------------
+        //        save filenames of events and categories to calendar file
+        //     ---------------------------------------------------------------
+        //    string[] files = { Path.GetFileName(categorypath), Path.GetFileName(eventpath) };
+        //        System.IO.File.WriteAllLines(filepath, files);
 
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = path;
-            _FileName = Path.GetFileName(filepath);
-        }
-        #endregion OpenNewAndSave
+        //        ----------------------------------------------------------------
+        //        save filename info for later use
+   
+        //        ----------------------------------------------------------------
+        //       _DirName = path;
+        //       _FileName = Path.GetFileName(filepath);
+        //    }
+            #endregion OpenNewAndSave
 
-        #region GetList
+            #region GetList
 
 
 
-        // ============================================================================
-        // Get all events list
-        // ============================================================================
-        public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+            // ============================================================================
+            // Get all events list
+            // ============================================================================
+            public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // ------------------------------------------------------------------------
             // return joined list within time frame

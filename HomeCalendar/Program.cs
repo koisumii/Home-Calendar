@@ -13,6 +13,7 @@ namespace HomeCalendar
             Database.newDatabase("C:\\Users\\2256255\\Downloads\\Sprint2\\Milestone3_tests\\testDBInput.db");
 
             Categories cat = new Categories(Database.dbConnection, false);
+            List<Category> list = cat.List();
         }
     }
 }

@@ -9,6 +9,7 @@ using System.Data.SQLite;
 using static Calendar.Category;
 using System.Net.Http.Headers;
 using System.Configuration;
+using System.Security.Cryptography;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -32,8 +33,13 @@ namespace Calendar
         // ====================================================================
         public Categories(SQLiteConnection dbConnection, bool newDB)
         {
+            this.dbConnection = dbConnection;
             // save the dbConnection object
             // if newDB, call set the CategoryTypes, setCategoryDefaults
+            if (newDB)
+            {
+                SetCategoriesToDefaults();
+            }
         }
 
             // Use flag to determine whether to load categories from the/existing database or set them to defaults
@@ -102,11 +108,11 @@ namespace Calendar
         // ====================================================================
         // get a specific category from the list where the id is the one specified
         // ====================================================================
-        public Category GetCategoryFromId(int i)
-        {
-            // query database
+        //public Category GetCategoryFromId(int i)
+        //{
+        //    // query database
 
-        }
+        //}
 
 
         // ====================================================================
@@ -137,7 +143,11 @@ namespace Calendar
         public void Add(String desc, Category.CategoryType type)
         {
             // use the database to insert the Category into the database
-
+            string query = "INSERT INTO categories (Description, TypeId) VALUES (@Description, @TypeId)";
+            using var cmd = new SQLiteCommand(query, dbConnection);
+            cmd.Parameters.AddWithValue("@Description", desc);
+            cmd.Parameters.AddWithValue("@TypeID", ((int)type));
+            cmd.ExecuteNonQuery();
 
             //int new_num = 1;
             //if (_Categories.Count > 0)
@@ -147,16 +157,12 @@ namespace Calendar
             //}
             ////AddToDatabase
             //_Categories.Add(new Category(new_num, desc, type));
+
         }
 
         //public void AddNewCategoryToDatabase(string description, Category.CategoryType type)
         //{
-        //    string query = "INSERT INTO categories (Description, TypeId) VALUES (@Description, @TypeId)";
-        //    using var cmd = new SQLiteCommand(query,dbConnection);
-        //    //cmd.CommandText = "INSERT INTO categories (Description, TypeId) VALUES (@Description, @TypeId)";
-        //    cmd.Parameters.AddWithValue("@Description", description);
-        //    cmd.Parameters.AddWithValue("@TypeID", ((int)type));
-        //    cmd.ExecuteNonQuery();
+        
         //    //dbConnection.Close();
         //}
 
@@ -228,7 +234,26 @@ namespace Calendar
         // ====================================================================
         public List<Category> List()
         {
-                // query database and return results
+            List<Category> categoriesList = new List<Category>();
+            
+            
+            SQLiteCommand cmd = new SQLiteCommand(dbConnection);
+            cmd.CommandText = "SELECT * FROM categories; ";
+            cmd.ExecuteNonQuery();
+            /*using SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
+            {
+                int id = reader.GetInt32(0);
+                string description = reader.GetString(1);
+                int typeId = reader.GetInt32(2);
+                Category.CategoryType type = GetCategoryTypeFromTypeId(typeId);
+                Console.WriteLine($"{id}, {description}, {typeId}");
+                //categoriesList.Add(new Category(id, description, type));
+            }*/
+            
+            return categoriesList;
+
+            // query database and return results
 
             //List<Category> newList = new List<Category>();
             //foreach (Category category in _Categories)
@@ -236,6 +261,8 @@ namespace Calendar
             //    newList.Add(new Category(category));
             //}
             //return newList;
+
+
         }
 
 
