@@ -3,10 +3,6 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
-# ignoring some databases
-messy.db
-newdb.db
-
 # User-specific files
 *.rsuser
 *.suo

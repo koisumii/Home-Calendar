@@ -236,7 +236,7 @@ namespace Calendar
         public void UpdateCategory(int id, string newDescription, Category.CategoryType newType)
         {
             int index = _Categories.FindIndex(c => c.Id == id);
-            if(index == -1)
+            if (index == -1)
             {
                 throw new Exception("Category with ID of: {id} was not found! =(");
             }
@@ -245,7 +245,7 @@ namespace Calendar
             cmd.CommandText = "UPDATE Categories SET Description = @newDescription, Type = @newType WHERE Id = @Id";
             // used to assign actual values to these placeholders
             // the placeholders in the SQL query above will be replaced with the value of these variables
-            cmd.Parameters.AddWithValue("@newDescription", newDescription); 
+            cmd.Parameters.AddWithValue("@newDescription", newDescription);
             cmd.Parameters.AddWithValue("@newType", newType.ToString());
             cmd.Parameters.AddWithValue("@Id", id);
 

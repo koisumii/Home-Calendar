@@ -93,7 +93,7 @@ namespace Calendar
         public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
         {
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
-            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString()); 
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString());
             cmd.Prepare();
             cmd.ExecuteNonQuery();
 
@@ -105,7 +105,7 @@ namespace Calendar
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
             cmd.Parameters.AddWithValue("@Description", Category.CategoryType.AllDayEvent.ToString());
             cmd.Prepare();
-            cmd.ExecuteNonQuery(); 
+            cmd.ExecuteNonQuery();
 
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
             cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Holiday.ToString());
@@ -114,14 +114,14 @@ namespace Calendar
 
         }
 
-        
-        public static void PopulateCategoriesTable(SQLiteCommand cmd) 
+
+        public static void PopulateCategoriesTable(SQLiteCommand cmd)
         {
-            Categories c1 = new Categories(); 
+            Categories c1 = new Categories();
             c1.SetCategoriesToDefaults();
             List<Category> categoriesList = c1.List();
 
-            for(int i = 0; i < categoriesList.Count; i++) 
+            for (int i = 0; i < categoriesList.Count; i++)
             {
                 cmd.CommandText = $"INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId);";
                 cmd.Parameters.AddWithValue("@Description", categoriesList[i].Description);
@@ -130,7 +130,7 @@ namespace Calendar
                 cmd.Prepare();
                 cmd.ExecuteNonQuery(); //row inserted
             }
-            
+
         }
 
 
@@ -148,17 +148,17 @@ namespace Calendar
             //PopulateCategoriesTypeTable(cmd);
         }
 
-       // ===================================================================
-       // close existing database, wait for garbage collector to
-       // release the lock before continuing
-       // ===================================================================
+        // ===================================================================
+        // close existing database, wait for garbage collector to
+        // release the lock before continuing
+        // ===================================================================
         static public void CloseDatabaseAndReleaseFile()
         {
             if (Database.dbConnection != null)
             {
                 // close the database connection
                 Database.dbConnection.Close();
-                
+
 
                 // wait for the garbage collector to remove the
                 // lock from the database file

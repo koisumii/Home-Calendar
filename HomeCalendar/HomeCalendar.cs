@@ -197,7 +197,7 @@ namespace Calendar
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
 
-            var query =  from c in _categories.List()
+            var query = from c in _categories.List()
                         join e in _events.List() on c.Id equals e.Category
                         where e.StartDateTime >= Start && e.StartDateTime <= End
                         orderby e.StartDateTime
@@ -341,7 +341,7 @@ namespace Calendar
         //             for each category for which there is an event in ANY month:
         //             "category", the total busy time for that category for all the months
         // ============================================================================
-        public List<Dictionary<string,object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<Dictionary<string, object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
             // get all items by month 
