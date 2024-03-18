@@ -124,6 +124,10 @@ namespace Calendar
             // ---------------------------------------------------------------
             // Add Defaults
             // ---------------------------------------------------------------
+            string query = "DELETE FROM categories";
+            SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
+            cmd.ExecuteNonQuery();
+
             Add("School", Category.CategoryType.Event);
             Add("Personal", Category.CategoryType.Event);
             Add("VideoGames", Category.CategoryType.Event);
