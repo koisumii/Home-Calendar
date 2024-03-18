@@ -60,7 +60,11 @@ namespace CalendarCodeTests
         {
             // Arrange
             String folder = TestConstants.GetSolutionDir();
-            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
+              String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String existingDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, existingDB, true);
+
+
             Database.existingDatabase(existingDB);
             SQLiteConnection conn = Database.dbConnection;
 
@@ -83,8 +87,11 @@ namespace CalendarCodeTests
         {
             // Arrange
             String folder = TestConstants.GetSolutionDir();
-            String newDB = $"{folder}\\{TestConstants.testDBInputFile}";
-            Database.existingDatabase(newDB);
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String existingDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, existingDB, true);
+
+            Database.existingDatabase(existingDB);
             SQLiteConnection conn = Database.dbConnection;
             Categories categories = new Categories(conn, false);
 
@@ -107,6 +114,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
+
             Database.existingDatabase(messyDB);
             SQLiteConnection conn = Database.dbConnection;
             Categories categories = new Categories(conn, false);
@@ -188,8 +196,12 @@ namespace CalendarCodeTests
         {
             // Arrange
             String folder = TestConstants.GetSolutionDir();
-            String newDB = $"{folder}\\{TestConstants.testDBInputFile}";
-            Database.existingDatabase(newDB);
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String existingDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, existingDB, true);
+
+
+            Database.existingDatabase(existingDB);
             SQLiteConnection conn = Database.dbConnection;
             Categories categories = new Categories(conn, false);
             int catID = 7;
