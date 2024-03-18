@@ -78,7 +78,7 @@ namespace Calendar
             cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id));";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"INSERT INTO events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id)) VALUES(1,1,'2024-02-14', 55, 'BLABLA');";
+            //cmd.CommandText = @"INSERT INTO events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id)) VALUES(1,1,'2024-02-14', 55, 'BLABLA');";
 
             //have to comment it out to pass 'SQLite_TestNewDatabase_newDBDoesExist_shouldHaveNoData'
             //PopulateCategoriesTypeTable(cmd);

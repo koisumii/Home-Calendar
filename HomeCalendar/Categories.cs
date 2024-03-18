@@ -36,6 +36,7 @@ namespace Calendar
             this.dbConnection = dbConnection;
             // save the dbConnection object
             // if newDB, call set the CategoryTypes, setCategoryDefaults
+            //this works ! :D
             if (newDB)
             {
                 SetCategoriesToDefaults();
@@ -139,14 +140,17 @@ namespace Calendar
 
         }
 
-
+        //this works !
         public void Add(String desc, Category.CategoryType type)
         {
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
+            pragmaOff.ExecuteNonQuery();
             // use the database to insert the Category into the database
-            string query = "INSERT INTO categories (Description, TypeId) VALUES (@Description, @TypeId)";
+            string query = "INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId)";
             using var cmd = new SQLiteCommand(query, dbConnection);
             cmd.Parameters.AddWithValue("@Description", desc);
-            cmd.Parameters.AddWithValue("@TypeID", ((int)type));
+            int x = ((int)type); 
+            cmd.Parameters.AddWithValue("@TypeId", x);
             cmd.ExecuteNonQuery();
 
             //int new_num = 1;
@@ -172,6 +176,16 @@ namespace Calendar
             // get the category from the db
             // modify it
             // save back to database
+            SQLiteCommand cmd = new SQLiteCommand(this.dbConnection);
+            cmd.CommandText = "UPDATE categories SET Description = @newDescription, TypeId = @newType WHERE Id = @Id";
+            cmd.Parameters.AddWithValue("@newDescription", newDescription);
+            int x = ((int)newType);
+            cmd.Parameters.AddWithValue("@newType", x);
+            cmd.Parameters.AddWithValue("@Id", id);
+            cmd.Prepare();
+            //int x = ((int)newType);
+            //cmd.Parameters.AddWithValue("@newType", x);
+            cmd.ExecuteNonQuery();
 
             //int index = _Categories.FindIndex(c => c.Id == id);
             //if(index == -1)
@@ -236,31 +250,25 @@ namespace Calendar
         {
             List<Category> categoriesList = new List<Category>();
             
-            
-            SQLiteCommand cmd = new SQLiteCommand(dbConnection);
-            cmd.CommandText = "SELECT * FROM categories; ";
-            cmd.ExecuteNonQuery();
-            /*using SQLiteDataReader reader = cmd.ExecuteReader();
+            string query = "SELECT * FROM categories ";
+            SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
                 string description = reader.GetString(1);
                 int typeId = reader.GetInt32(2);
                 Category.CategoryType type = GetCategoryTypeFromTypeId(typeId);
-                Console.WriteLine($"{id}, {description}, {typeId}");
-                //categoriesList.Add(new Category(id, description, type));
-            }*/
-            
+
+                //Console.WriteLine($"{id}, {description}, {typeId}");
+                categoriesList.Add(new Category(id, description, type));
+            }
+
+
             return categoriesList;
 
             // query database and return results
 
-            //List<Category> newList = new List<Category>();
-            //foreach (Category category in _Categories)
-            //{
-            //    newList.Add(new Category(category));
-            //}
-            //return newList;
 
 
         }

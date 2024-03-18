@@ -10,9 +10,10 @@ namespace HomeCalendar
             //Events e1 = new Events();
 
             //conecting to db 
-            Database.newDatabase("C:\\Users\\2256255\\Downloads\\Sprint2\\Milestone3_tests\\testDBInput.db");
+            Database.newDatabase("C:\\Users\\2232607\\Documents\\Sprint2\\Milestone3_tests\\testDBInput.db");
 
-            Categories cat = new Categories(Database.dbConnection, false);
+            Categories cat = new Categories(Database.dbConnection, false) ;
+            cat.UpdateCategory(1, "testing update", Category.CategoryType.Holiday);
             List<Category> list = cat.List();
         }
     }
