@@ -54,12 +54,14 @@ namespace Calendar
                 string query = "SELECT Id, Description, TypeId FROM categories ORDER BY Id";
                 using var cmd = new SQLiteCommand(query, dbConnection);
                 using SQLiteDataReader reader = cmd.ExecuteReader();
+                _Categories.Clear();
                 while (reader.Read())
                 {
                     int id = reader.GetInt32(0);
                     string description = reader.GetString(1);
                     int typeId = reader.GetInt32(2);
                     CategoryType categoryType = GetCategoryTypeFromTypeId(typeId);
+                    
                     
                     //Populating table 
                     //cmd.CommandText = @"INSERT INTO categories(Id, Description, TypeId) VALUES(@Id, @Description, @TypeId)";
