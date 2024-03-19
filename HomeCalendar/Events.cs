@@ -152,34 +152,51 @@ namespace Calendar
         // ====================================================================
         public void Delete(int EventId)
         {
-            //try
-            //{
-                string query = "SELECT COUNT(*) FROM events WHERE Id = @EventId;";
-                int count;
-                using (SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection))
-                {
-                    cmd.Parameters.AddWithValue("@EventId", EventId);
-                    count = Convert.ToInt32(cmd.ExecuteScalar());
-                }
+            try
+            {
+                var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
+                pragmaOff.ExecuteNonQuery();
 
-                if (count > 0)
+                using var cmd = new SQLiteCommand(this.dbConnection);
+                cmd.CommandText = "DELETE FROM events WHERE Id = @EventId;";
+                cmd.Parameters.AddWithValue("@EventId", EventId);
+                int rowsAffected = cmd.ExecuteNonQuery();
+                if (rowsAffected == 0)
                 {
-                    using (SQLiteCommand cmd = new SQLiteCommand(this.dbConnection))
-                    {
-                        cmd.CommandText = "DELETE FROM events WHERE Id = @EventId;";
-                        cmd.Parameters.AddWithValue("@EventId", EventId);
-                        cmd.ExecuteNonQuery();
-                    }
+                    //No rows affected means nothing was deleted.
+                    return;
                 }
                 else
                 {
                     return;
-                }              
-            //}    
-            //catch (SQLiteException ex)
-            //{
-            //    throw new Exception("Error occured while trying to delete an event.", ex);
-            //}
+                }
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while deleting an event from the database");
+            }
+        }
+
+        public void UpdateEvent(int id, int category, DateTime date, double duration, String details)
+        {
+            try
+            {
+                SQLiteCommand cmd = new SQLiteCommand(this.dbConnection);
+                cmd.CommandText = "UPDATE events SET CategoryId = @category, StartDateTime = @date, DurationInMinutes = @duration, Details = @details WHERE Id = @Id;";
+
+                cmd.Parameters.AddWithValue("@CategoryId", category);
+                cmd.Parameters.AddWithValue("@StartDateTime", date);
+                cmd.Parameters.AddWithValue("@DurationInMinutes", duration);
+                cmd.Parameters.AddWithValue("@Details", details);
+                cmd.Parameters.AddWithValue("@EventId", id);
+
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while updating an event from the database");
+            }          
         }
 
         // ====================================================================
