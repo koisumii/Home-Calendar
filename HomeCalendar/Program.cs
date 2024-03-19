@@ -1,7 +1,7 @@
 using Calendar;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.Data.SQLite;
-namespace HomeCalendar
+namespace Calendar
 {
     internal class Program
     {
@@ -12,7 +12,7 @@ namespace HomeCalendar
             //conecting to db 
             Database.newDatabase("C:\\Users\\2232607\\Documents\\Sprint2\\Milestone3_tests\\testDBInput.db");
 
-            Categories cat = new Categories(Database.dbConnection, false) ;
+            Categories cat = new Categories(Database.dbConnection, false);
             cat.UpdateCategory(1, "testing update", Category.CategoryType.Holiday);
             List<Category> list = cat.List();
         }

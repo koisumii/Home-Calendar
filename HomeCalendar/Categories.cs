@@ -10,6 +10,7 @@ using static Calendar.Category;
 using System.Net.Http.Headers;
 using System.Configuration;
 using System.Security.Cryptography;
+using System.Globalization;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -43,28 +44,23 @@ namespace Calendar
                 SetCategoriesToDefaults();
             }
         }
-        
-        /// <summary>
-        /// This methods is used to convert an enum to the number is assigned to.
-        /// </summary>
-        /// <param name="typeId"> an unique identifier that represents an activity. </param>
-        /// <returns> a type of an activity </returns>
+      
         public CategoryType GetCategoryTypeFromTypeId(int typeId)
         {
             if (typeId == 1)
             {
-                return CategoryType.Event; 
+                return CategoryType.Event;
             }
-            if(typeId == 2)
+            if (typeId == 2)
             {
                 return CategoryType.Availability;
             }
-            if(typeId == 3)
+            if (typeId == 3)
             {
-                return CategoryType.AllDayEvent; 
+                return CategoryType.AllDayEvent;
             }
 
-            return CategoryType.Holiday; 
+            return CategoryType.Holiday;
         }
 
 
@@ -115,7 +111,7 @@ namespace Calendar
             string query = "INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId)";
             using var cmd = new SQLiteCommand(query, dbConnection);
             cmd.Parameters.AddWithValue("@Description", desc);
-            int x = ((int)type); 
+            int x = ((int)type);
             cmd.Parameters.AddWithValue("@TypeId", x);
             cmd.ExecuteNonQuery();
 
@@ -164,7 +160,6 @@ namespace Calendar
         public void Delete(int Id)
         {
             // delete from database
-            
             try
             {
                 var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
@@ -197,7 +192,7 @@ namespace Calendar
         public List<Category> List()
         {
             List<Category> categoriesList = new List<Category>();
-            
+
             string query = "SELECT * FROM categories ";
             SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
@@ -224,4 +219,3 @@ namespace Calendar
 
     }
 }
-
