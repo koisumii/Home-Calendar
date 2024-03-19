@@ -117,15 +117,15 @@ namespace Calendar
 
         }
 
-        
-        
+
+
 
         public static void PopulateEventsTable(SQLiteCommand cmd)
         {
             Events e = new Events();
             List<Event> newList = e.List();
 
-            
+
         }
 
 

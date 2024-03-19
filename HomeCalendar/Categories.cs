@@ -40,87 +40,69 @@ namespace Calendar
             if (newDB)
             {
                 SetCategoriesToDefaults();
-
-
-                _dbconnection = dbconnection;
-                _newDB = newDB;
-
-                //if there is an existing db
-                if (newDB)
-                {
-                    SetCategoriesToDefaults();
-                }
             }
         }
 
-        //retrieves category information from db and makes new Categories instances with it.
-        private void SetCategoriesUsingDB()
-        {
-            _dbconnection.Open();
-            using (DbCommand cmd = _dbconnection.CreateCommand())
-            {
-                cmd.CommandText = "SELECT id, description, type_id FROM categories";
+        // Use flag to determine whether to load categories from the/existing database or set them to defaults
+        //should this be the opposite ?? if it is NOT a new db set it to the default 
+        //if (!newDB)
+        //{
+        //    //no need,, already open
+        //    //dbConnection.Open();
+        //    string query = "SELECT Id, Description, TypeId FROM categories ORDER BY Id";
+        //    using var cmd = new SQLiteCommand(query, dbConnection);
+        //    using SQLiteDataReader reader = cmd.ExecuteReader();
+        //    //_Categories.Clear();
+        //    while (reader.Read())
+        //    {
+        //        int id = reader.GetInt32(0);
+        //        string description = reader.GetString(1);
+        //        int typeId = reader.GetInt32(2);
+        //        CategoryType categoryType = GetCategoryTypeFromTypeId(typeId);
 
-            // Use flag to determine whether to load categories from the/existing database or set them to defaults
-             //should this be the opposite ?? if it is NOT a new db set it to the default 
-            //if (!newDB)
-            //{
-            //    //no need,, already open
-            //    //dbConnection.Open();
-            //    string query = "SELECT Id, Description, TypeId FROM categories ORDER BY Id";
-            //    using var cmd = new SQLiteCommand(query, dbConnection);
-            //    using SQLiteDataReader reader = cmd.ExecuteReader();
-            //    //_Categories.Clear();
-            //    while (reader.Read())
-            //    {
-            //        int id = reader.GetInt32(0);
-            //        string description = reader.GetString(1);
-            //        int typeId = reader.GetInt32(2);
-            //        CategoryType categoryType = GetCategoryTypeFromTypeId(typeId);
-                    
-                    
-            //        //Populating table 
-            //        //cmd.CommandText = @"INSERT INTO categories(Id, Description, TypeId) VALUES(@Id, @Description, @TypeId)";
-            //        //cmd.Parameters.AddWithValue("@Id", id);
-            //        //cmd.Parameters.AddWithValue("@Description", description);
-            //        //cmd.Parameters.AddWithValue("@TypeId", typeId);
-            //        //cmd.ExecuteNonQuery();
 
-            //        _Categories.Add(new Category(id, description, categoryType));
-            //        AddNewCategoryToDatabase(description, categoryType);
+        //        //Populating table 
+        //        //cmd.CommandText = @"INSERT INTO categories(Id, Description, TypeId) VALUES(@Id, @Description, @TypeId)";
+        //        //cmd.Parameters.AddWithValue("@Id", id);
+        //        //cmd.Parameters.AddWithValue("@Description", description);
+        //        //cmd.Parameters.AddWithValue("@TypeId", typeId);
+        //        //cmd.ExecuteNonQuery();
 
-            //        /*if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
-            //        {
-            //            _Categories.Add(new Category(id, description, categoryType));
-            //        }*/
-            //    }
-            //    //reader.Close();
-            //    //PopulateCategoriesTable(cmd);
-            //    //dbConnection.Close(); //??
-            //}
-            //else
-            //{
-            //    //when it is a new db it should have no data 
-            //    SetCategoriesToDefaults();
-           //}
-        
+        //        _Categories.Add(new Category(id, description, categoryType));
+        //        AddNewCategoryToDatabase(description, categoryType);
+
+        //        /*if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
+        //        {
+        //            _Categories.Add(new Category(id, description, categoryType));
+        //        }*/
+        //    }
+        //    //reader.Close();
+        //    //PopulateCategoriesTable(cmd);
+        //    //dbConnection.Close(); //??
+        //}
+        //else
+        //{
+        //    //when it is a new db it should have no data 
+        //    SetCategoriesToDefaults();
+        //}
+
 
         public CategoryType GetCategoryTypeFromTypeId(int typeId)
         {
             if (typeId == 1)
             {
-                return CategoryType.Event; 
+                return CategoryType.Event;
             }
-            if(typeId == 2)
+            if (typeId == 2)
             {
                 return CategoryType.Availability;
             }
-            if(typeId == 3)
+            if (typeId == 3)
             {
-                return CategoryType.AllDayEvent; 
+                return CategoryType.AllDayEvent;
             }
 
-            return CategoryType.Holiday; 
+            return CategoryType.Holiday;
         }
 
 
@@ -171,7 +153,7 @@ namespace Calendar
             string query = "INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId)";
             using var cmd = new SQLiteCommand(query, dbConnection);
             cmd.Parameters.AddWithValue("@Description", desc);
-            int x = ((int)type); 
+            int x = ((int)type);
             cmd.Parameters.AddWithValue("@TypeId", x);
             cmd.ExecuteNonQuery();
 
@@ -188,7 +170,7 @@ namespace Calendar
 
         //public void AddNewCategoryToDatabase(string description, Category.CategoryType type)
         //{
-        
+
         //    //dbConnection.Close();
         //}
 
@@ -238,7 +220,7 @@ namespace Calendar
             // delete from database
 
             //int i = _Categories.FindIndex(x => x.Id == Id);
-            
+
             try
             {
                 var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
@@ -271,7 +253,7 @@ namespace Calendar
         public List<Category> List()
         {
             List<Category> categoriesList = new List<Category>();
-            
+
             string query = "SELECT * FROM categories ";
             SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
@@ -299,4 +281,3 @@ namespace Calendar
 
     }
 }
-
