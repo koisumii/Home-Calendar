@@ -10,6 +10,7 @@ using static Calendar.Category;
 using System.Net.Http.Headers;
 using System.Configuration;
 using System.Security.Cryptography;
+using System.Globalization;
 
 // ============================================================================
 // (c) Sandy Bultena 2018

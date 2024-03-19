@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
 using System.Data.SQLite;
+using System.Globalization;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -50,7 +51,7 @@ namespace Calendar
             this.dbConnection = dbConnection;
         }
 
-        public void ReadFromFile(String filepath = null)
+        /*public void ReadFromFile(String filepath = null)
         {
 
             // ---------------------------------------------------------------
@@ -83,13 +84,13 @@ namespace Calendar
             _FileName = Path.GetFileName(filepath);
 
 
-        }
+        }*/
 
         // ====================================================================
         // save to a file
         // if filepath is not specified, read/save in AppData file
         // ====================================================================
-        public void SaveToFile(String filepath = null)
+        /*public void SaveToFile(String filepath = null)
         {
             // ---------------------------------------------------------------
             // if file path not specified, set to last read file
@@ -120,31 +121,30 @@ namespace Calendar
             // ----------------------------------------------------------------
             _DirName = Path.GetDirectoryName(filepath);
             _FileName = Path.GetFileName(filepath);
-        }
+        }*/
 
 
 
         // ====================================================================
         // Add Event
         // ====================================================================
-        private void Add(Event exp)
+        /*private void Add(Event exp)
         {
             _Events.Add(exp);
-        }
+        }*/
 
-        public void Add(DateTime date, int category, Double duration, String details)
+        public void Add(string date, int category, Double duration, String details)
         {
-            int new_id = 1;
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
+            pragmaOff.ExecuteNonQuery();
 
-            // if we already have Events, set ID to max
-            if (_Events.Count > 0)
-            {
-                new_id = (from e in _Events select e.Id).Max();
-                new_id++;
-            }
-
-            _Events.Add(new Event(new_id, date, category, duration, details));
-
+            string query = "INSERT INTO events(CategoryId, StartDateTime, DurationInMinutes, Details) VALUES(@CategoryId, @StartDateTime, @DurationInMinutes, @Details)";
+            using var cmd = new SQLiteCommand(query, dbConnection);
+            cmd.Parameters.AddWithValue("@CategoryId", category);
+            cmd.Parameters.AddWithValue("@StartDateTime", date);
+            cmd.Parameters.AddWithValue("@DurationInMinutes", duration);
+            cmd.Parameters.AddWithValue("@Details", details);
+            cmd.ExecuteNonQuery();
         }
 
         // ====================================================================
@@ -206,68 +206,88 @@ namespace Calendar
         // ====================================================================
         public List<Event> List()
         {
-            List<Event> newList = new List<Event>();
-            foreach (Event Event in _Events)
+            //List<Event> newList = new List<Event>();
+            //foreach (Event Event in _Events)
+            //{
+            //    newList.Add(new Event(Event));
+            //}
+            //return newList;
+            List<Event> eventsList = new List<Event>();
+
+            string query = "SELECT * FROM events ";
+            SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                newList.Add(new Event(Event));
+                int id = reader.GetInt32(0);
+                int categoryId = reader.GetInt32(1);
+                string startDateTime = reader.GetString(2);
+                float durationInMinutes = reader.GetFloat(3);
+                string details = reader.GetString(4);
+                //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                //Console.WriteLine($"{id}, {description}, {typeId}");
+                Add(startDateTime, categoryId, durationInMinutes, details);
             }
-            return newList;
+
+
+            return eventsList;
         }
 
 
         // ====================================================================
         // read from an XML file and add categories to our categories list
         // ====================================================================
-        private void _ReadXMLFile(String filepath)
-        {
+        //private void _ReadXMLFile(String filepath)
+        //{
 
 
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(filepath);
+        //    try
+        //    {
+        //        XmlDocument doc = new XmlDocument();
+        //        doc.Load(filepath);
 
-                // Loop over each Event
-                foreach (XmlNode Event in doc.DocumentElement.ChildNodes)
-                {
-                    // set default Event parameters
-                    int id = int.Parse((((XmlElement)Event).GetAttributeNode("ID")).InnerText);
-                    String description = "";
-                    DateTime date = DateTime.Parse("2000-01-01");
-                    int category = 0;
-                    Double DurationInMinutes = 0.0;
+        //        // Loop over each Event
+        //        foreach (XmlNode Event in doc.DocumentElement.ChildNodes)
+        //        {
+        //            // set default Event parameters
+        //            int id = int.Parse((((XmlElement)Event).GetAttributeNode("ID")).InnerText);
+        //            String description = "";
+        //            DateTime date = DateTime.Parse("2000-01-01");
+        //            int category = 0;
+        //            Double DurationInMinutes = 0.0;
 
-                    // get Event parameters
-                    foreach (XmlNode info in Event.ChildNodes)
-                    {
-                        switch (info.Name)
-                        {
-                            case "StartDateTime":
-                                date = DateTime.Parse(info.InnerText);
-                                break;
-                            case "DurationInMinutes":
-                                DurationInMinutes = Double.Parse(info.InnerText);
-                                break;
-                            case "Items":
-                                description = info.InnerText;
-                                break;
-                            case "Category":
-                                category = int.Parse(info.InnerText);
-                                break;
-                        }
-                    }
+        //            // get Event parameters
+        //            foreach (XmlNode info in Event.ChildNodes)
+        //            {
+        //                switch (info.Name)
+        //                {
+        //                    case "StartDateTime":
+        //                        date = DateTime.Parse(info.InnerText);
+        //                        break;
+        //                    case "DurationInMinutes":
+        //                        DurationInMinutes = Double.Parse(info.InnerText);
+        //                        break;
+        //                    case "Items":
+        //                        description = info.InnerText;
+        //                        break;
+        //                    case "Category":
+        //                        category = int.Parse(info.InnerText);
+        //                        break;
+        //                }
+        //            }
 
-                    // have all info for Event, so create new one
-                    this.Add(new Event(id, date, category, DurationInMinutes, description));
+        //            // have all info for Event, so create new one
+        //            this.Add(new Event(id, date, category, DurationInMinutes, description));
 
-                }
+        //        }
 
-            }
-            catch (Exception e)
-            {
-                throw new Exception("ReadFromFileException: Reading XML " + e.Message);
-            }
-        }
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        throw new Exception("ReadFromFileException: Reading XML " + e.Message);
+        //    }
+        //}
 
 
         // ====================================================================

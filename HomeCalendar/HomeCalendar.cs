@@ -69,21 +69,21 @@ namespace Calendar
             //_events = new Events();
             //ReadFromFile(calendarFileName);
         }
-        public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
-        {
-            if (!newDB && File.Exists(databaseFile))
-            {
-                Database.existingDatabase(databaseFile);
-            }
-            else
-            {
-                Database.newDatabase(databaseFile);
-                newDB = true;
-            }
-            _categories = new Categories(Database.dbConnection, newDB);
-            _events = new Events();
-            _events.ReadFromFile(eventsXMLFile);
-        }
+        //public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
+        //{
+        //    if (!newDB && File.Exists(databaseFile))
+        //    {
+        //        Database.existingDatabase(databaseFile);
+        //    }
+        //    else
+        //    {
+        //        Database.newDatabase(databaseFile);
+        //        newDB = true;
+        //    }
+        //    _categories = new Categories(Database.dbConnection, newDB);
+        //    _events = new Events();
+        //    _events.ReadFromFile(eventsXMLFile);
+        //}
 
         #region OpenNewAndSave
         // ---------------------------------------------------------------

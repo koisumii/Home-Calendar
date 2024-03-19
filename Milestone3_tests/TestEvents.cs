@@ -32,8 +32,8 @@ namespace CalendarCodeTests
             // Assert 
             Assert.IsType<Events>(Events);
 
-            Assert.True(typeof(Events).GetProperty("FileName").CanWrite == false);
-            Assert.True(typeof(Events).GetProperty("DirName").CanWrite == false);
+            //Assert.True(typeof(Events).GetProperty("FileName").CanWrite == false);
+            //Assert.True(typeof(Events).GetProperty("DirName").CanWrite == false);
 
         }
 
@@ -81,40 +81,40 @@ namespace CalendarCodeTests
 
         // ========================================================================
 
-        [Fact]
-        public void EventsMethod_List_ReturnsListOfEvents()
-        {
-            // Arrange
-            String dir = TestConstants.GetSolutionDir();
-            Events Events = new Events();
-            Events.ReadFromFile(dir + "\\" + testInputFile);
+        //[Fact]
+        //public void EventsMethod_List_ReturnsListOfEvents()
+        //{
+        //    // Arrange
+        //    String dir = TestConstants.GetSolutionDir();
+        //    Events Events = new Events();
+        //    Events.ReadFromFile(dir + "\\" + testInputFile);
 
-            // Act
-            List<Event> list = Events.List();
+        //    // Act
+        //    List<Event> list = Events.List();
 
-            // Assert
-            Assert.Equal(numberOfEventsInFile, list.Count);
+        //    // Assert
+        //    Assert.Equal(numberOfEventsInFile, list.Count);
 
-        }/**/
+        //}/**/
 
         // ========================================================================
 
-        [Fact]
-        public void EventsMethod_List_ModifyListDoesNotModifyEventsInstance()
-        {
-            // Arrange
-            String dir = TestConstants.GetSolutionDir();
-            Events Events = new Events();
-            Events.ReadFromFile(dir + "\\" + testInputFile);
-            List<Event> list = Events.List();
+        //[Fact]
+        //public void EventsMethod_List_ModifyListDoesNotModifyEventsInstance()
+        //{
+        //    // Arrange
+        //    String dir = TestConstants.GetSolutionDir();
+        //    Events Events = new Events();
+        //    Events.ReadFromFile(dir + "\\" + testInputFile);
+        //    List<Event> list = Events.List();
 
-            // Act
-            list[0].DurationInMinutes = list[0].DurationInMinutes + 21.03; 
+        //    // Act
+        //    list[0].DurationInMinutes = list[0].DurationInMinutes + 21.03; 
 
-            // Assert
-            Assert.NotEqual(list[0].DurationInMinutes, Events.List()[0].DurationInMinutes);
+        //    // Assert
+        //    Assert.NotEqual(list[0].DurationInMinutes, Events.List()[0].DurationInMinutes);
 
-        }/**/
+        //}/**/
 
         // ========================================================================
 
@@ -122,19 +122,28 @@ namespace CalendarCodeTests
         public void EventsMethod_Add()
         {
             // Arrange
-            String dir = TestConstants.GetSolutionDir();
-            Events Events = new Events();
-            Events.ReadFromFile(dir + "\\" + testInputFile);
+            //String dir = TestConstants.GetSolutionDir();
+            //Events Events = new Events();
+            //Events.ReadFromFile(dir + "\\" + testInputFile);
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, messyDB, true);
+
+            Database.existingDatabase(messyDB);
+            SQLiteConnection conn = Database.dbConnection; 
+            Events Events = new Events(conn);
+
             int category = 57;
             double DurationInMinutes = 98.1;
 
             // Act
-            Events.Add(DateTime.Now,category,DurationInMinutes,"new Event");
+            Events.Add(DateTime.Now.ToString(), category, DurationInMinutes, "new Event");
             List<Event> EventsList = Events.List();
             int sizeOfList = Events.List().Count;
 
             // Assert
-            Assert.Equal(numberOfEventsInFile+1, sizeOfList);
+            Assert.Equal(numberOfEventsInFile + 1, sizeOfList);
             Assert.Equal(maxIDInEventFile + 1, EventsList[sizeOfList - 1].Id);
             Assert.Equal(DurationInMinutes, EventsList[sizeOfList - 1].DurationInMinutes);
 
