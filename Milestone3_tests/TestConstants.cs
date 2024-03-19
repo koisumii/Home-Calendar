@@ -84,6 +84,7 @@ namespace CalendarCodeTests
             EventID = 9,
             DurationInMinutes = 60
         };
+        //changing because we are not using files anymore??, original: 12
         public static int numberOfCategoriesInFile = 12;
         public static String testCategoriesInputFile = "test_categories.cats";
         public static String testDBInputFile = "testDBInput.db";

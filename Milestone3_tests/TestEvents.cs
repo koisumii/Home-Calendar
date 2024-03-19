@@ -35,7 +35,7 @@ namespace CalendarCodeTests
 
         // ========================================================================
 
-        [Fact]
+        /*[Fact]
         public void EventsMethod_ReadFromFile_NotExist_ThrowsException()
         {
             // Arrange
@@ -45,11 +45,11 @@ namespace CalendarCodeTests
             // Act and Assert
             Assert.Throws<System.IO.FileNotFoundException>(() => Events.ReadFromFile(badFile));
 
-        }
+        }*/
 
         // ========================================================================
 
-        [Fact]
+        /*[Fact]
         public void EventsMethod_ReadFromFile_ValidateCorrectDataWasRead()
         {
             // Arrange
@@ -72,7 +72,7 @@ namespace CalendarCodeTests
             Assert.Equal(dir, fileDir);
             Assert.Equal(testInputFile, Events.FileName);
 
-        }
+        }*/
 
         // ========================================================================
 
@@ -90,7 +90,7 @@ namespace CalendarCodeTests
             // Assert
             Assert.Equal(numberOfEventsInFile, list.Count);
 
-        }
+        }/**/
 
         // ========================================================================
 
@@ -109,7 +109,7 @@ namespace CalendarCodeTests
             // Assert
             Assert.NotEqual(list[0].DurationInMinutes, Events.List()[0].DurationInMinutes);
 
-        }
+        }/**/
 
         // ========================================================================
 
@@ -165,7 +165,9 @@ namespace CalendarCodeTests
             // Arrange
             String dir = TestConstants.GetSolutionDir();
             Events Events = new Events();
-            Events.ReadFromFile(dir + "\\" + testInputFile);
+            //Events.ReadFromFile(dir + "\\" + testInputFile);
+            //call db 
+
             int IdToDelete = 1006;
             int sizeOfList = Events.List().Count;
 
@@ -186,7 +188,7 @@ namespace CalendarCodeTests
 
         // ========================================================================
 
-        [Fact]
+        /*[Fact]
         public void EventMethod_WriteToFile()
         {
             // Arrange
@@ -213,11 +215,11 @@ namespace CalendarCodeTests
                 File.Delete(outputFile);
             }
 
-        }
+        }*/
 
         // ========================================================================
 
-        [Fact]
+        /*[Fact]
         public void EventMethod_WriteToFile_VerifyNewEventWrittenCorrectly()
         {
             // Arrange
@@ -244,11 +246,11 @@ namespace CalendarCodeTests
             Assert.Equal(beforeSaving.Details, afterSaving.Details);
             Assert.Equal(beforeSaving.DurationInMinutes, afterSaving.DurationInMinutes);
 
-        }
+        }*/
 
         // ========================================================================
 
-        [Fact]
+        /*[Fact]
         public void EventMethod_WriteToFile_WriteToLastFileWrittenToByDefault()
         {
             // Arrange
@@ -276,7 +278,7 @@ namespace CalendarCodeTests
                 File.Delete(outputFile);
             }
 
-        }
+        }*/
     }
 }
 
