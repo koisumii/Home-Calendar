@@ -27,7 +27,7 @@ namespace Calendar
     public class Categories
     {
         private SQLiteConnection dbConnection;
-
+        // documentation done 
         // ====================================================================
         // Constructor
         // ====================================================================
@@ -36,57 +36,19 @@ namespace Calendar
             this.dbConnection = dbConnection;
             // save the dbConnection object
             // if newDB, call set the CategoryTypes, setCategoryDefaults
-            //this works ! :D
+            // this works ! :D
             if (newDB)
             {
+                PopulateCategoriesTypeTable();
                 SetCategoriesToDefaults();
             }
         }
-
-            // Use flag to determine whether to load categories from the/existing database or set them to defaults
-             //should this be the opposite ?? if it is NOT a new db set it to the default 
-            //if (!newDB)
-            //{
-            //    //no need,, already open
-            //    //dbConnection.Open();
-            //    string query = "SELECT Id, Description, TypeId FROM categories ORDER BY Id";
-            //    using var cmd = new SQLiteCommand(query, dbConnection);
-            //    using SQLiteDataReader reader = cmd.ExecuteReader();
-            //    //_Categories.Clear();
-            //    while (reader.Read())
-            //    {
-            //        int id = reader.GetInt32(0);
-            //        string description = reader.GetString(1);
-            //        int typeId = reader.GetInt32(2);
-            //        CategoryType categoryType = GetCategoryTypeFromTypeId(typeId);
-                    
-                    
-            //        //Populating table 
-            //        //cmd.CommandText = @"INSERT INTO categories(Id, Description, TypeId) VALUES(@Id, @Description, @TypeId)";
-            //        //cmd.Parameters.AddWithValue("@Id", id);
-            //        //cmd.Parameters.AddWithValue("@Description", description);
-            //        //cmd.Parameters.AddWithValue("@TypeId", typeId);
-            //        //cmd.ExecuteNonQuery();
-
-            //        _Categories.Add(new Category(id, description, categoryType));
-            //        AddNewCategoryToDatabase(description, categoryType);
-
-            //        /*if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
-            //        {
-            //            _Categories.Add(new Category(id, description, categoryType));
-            //        }*/
-            //    }
-            //    //reader.Close();
-            //    //PopulateCategoriesTable(cmd);
-            //    //dbConnection.Close(); //??
-            //}
-            //else
-            //{
-            //    //when it is a new db it should have no data 
-            //    SetCategoriesToDefaults();
-           //}
         
-
+        /// <summary>
+        /// This methods is used to convert an enum to the number is assigned to.
+        /// </summary>
+        /// <param name="typeId"> an unique identifier that represents an activity. </param>
+        /// <returns> a type of an activity </returns>
         public CategoryType GetCategoryTypeFromTypeId(int typeId)
         {
             if (typeId == 1)
@@ -157,29 +119,35 @@ namespace Calendar
             cmd.Parameters.AddWithValue("@TypeId", x);
             cmd.ExecuteNonQuery();
 
-            //int new_num = 1;
-            //if (_Categories.Count > 0)
-            //{
-            //    new_num = (from c in _Categories select c.Id).Max();
-            //    new_num++;
-            //}
-            ////AddToDatabase
-            //_Categories.Add(new Category(new_num, desc, type));
+        }
+
+        public void PopulateCategoriesTypeTable()
+        {
+            SQLiteCommand cmd = new SQLiteCommand(this.dbConnection);
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Availability.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.AllDayEvent.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Holiday.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
 
         }
 
-        //public void AddNewCategoryToDatabase(string description, Category.CategoryType type)
-        //{
-        
-        //    //dbConnection.Close();
-        //}
-
         public void UpdateCategory(int id, string newDescription, Category.CategoryType newType)
         {
-
-            // get the category from the db
-            // modify it
-            // save back to database
             SQLiteCommand cmd = new SQLiteCommand(this.dbConnection);
             cmd.CommandText = "UPDATE categories SET Description = @newDescription, TypeId = @newType WHERE Id = @Id";
             cmd.Parameters.AddWithValue("@newDescription", newDescription);
@@ -187,29 +155,7 @@ namespace Calendar
             cmd.Parameters.AddWithValue("@newType", x);
             cmd.Parameters.AddWithValue("@Id", id);
             cmd.Prepare();
-            //int x = ((int)newType);
-            //cmd.Parameters.AddWithValue("@newType", x);
             cmd.ExecuteNonQuery();
-
-            //int index = _Categories.FindIndex(c => c.Id == id);
-            //if(index == -1)
-            //{
-            //    throw new Exception("Category with ID of: {id} was not found! =(");
-            //}
-            //using var cmd = new SQLiteCommand(dbConnection);
-            //dbConnection.Open();
-            //cmd.CommandText = "UPDATE Categories SET Description = @newDescription, Type = @newType WHERE Id = @Id";
-            //// used to assign actual values to these placeholders
-            //// the placeholders in the SQL query above will be replaced with the value of these variables
-            //cmd.Parameters.AddWithValue("@newDescription", newDescription); 
-            //cmd.Parameters.AddWithValue("@newType", newType.ToString());
-            //cmd.Parameters.AddWithValue("@Id", id);
-
-            //cmd.ExecuteNonQuery();
-
-            //dbConnection.Close();
-
-            //should check if update failed and no category was updated? row = 0
         }
 
         // ====================================================================
@@ -218,8 +164,6 @@ namespace Calendar
         public void Delete(int Id)
         {
             // delete from database
-
-            //int i = _Categories.FindIndex(x => x.Id == Id);
             
             try
             {
@@ -264,7 +208,6 @@ namespace Calendar
                 int typeId = reader.GetInt32(2);
                 Category.CategoryType type = GetCategoryTypeFromTypeId(typeId);
 
-                //Console.WriteLine($"{id}, {description}, {typeId}");
                 categoriesList.Add(new Category(id, description, type));
             }
 
