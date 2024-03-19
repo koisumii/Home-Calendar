@@ -1,10 +1,11 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -26,6 +27,7 @@ namespace Calendar
         private string _FileName;
         private string _DirName;
 
+        private SQLiteConnection dbConnection;
         // ====================================================================
         // Properties
         // ====================================================================
@@ -38,6 +40,16 @@ namespace Calendar
         // Throws System.IO.FileNotFoundException if file does not exist
         // Throws System.Exception if cannot read the file correctly (parsing XML)
         // ====================================================================
+
+        public Events()
+        {
+
+        }
+        public Events(SQLiteConnection dbConnection)
+        {
+            this.dbConnection = dbConnection;
+        }
+
         public void ReadFromFile(String filepath = null)
         {
 
@@ -138,14 +150,36 @@ namespace Calendar
         // ====================================================================
         // Delete Event
         // ====================================================================
-        public void Delete(int Id)
+        public void Delete(int EventId)
         {
-            int i = _Events.FindIndex(x => x.Id == Id);
-            if(i >= 0)
-            {
-                _Events.RemoveAt(i);
-            }
+            //try
+            //{
+                string query = "SELECT COUNT(*) FROM events WHERE Id = @EventId;";
+                int count;
+                using (SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection))
+                {
+                    cmd.Parameters.AddWithValue("@EventId", EventId);
+                    count = Convert.ToInt32(cmd.ExecuteScalar());
+                }
 
+                if (count > 0)
+                {
+                    using (SQLiteCommand cmd = new SQLiteCommand(this.dbConnection))
+                    {
+                        cmd.CommandText = "DELETE FROM events WHERE Id = @EventId;";
+                        cmd.Parameters.AddWithValue("@EventId", EventId);
+                        cmd.ExecuteNonQuery();
+                    }
+                }
+                else
+                {
+                    return;
+                }              
+            //}    
+            //catch (SQLiteException ex)
+            //{
+            //    throw new Exception("Error occured while trying to delete an event.", ex);
+            //}
         }
 
         // ====================================================================

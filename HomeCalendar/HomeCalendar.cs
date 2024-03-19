@@ -69,7 +69,6 @@ namespace Calendar
             //_events = new Events();
             //ReadFromFile(calendarFileName);
         }
-        //remove all xml
         public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
         {
             if (!newDB && File.Exists(databaseFile))
@@ -176,21 +175,21 @@ namespace Calendar
 
         //        ----------------------------------------------------------------
         //        save filename info for later use
-   
+
         //        ----------------------------------------------------------------
         //       _DirName = path;
         //       _FileName = Path.GetFileName(filepath);
         //    }
-            #endregion OpenNewAndSave
+        #endregion OpenNewAndSave
 
-            #region GetList
+        #region GetList
 
 
 
-            // ============================================================================
-            // Get all events list
-            // ============================================================================
-            public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        // ============================================================================
+        // Get all events list
+        // ============================================================================
+        public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // ------------------------------------------------------------------------
             // return joined list within time frame
@@ -215,11 +214,8 @@ namespace Calendar
                 // filter out unwanted categories if filter flag is on
                 if (FilterFlag && CategoryID != e.CatId)
                 {
-                    //Category Id only used for filtering if the filter flag is set to true.
                     continue;
                 }
-
-                // TODO write sql query:
 
                 // keep track of running totals
                 totalBusyTime = totalBusyTime + e.DurationInMinutes;
