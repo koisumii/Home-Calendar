@@ -133,12 +133,12 @@ namespace Calendar
             _Events.Add(exp);
         }*/
 
-        public void Add(string date, int category, Double duration, String details)
+        public void Add(string date, float category, Double duration, String details)
         {
             var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
             pragmaOff.ExecuteNonQuery();
 
-            string query = "INSERT INTO events(CategoryId, StartDateTime, DurationInMinutes, Details) VALUES(@CategoryId, @StartDateTime, @DurationInMinutes, @Details)";
+            string query = "INSERT INTO events(StartDateTime, Details, DurationInMinutes, CategoryId) VALUES(@CategoryId, @StartDateTime, @DurationInMinutes, @Details)";
             using var cmd = new SQLiteCommand(query, dbConnection);
             cmd.Parameters.AddWithValue("@CategoryId", category);
             cmd.Parameters.AddWithValue("@StartDateTime", date);
@@ -220,14 +220,14 @@ namespace Calendar
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
-                int categoryId = reader.GetInt32(1);
-                string startDateTime = reader.GetString(2);
-                float durationInMinutes = reader.GetFloat(3);
-                string details = reader.GetString(4);
+                var durationInMinutes = reader.GetString(1);
+                var startDateTime = reader.GetString(2); 
+                var details = reader.GetString(3);
+                var categoryId = reader.GetString(4);
                 //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
                 //Console.WriteLine($"{id}, {description}, {typeId}");
-                Add(startDateTime, categoryId, durationInMinutes, details);
+                //Add(startDateTime, categoryId, durationInMinutes, details);
             }
 
 

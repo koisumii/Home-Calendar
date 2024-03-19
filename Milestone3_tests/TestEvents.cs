@@ -81,40 +81,53 @@ namespace CalendarCodeTests
 
         // ========================================================================
 
-        //[Fact]
-        //public void EventsMethod_List_ReturnsListOfEvents()
-        //{
-        //    // Arrange
-        //    String dir = TestConstants.GetSolutionDir();
-        //    Events Events = new Events();
-        //    Events.ReadFromFile(dir + "\\" + testInputFile);
+        [Fact]
+        public void EventsMethod_List_ReturnsListOfEvents()
+        {
+            // Arrange
+            //String dir = TestConstants.GetSolutionDir();
+            //Events Events = new Events();
+            //Events.ReadFromFile(dir + "\\" + testInputFile);
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String existingDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, existingDB, true);
 
-        //    // Act
-        //    List<Event> list = Events.List();
+            Database.existingDatabase(existingDB);
+            SQLiteConnection conn = Database.dbConnection;
+            Events Events = new Events(conn);
 
-        //    // Assert
-        //    Assert.Equal(numberOfEventsInFile, list.Count);
+            // Act
+            List<Event> list = Events.List();
 
-        //}/**/
+            // Assert
+            Assert.Equal(numberOfEventsInFile, list.Count);
+
+        }/**/
 
         // ========================================================================
 
-        //[Fact]
-        //public void EventsMethod_List_ModifyListDoesNotModifyEventsInstance()
-        //{
-        //    // Arrange
-        //    String dir = TestConstants.GetSolutionDir();
-        //    Events Events = new Events();
-        //    Events.ReadFromFile(dir + "\\" + testInputFile);
-        //    List<Event> list = Events.List();
+        [Fact]
+        public void EventsMethod_List_ModifyListDoesNotModifyEventsInstance()
+        {
+            // Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String existingDB = $"{folder}\\messy.db";
+            System.IO.File.Copy(goodDB, existingDB, true);
 
-        //    // Act
-        //    list[0].DurationInMinutes = list[0].DurationInMinutes + 21.03; 
+            Database.existingDatabase(existingDB);
+            SQLiteConnection conn = Database.dbConnection;
+            Events Events = new Events(conn);
+            List<Event> list = Events.List();
 
-        //    // Assert
-        //    Assert.NotEqual(list[0].DurationInMinutes, Events.List()[0].DurationInMinutes);
+            // Act
+            list[0].DurationInMinutes = list[0].DurationInMinutes + 21.03;
 
-        //}/**/
+            // Assert
+            Assert.NotEqual(list[0].DurationInMinutes, Events.List()[0].DurationInMinutes);
+
+        }/**/
 
         // ========================================================================
 

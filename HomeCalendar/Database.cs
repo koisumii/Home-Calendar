@@ -81,7 +81,7 @@ namespace Calendar
             cmd.CommandText = @"CREATE TABLE categories(Id INTEGER PRIMARY KEY, Description TEXT, TypeId INT NOT NULL, FOREIGN KEY(TypeId) REFERENCES categoryTypes(Id));";
             cmd.ExecuteNonQuery();
 
-            cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id));";
+            cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, StartDateTime TEXT, Details TEXT, DurationInMinutes REAL, CategoryId INT NOT NULL, FOREIGN KEY(CategoryId) REFERENCES categories(Id));";
             cmd.ExecuteNonQuery();
 
 
@@ -147,7 +147,6 @@ namespace Calendar
         /// <summary>
         ///  close existing database, wait for garbage collector to release the lock before continuing
         /// </summary>
-=======
         // ===================================================================
         // close existing database, wait for garbage collector to
         // release the lock before continuing
