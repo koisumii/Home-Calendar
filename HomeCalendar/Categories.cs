@@ -232,7 +232,7 @@ namespace Calendar
                 int rowsAffected = cmd.ExecuteNonQuery();
                 if (rowsAffected == 0)
                 {
-                    //
+                    throw new Exception($"The category with ID {Id} does not exist.");
                 }
             }
 
