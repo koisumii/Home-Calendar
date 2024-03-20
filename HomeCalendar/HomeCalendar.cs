@@ -69,21 +69,21 @@ namespace Calendar
             //_events = new Events();
             //ReadFromFile(calendarFileName);
         }
-        public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
-        {
-            if (!newDB && File.Exists(databaseFile))
-            {
-                Database.existingDatabase(databaseFile);
-            }
-            else
-            {
-                Database.newDatabase(databaseFile);
-                newDB = true;
-            }
-            _categories = new Categories(Database.dbConnection, newDB);
-            _events = new Events();
-            _events.ReadFromFile(eventsXMLFile);
-        }
+        //public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
+        //{
+        //    if (!newDB && File.Exists(databaseFile))
+        //    {
+        //        Database.existingDatabase(databaseFile);
+        //    }
+        //    else
+        //    {
+        //        Database.newDatabase(databaseFile);
+        //        newDB = true;
+        //    }
+        //    _categories = new Categories(Database._dbConnection, newDB);
+        //    _events = new Events();
+        //    _events.ReadFromFile(eventsXMLFile);
+        //}
 
         #region OpenNewAndSave
         // ---------------------------------------------------------------
@@ -175,21 +175,21 @@ namespace Calendar
 
         //        ----------------------------------------------------------------
         //        save filename info for later use
-   
+
         //        ----------------------------------------------------------------
         //       _DirName = path;
         //       _FileName = Path.GetFileName(filepath);
         //    }
-            #endregion OpenNewAndSave
+        #endregion OpenNewAndSave
 
-            #region GetList
+        #region GetList
 
 
 
-            // ============================================================================
-            // Get all events list
-            // ============================================================================
-            public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        // ============================================================================
+        // Get all events list
+        // ============================================================================
+        public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // ------------------------------------------------------------------------
             // return joined list within time frame
@@ -197,7 +197,7 @@ namespace Calendar
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
 
-            var query =  from c in _categories.List()
+            var query = from c in _categories.List()
                         join e in _events.List() on c.Id equals e.Category
                         where e.StartDateTime >= Start && e.StartDateTime <= End
                         orderby e.StartDateTime
@@ -338,7 +338,7 @@ namespace Calendar
         //             for each category for which there is an event in ANY month:
         //             "category", the total busy time for that category for all the months
         // ============================================================================
-        public List<Dictionary<string,object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<Dictionary<string, object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
             // get all items by month 

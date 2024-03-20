@@ -1,10 +1,12 @@
-﻿using System;
+﻿﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using System.Xml;
+using System.Data.SQLite;
+using System.Globalization;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -19,18 +21,18 @@ namespace Calendar
     //        - Read / write to file
     //        - etc
     // ====================================================================
+    /// <summary>
+    /// Multiple activities that are retrieved, created, updated and deleted from a database
+    /// </summary>
     public class Events
     {
-        private static String DefaultFileName = "calendar.txt";
         private List<Event> _Events = new List<Event>();
-        private string _FileName;
-        private string _DirName;
 
+        private SQLiteConnection _dbConnection;
         // ====================================================================
         // Properties
         // ====================================================================
-        public String FileName { get { return _FileName; } }
-        public String DirName { get { return _DirName; } }
+        public SQLiteConnection Connection { get { return _dbConnection; } }
 
         // ====================================================================
         // populate categories from a file
@@ -38,244 +40,159 @@ namespace Calendar
         // Throws System.IO.FileNotFoundException if file does not exist
         // Throws System.Exception if cannot read the file correctly (parsing XML)
         // ====================================================================
-        public void ReadFromFile(String filepath = null)
+
+        public Events()
         {
-
-            // ---------------------------------------------------------------
-            // reading from file resets all the current Events,
-            // so clear out any old definitions
-            // ---------------------------------------------------------------
-            _Events.Clear();
-
-            // ---------------------------------------------------------------
-            // reset default dir/filename to null 
-            // ... filepath may not be valid, 
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyReadFromFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // read the Events from the xml file
-            // ---------------------------------------------------------------
-            _ReadXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use?
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
-
 
         }
-
-        // ====================================================================
-        // save to a file
-        // if filepath is not specified, read/save in AppData file
-        // ====================================================================
-        public void SaveToFile(String filepath = null)
+        public Events(SQLiteConnection dbConnection)
         {
-            // ---------------------------------------------------------------
-            // if file path not specified, set to last read file
-            // ---------------------------------------------------------------
-            if (filepath == null && DirName != null && FileName != null)
-            {
-                filepath = DirName + "\\" + FileName;
-            }
-
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
-
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if it doesn't exist)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, DefaultFileName);
-
-            // ---------------------------------------------------------------
-            // save as XML
-            // ---------------------------------------------------------------
-            _WriteXMLFile(filepath);
-
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = Path.GetDirectoryName(filepath);
-            _FileName = Path.GetFileName(filepath);
+            this._dbConnection = dbConnection;
         }
 
 
-
-        // ====================================================================
-        // Add Event
-        // ====================================================================
-        private void Add(Event exp)
+        /// <summary>
+        /// Adds a new activity (new 'Event' object) to the database. 
+        /// </summary>
+        /// <param name="date"> The beginnin of the event. </param>
+        /// <param name="categoryId"> A name that is assocaited with a type of activity </param>
+        /// <param name="duration"> The time that has been reserved for this event. </param>
+        /// <param name="details"> A description of the activity. </param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Events e = new Events(dbConnection);
+        /// e.Add("2018-01-01", 2, 45.5, "new Event");
+        /// ]]>
+        /// </code>
+        /// </example>
+        public void Add(string date, int categoryId, Double duration, String details)
         {
-            _Events.Add(exp);
-        }
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this._dbConnection);
+            pragmaOff.ExecuteNonQuery();
 
-        public void Add(DateTime date, int category, Double duration, String details)
-        {
-            int new_id = 1;
-
-            // if we already have Events, set ID to max
-            if (_Events.Count > 0)
-            {
-                new_id = (from e in _Events select e.Id).Max();
-                new_id++;
-            }
-
-            _Events.Add(new Event(new_id, date, category, duration, details));
-
+            string query = "INSERT INTO events(CategoryId, StartDateTime, DurationInMinutes, Details) VALUES(@CategoryId, @StartDateTime, @DurationInMinutes, @Details)";
+            using var cmd = new SQLiteCommand(query, _dbConnection);
+            cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+            cmd.Parameters.AddWithValue("@StartDateTime", date);
+            cmd.Parameters.AddWithValue("@DurationInMinutes", duration);
+            cmd.Parameters.AddWithValue("@Details", details);
+            cmd.ExecuteNonQuery();
         }
 
         // ====================================================================
         // Delete Event
         // ====================================================================
-        public void Delete(int Id)
+        /// <summary>
+        /// Removes the activity from the database.
+        /// </summary>
+        /// <param name="EventId"> An unique number that represents an activity. </param>
+        /// <exception cref="Exception"> Throw an exception if the Id could not be found in the database. </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Events e = new Events(dbConnection);
+        /// e.Delete(1);
+        /// ]]>
+        /// </code>
+        /// </example>
+        public void Delete(int EventId)
         {
-            int i = _Events.FindIndex(x => x.Id == Id);
-            if(i >= 0)
+            try
             {
-                _Events.RemoveAt(i);
-            }
+                var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this._dbConnection);
+                pragmaOff.ExecuteNonQuery();
 
+                using var cmd = new SQLiteCommand(this._dbConnection);
+                cmd.CommandText = "DELETE FROM events WHERE Id = @EventId;";
+                cmd.Parameters.AddWithValue("@EventId", EventId);
+                int rowsAffected = cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while deleting an event from the database");
+            }
         }
 
-        // ====================================================================
-        // Return list of Events
-        // Note:  make new copy of list, so user cannot modify what is part of
-        //        this instance
-        // ====================================================================
+        /// <summary>
+        /// This method allows to change the one of the activities. 
+        /// </summary>
+        /// <param name="id"> the unique identifier for an activity. </param>
+        /// <param name="categoryId"> the identifier of the activitie's categoryId. </param>
+        /// <param name="startDateTime"> the beginning of the activity. </param>
+        /// <param name="duration"> The time this activity will take. </param>
+        /// <param name="details"> The description of the activity. </param>
+        /// <exception cref="Exception"> Throw exception if there was an issue with updating the event. </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Event e = new Event(dbConnection);
+        /// e.UpdateEvent(1, 3, "2020-01-01", 57.0, "updated details");
+        /// ]]>
+        /// </code>
+        /// </example>
+        public void UpdateEvent(int id, int categoryId, DateTime startDateTime, double duration, String details)
+        {
+            try
+            {
+                SQLiteCommand cmd = new SQLiteCommand(this._dbConnection);
+                cmd.CommandText = "UPDATE events SET CategoryId = @categoryId, StartDateTime = @startDateTime, DurationInMinutes = @duration, Details = @details WHERE Id = @Id;";
+
+                cmd.Parameters.AddWithValue("@CategoryId", categoryId);
+                cmd.Parameters.AddWithValue("@StartDateTime", startDateTime);
+                cmd.Parameters.AddWithValue("@DurationInMinutes", duration);
+                cmd.Parameters.AddWithValue("@Details", details);
+                cmd.Parameters.AddWithValue("@EventId", id);
+
+                cmd.Prepare();
+                cmd.ExecuteNonQuery();
+            }
+            catch (Exception e)
+            {
+                throw new Exception("An error occurred while updating an event from the database");
+            }          
+        }
+
+        /// <summary>
+        /// This method retrieves all activities in our database and puts them inside a list. 
+        /// </summary>
+        /// <returns> A list containing all activities. </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Event e = new Event(dbConnection);
+        /// List<Event> eventsList = e.List();
+        /// ]]>
+        /// </code>
+        /// </example>
         public List<Event> List()
         {
-            List<Event> newList = new List<Event>();
-            foreach (Event Event in _Events)
+            List<Event> eventsList = new List<Event>();
+
+            string query = "SELECT * FROM events ";
+            SQLiteCommand cmd = new SQLiteCommand(query, this._dbConnection);
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read())
             {
-                newList.Add(new Event(Event));
+                int id = reader.GetInt32(0);
+                int categoryId = reader.GetInt32(1);
+                string startDateTime = reader.GetString(2);
+                float durationInMinutes = reader.GetFloat(3);
+                string details = reader.GetString(4);
+                //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+
+                //Console.WriteLine($"{id}, {description}, {typeId}");
+                Add(startDateTime, categoryId, durationInMinutes, details);
             }
-            return newList;
+
+
+            return eventsList;
         }
 
 
-        // ====================================================================
-        // read from an XML file and add categories to our categories list
-        // ====================================================================
-        private void _ReadXMLFile(String filepath)
-        {
+        
 
-
-            try
-            {
-                XmlDocument doc = new XmlDocument();
-                doc.Load(filepath);
-
-                // Loop over each Event
-                foreach (XmlNode Event in doc.DocumentElement.ChildNodes)
-                {
-                    // set default Event parameters
-                    int id = int.Parse((((XmlElement)Event).GetAttributeNode("ID")).InnerText);
-                    String description = "";
-                    DateTime date = DateTime.Parse("2000-01-01");
-                    int category = 0;
-                    Double DurationInMinutes = 0.0;
-
-                    // get Event parameters
-                    foreach (XmlNode info in Event.ChildNodes)
-                    {
-                        switch (info.Name)
-                        {
-                            case "StartDateTime":
-                                date = DateTime.Parse(info.InnerText);
-                                break;
-                            case "DurationInMinutes":
-                                DurationInMinutes = Double.Parse(info.InnerText);
-                                break;
-                            case "Items":
-                                description = info.InnerText;
-                                break;
-                            case "Category":
-                                category = int.Parse(info.InnerText);
-                                break;
-                        }
-                    }
-
-                    // have all info for Event, so create new one
-                    this.Add(new Event(id, date, category, DurationInMinutes, description));
-
-                }
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("ReadFromFileException: Reading XML " + e.Message);
-            }
-        }
-
-
-        // ====================================================================
-        // write to an XML file
-        // if filepath is not specified, read/save in AppData file
-        // ====================================================================
-        private void _WriteXMLFile(String filepath)
-        {
-            // ---------------------------------------------------------------
-            // loop over all categories and write them out as XML
-            // ---------------------------------------------------------------
-            try
-            {
-                // create top level element of Events
-                XmlDocument doc = new XmlDocument();
-                doc.LoadXml("<Events></Events>");
-
-                // foreach Category, create an new xml element
-                foreach (Event exp in _Events)
-                {
-                    // main element 'Event' with attribute ID
-                    XmlElement ele = doc.CreateElement("Event");
-                    XmlAttribute attr = doc.CreateAttribute("ID");
-                    attr.Value = exp.Id.ToString();
-                    ele.SetAttributeNode(attr);
-                    doc.DocumentElement.AppendChild(ele);
-
-                    // child attributes (date, description, DurationInMinutes, category)
-                    XmlElement d = doc.CreateElement("StartDateTime");
-                    XmlText dText = doc.CreateTextNode(exp.StartDateTime.ToString());
-                    ele.AppendChild(d);
-                    d.AppendChild(dText);
-
-                    XmlElement de = doc.CreateElement("Items");
-                    XmlText deText = doc.CreateTextNode(exp.Details);
-                    ele.AppendChild(de);
-                    de.AppendChild(deText);
-
-                    XmlElement a = doc.CreateElement("DurationInMinutes");
-                    XmlText aText = doc.CreateTextNode(exp.DurationInMinutes.ToString());
-                    ele.AppendChild(a);
-                    a.AppendChild(aText);
-
-                    XmlElement c = doc.CreateElement("Category");
-                    XmlText cText = doc.CreateTextNode(exp.Category.ToString());
-                    ele.AppendChild(c);
-                    c.AppendChild(cText);
-
-                }
-
-                // write the xml to FilePath
-                doc.Save(filepath);
-
-            }
-            catch (Exception e)
-            {
-                throw new Exception("SaveToFileException: Reading XML " + e.Message);
-            }
-        }
+        
 
     }
 }

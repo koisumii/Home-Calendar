@@ -10,6 +10,7 @@ using static Calendar.Category;
 using System.Net.Http.Headers;
 using System.Configuration;
 using System.Security.Cryptography;
+using System.Globalization;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -24,108 +25,69 @@ namespace Calendar
     //        - Read / write to file
     //        - etc
     // ====================================================================
+    /// <summary>
+    /// A division of different activies which have a name, an unique number and details about it.
+    /// </summary>
     public class Categories
     {
-        private SQLiteConnection dbConnection;
+        private SQLiteConnection _dbConnection;
+
+        // ====================================================================
+        // Properties
+        // ====================================================================
+        public SQLiteConnection Connection { get { return _dbConnection; } }
 
         // ====================================================================
         // Constructor
         // ====================================================================
         public Categories(SQLiteConnection dbConnection, bool newDB)
         {
-            this.dbConnection = dbConnection;
-            // save the dbConnection object
-            // if newDB, call set the CategoryTypes, setCategoryDefaults
-            //this works ! :D
+            this._dbConnection = dbConnection;
             if (newDB)
             {
+                PopulateCategoriesTypeTable();
                 SetCategoriesToDefaults();
             }
         }
-
-            // Use flag to determine whether to load categories from the/existing database or set them to defaults
-             //should this be the opposite ?? if it is NOT a new db set it to the default 
-            //if (!newDB)
-            //{
-            //    //no need,, already open
-            //    //dbConnection.Open();
-            //    string query = "SELECT Id, Description, TypeId FROM categories ORDER BY Id";
-            //    using var cmd = new SQLiteCommand(query, dbConnection);
-            //    using SQLiteDataReader reader = cmd.ExecuteReader();
-            //    //_Categories.Clear();
-            //    while (reader.Read())
-            //    {
-            //        int id = reader.GetInt32(0);
-            //        string description = reader.GetString(1);
-            //        int typeId = reader.GetInt32(2);
-            //        CategoryType categoryType = GetCategoryTypeFromTypeId(typeId);
-                    
-                    
-            //        //Populating table 
-            //        //cmd.CommandText = @"INSERT INTO categories(Id, Description, TypeId) VALUES(@Id, @Description, @TypeId)";
-            //        //cmd.Parameters.AddWithValue("@Id", id);
-            //        //cmd.Parameters.AddWithValue("@Description", description);
-            //        //cmd.Parameters.AddWithValue("@TypeId", typeId);
-            //        //cmd.ExecuteNonQuery();
-
-            //        _Categories.Add(new Category(id, description, categoryType));
-            //        AddNewCategoryToDatabase(description, categoryType);
-
-            //        /*if (Enum.TryParse(reader.GetString(2), out Category.CategoryType categoryType))
-            //        {
-            //            _Categories.Add(new Category(id, description, categoryType));
-            //        }*/
-            //    }
-            //    //reader.Close();
-            //    //PopulateCategoriesTable(cmd);
-            //    //dbConnection.Close(); //??
-            //}
-            //else
-            //{
-            //    //when it is a new db it should have no data 
-            //    SetCategoriesToDefaults();
-           //}
-        
-
+      
         public CategoryType GetCategoryTypeFromTypeId(int typeId)
         {
             if (typeId == 1)
             {
-                return CategoryType.Event; 
+                return CategoryType.Event;
             }
-            if(typeId == 2)
+            if (typeId == 2)
             {
                 return CategoryType.Availability;
             }
-            if(typeId == 3)
+            if (typeId == 3)
             {
-                return CategoryType.AllDayEvent; 
+                return CategoryType.AllDayEvent;
             }
 
-            return CategoryType.Holiday; 
+            return CategoryType.Holiday;
         }
-
-
-        // ====================================================================
-        // get a specific category from the list where the id is the one specified
-        // ====================================================================
-        //public Category GetCategoryFromId(int i)
-        //{
-        //    // query database
-
-        //}
-
 
         // ====================================================================
         // set categories to default
         // ====================================================================
+        /// <summary>
+        /// Resets the list of group of activities to a default when providing a new database. 
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories c = new Categories(dbConnection, true);
+        /// ]]>
+        /// </code>
+        /// </example>
         public void SetCategoriesToDefaults()
         {
             // ---------------------------------------------------------------
             // Add Defaults
             // ---------------------------------------------------------------
             string query = "DELETE FROM categories";
-            SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
+            SQLiteCommand cmd = new SQLiteCommand(query, this._dbConnection);
             cmd.ExecuteNonQuery();
 
             Add("School", Category.CategoryType.Event);
@@ -139,101 +101,125 @@ namespace Calendar
             Add("US Holidays", Category.CategoryType.Holiday);
         }
 
-        public void SetCategoryTypes()
-        {
-
-        }
-
-        //this works !
+        /// <summary>
+        /// Adds a new group of activities to this database. 
+        /// </summary>
+        /// <param name="desc"> A text that specifies details about a category. </param>
+        /// <param name="type"> An unique name that represents what kind of category it is. </param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories c1 = new Categories();
+        /// c1.Add("Pottery class", Category.CategoryType.Event);
+        /// ]]>
+        /// </code>
+        /// </example>
         public void Add(String desc, Category.CategoryType type)
         {
-            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
+            var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this._dbConnection);
             pragmaOff.ExecuteNonQuery();
             // use the database to insert the Category into the database
             string query = "INSERT INTO categories(Description, TypeId) VALUES(@Description, @TypeId)";
-            using var cmd = new SQLiteCommand(query, dbConnection);
+            using var cmd = new SQLiteCommand(query, _dbConnection);
             cmd.Parameters.AddWithValue("@Description", desc);
-            int x = ((int)type); 
+            int x = ((int)type);
             cmd.Parameters.AddWithValue("@TypeId", x);
             cmd.ExecuteNonQuery();
 
-            //int new_num = 1;
-            //if (_Categories.Count > 0)
-            //{
-            //    new_num = (from c in _Categories select c.Id).Max();
-            //    new_num++;
-            //}
-            ////AddToDatabase
-            //_Categories.Add(new Category(new_num, desc, type));
+        }
+
+        /// <summary>
+        /// Populates the category types to a default. 
+        /// </summary>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories c1 = new Categories();
+        /// c1.PopulateCategoriestable();
+        /// ]]>
+        /// </code>
+        /// </example>
+        public void PopulateCategoriesTypeTable()
+        {
+            SQLiteCommand cmd = new SQLiteCommand(this._dbConnection);
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Availability.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.AllDayEvent.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
+
+            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Holiday.ToString());
+            cmd.Prepare();
+            cmd.ExecuteNonQuery();
 
         }
 
-        //public void AddNewCategoryToDatabase(string description, Category.CategoryType type)
-        //{
-        
-        //    //dbConnection.Close();
-        //}
-
+        /// <summary>
+        /// This method allows to change the one of the activities. 
+        /// </summary>
+        /// <param name="id"> the unique identifier for an activity. </param>
+        /// <param name="categoryId"> the identifier of the activitie's categoryId. </param>
+        /// <param name="startDateTime"> the beginning of the activity. </param>
+        /// <param name="duration"> The time this activity will take. </param>
+        /// <param name="details"> The description of the activity. </param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories c1e = new Categories(dbConnection, true);
+        /// c1.UpdateEvent(1, 3, "2020-01-01", 57.0, "updated details");
+        /// ]]>
+        /// </code>
+        /// </example>
         public void UpdateCategory(int id, string newDescription, Category.CategoryType newType)
         {
-
-            // get the category from the db
-            // modify it
-            // save back to database
-            SQLiteCommand cmd = new SQLiteCommand(this.dbConnection);
+            SQLiteCommand cmd = new SQLiteCommand(this._dbConnection);
             cmd.CommandText = "UPDATE categories SET Description = @newDescription, TypeId = @newType WHERE Id = @Id";
             cmd.Parameters.AddWithValue("@newDescription", newDescription);
             int x = ((int)newType);
             cmd.Parameters.AddWithValue("@newType", x);
             cmd.Parameters.AddWithValue("@Id", id);
             cmd.Prepare();
-            //int x = ((int)newType);
-            //cmd.Parameters.AddWithValue("@newType", x);
             cmd.ExecuteNonQuery();
-
-            //int index = _Categories.FindIndex(c => c.Id == id);
-            //if(index == -1)
-            //{
-            //    throw new Exception("Category with ID of: {id} was not found! =(");
-            //}
-            //using var cmd = new SQLiteCommand(dbConnection);
-            //dbConnection.Open();
-            //cmd.CommandText = "UPDATE Categories SET Description = @newDescription, Type = @newType WHERE Id = @Id";
-            //// used to assign actual values to these placeholders
-            //// the placeholders in the SQL query above will be replaced with the value of these variables
-            //cmd.Parameters.AddWithValue("@newDescription", newDescription); 
-            //cmd.Parameters.AddWithValue("@newType", newType.ToString());
-            //cmd.Parameters.AddWithValue("@Id", id);
-
-            //cmd.ExecuteNonQuery();
-
-            //dbConnection.Close();
-
-            //should check if update failed and no category was updated? row = 0
         }
 
         // ====================================================================
         // Delete category
         // ====================================================================
+        /// <summary>
+        /// Removes the activity from the database.
+        /// </summary>
+        /// <param name="Id"> An unique number that represents an type of activity. </param>
+        /// <exception cref="Exception"> Throw an exception if the Id could not be found in the database. </exception>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories c1 = new Categories(dbConnection, true);
+        /// c1.Delete(1);
+        /// ]]>
+        /// </code>
+        /// </example>
         public void Delete(int Id)
         {
             // delete from database
-
-            //int i = _Categories.FindIndex(x => x.Id == Id);
-            
             try
             {
-                var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this.dbConnection);
+                var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this._dbConnection);
                 pragmaOff.ExecuteNonQuery();
 
-                using var cmd = new SQLiteCommand(this.dbConnection);
+                using var cmd = new SQLiteCommand(this._dbConnection);
                 cmd.CommandText = "DELETE FROM categories WHERE Id = @Id";
                 cmd.Parameters.AddWithValue("@Id", Id);
                 int rowsAffected = cmd.ExecuteNonQuery();
-                if (rowsAffected == 0)
-                {
-                    //
-                }
             }
 
             catch (Exception e)
@@ -250,12 +236,24 @@ namespace Calendar
         // Note:  make new copy of list, so user cannot modify what is part of
         //        this instance
         // ====================================================================
+        /// <summary>
+        /// This method retrieves all types of activities in our database and puts them inside a list. 
+        /// </summary>
+        /// <returns> A list containing all types of activities. </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Categories c1 = new Categories(dbConnection, true);
+        /// List<Category> categoriesList = c1.List();
+        /// ]]>
+        /// </code>
+        /// </example>
         public List<Category> List()
         {
             List<Category> categoriesList = new List<Category>();
-            
+
             string query = "SELECT * FROM categories ";
-            SQLiteCommand cmd = new SQLiteCommand(query, this.dbConnection);
+            SQLiteCommand cmd = new SQLiteCommand(query, this._dbConnection);
             using SQLiteDataReader reader = cmd.ExecuteReader();
             while (reader.Read())
             {
@@ -264,7 +262,6 @@ namespace Calendar
                 int typeId = reader.GetInt32(2);
                 Category.CategoryType type = GetCategoryTypeFromTypeId(typeId);
 
-                //Console.WriteLine($"{id}, {description}, {typeId}");
                 categoriesList.Add(new Category(id, description, type));
             }
 
@@ -281,4 +278,3 @@ namespace Calendar
 
     }
 }
-
