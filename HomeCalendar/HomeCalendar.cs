@@ -56,8 +56,8 @@ namespace Calendar
         // -------------------------------------------------------------------
         public HomeCalendar()
         {
-            _categories = new Categories();
-            _events = new Events();
+            //_categories = new Categories();
+            //_events = new Events();
         }
 
         // -------------------------------------------------------------------
@@ -65,33 +65,32 @@ namespace Calendar
         // -------------------------------------------------------------------
         public HomeCalendar(String calendarFileName)
         {
-            _categories = new Categories();
-            _events = new Events();
-            _events.ReadFromFile(calendarFileName);
+            //_categories = new Categories();
+            //_events = new Events();
+            //ReadFromFile(calendarFileName);
         }
-        //remove all xml
-        public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
-        {
-            if (!newDB && File.Exists(databaseFile))
-            {
-                Database.existingDatabase(databaseFile);
-            }
-            else
-            {
-                Database.newDatabase(databaseFile);
-                newDB = true;
-            }
-            _categories = new Categories(Database.dbConnection, newDB);
-            _events = new Events();
-            _events.ReadFromFile(eventsXMLFile);
-        }
+        //public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
+        //{
+        //    if (!newDB && File.Exists(databaseFile))
+        //    {
+        //        Database.existingDatabase(databaseFile);
+        //    }
+        //    else
+        //    {
+        //        Database.newDatabase(databaseFile);
+        //        newDB = true;
+        //    }
+        //    _categories = new Categories(Database.dbConnection, newDB);
+        //    _events = new Events();
+        //    _events.ReadFromFile(eventsXMLFile);
+        //}
 
         #region OpenNewAndSave
         // ---------------------------------------------------------------
         // Read
         // Throws Exception if any problem reading this file
         // ---------------------------------------------------------------
-        public void ReadFromFile(String? calendarFileName)
+        /*public void ReadFromFile(String? calendarFileName)
         {
             // ---------------------------------------------------------------
             // read the calendar file and process
@@ -128,7 +127,7 @@ namespace Calendar
                 throw new Exception("Could not read calendar info: \n" + e.Message);
             }
 
-        }
+        }*/
 
         // ====================================================================
         // save to a file
@@ -138,48 +137,49 @@ namespace Calendar
         //  filepath # a file containing the names of the events and categories files.
         //  Throws exception if we cannot write to that file (ex: invalid dir, wrong permissions)
         // ====================================================================
-        public void SaveToFile(String filepath)
-        {
+        //public void SaveToFile(String filepath)
+        //{
 
-            // ---------------------------------------------------------------
-            // just in case filepath doesn't exist, reset path info
-            // ---------------------------------------------------------------
-            _DirName = null;
-            _FileName = null;
+        //    ---------------------------------------------------------------
+        //    just in case filepath doesn't exist, reset path info
+        //    -------------------------------------------------------------- -
+        //   _DirName = null;
+        //        _FileName = null;
 
-            // ---------------------------------------------------------------
-            // get filepath name (throws exception if we can't write to the file)
-            // ---------------------------------------------------------------
-            filepath = CalendarFiles.VerifyWriteToFileName(filepath, "");
+        //        ---------------------------------------------------------------
+        //        get filepath name(throws exception if we can't write to the file)
+        //        -------------------------------------------------------------- -
+        //       filepath = CalendarFiles.VerifyWriteToFileName(filepath, "");
 
-            String? path = Path.GetDirectoryName(Path.GetFullPath(filepath));
-            String file = Path.GetFileNameWithoutExtension(filepath);
-            String ext = Path.GetExtension(filepath);
+        //        String? path = Path.GetDirectoryName(Path.GetFullPath(filepath));
+        //        String file = Path.GetFileNameWithoutExtension(filepath);
+        //        String ext = Path.GetExtension(filepath);
 
-            // ---------------------------------------------------------------
-            // construct file names for events and categories
-            // ---------------------------------------------------------------
-            String eventpath = path + "\\" + file + "_events" + ".evts";
-            String categorypath = path + "\\" + file + "_categories" + ".cats";
+        //        ---------------------------------------------------------------
+        //        construct file names for events and categories
+        //        -------------------------------------------------------------- -
+        //       String eventpath = path + "\\" + file + "_events" + ".evts";
+        //        String categorypath = path + "\\" + file + "_categories" + ".cats";
 
-            // ---------------------------------------------------------------
-            // save the events and categories into their own files
-            // ---------------------------------------------------------------
-            _events.SaveToFile(eventpath);
-            _categories.SaveToFile(categorypath);
+        //        ---------------------------------------------------------------
+        //        save the events and categories into their own files
+        //     ---------------------------------------------------------------
+        //    _events.SaveToFile(eventpath);
+        //        _categories.SaveToFile(categorypath);
 
-            // ---------------------------------------------------------------
-            // save filenames of events and categories to calendar file
-            // ---------------------------------------------------------------
-            string[] files = { Path.GetFileName(categorypath), Path.GetFileName(eventpath) };
-            System.IO.File.WriteAllLines(filepath, files);
+        //        ---------------------------------------------------------------
+        //        save filenames of events and categories to calendar file
+        //     ---------------------------------------------------------------
+        //    string[] files = { Path.GetFileName(categorypath), Path.GetFileName(eventpath) };
+        //        System.IO.File.WriteAllLines(filepath, files);
 
-            // ----------------------------------------------------------------
-            // save filename info for later use
-            // ----------------------------------------------------------------
-            _DirName = path;
-            _FileName = Path.GetFileName(filepath);
-        }
+        //        ----------------------------------------------------------------
+        //        save filename info for later use
+
+        //        ----------------------------------------------------------------
+        //       _DirName = path;
+        //       _FileName = Path.GetFileName(filepath);
+        //    }
         #endregion OpenNewAndSave
 
         #region GetList
@@ -197,7 +197,7 @@ namespace Calendar
             Start = Start ?? new DateTime(1900, 1, 1);
             End = End ?? new DateTime(2500, 1, 1);
 
-            var query =  from c in _categories.List()
+            var query = from c in _categories.List()
                         join e in _events.List() on c.Id equals e.Category
                         where e.StartDateTime >= Start && e.StartDateTime <= End
                         orderby e.StartDateTime
@@ -214,11 +214,8 @@ namespace Calendar
                 // filter out unwanted categories if filter flag is on
                 if (FilterFlag && CategoryID != e.CatId)
                 {
-                    //Category Id only used for filtering if the filter flag is set to true.
                     continue;
                 }
-
-                // TODO write sql query:
 
                 // keep track of running totals
                 totalBusyTime = totalBusyTime + e.DurationInMinutes;
@@ -341,7 +338,7 @@ namespace Calendar
         //             for each category for which there is an event in ANY month:
         //             "category", the total busy time for that category for all the months
         // ============================================================================
-        public List<Dictionary<string,object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
+        public List<Dictionary<string, object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
             // get all items by month 
