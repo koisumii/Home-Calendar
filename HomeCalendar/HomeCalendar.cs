@@ -80,7 +80,7 @@ namespace Calendar
         //        Database.newDatabase(databaseFile);
         //        newDB = true;
         //    }
-        //    _categories = new Categories(Database.dbConnection, newDB);
+        //    _categories = new Categories(Database._dbConnection, newDB);
         //    _events = new Events();
         //    _events.ReadFromFile(eventsXMLFile);
         //}

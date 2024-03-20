@@ -13,7 +13,7 @@ using System.Threading;
 //     SQLiteCommand variable later on.
 //     EXAMPLE:
 //            Database.newDatabase(GetSolutionDir() + "\\" + filename);
-//            var cmd = new SQLiteCommand(Database.dbConnection);
+//            var cmd = new SQLiteCommand(Database._dbConnection);
 //            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES('Whatever')";
 //            cmd.ExecuteNonQuery();
 //            cmd.Dispose();
@@ -31,7 +31,7 @@ using System.Threading;
 namespace Calendar
 {
     /// <summary>
-    /// This 
+    /// This class manages the connection to a database and creating the tables
     /// </summary>
     public class Database
     {
@@ -47,6 +47,13 @@ namespace Calendar
         /// Creates a new database to store information. In this case, we are creating events, categories and category types. 
         /// </summary>
         /// <param name="filename"> The full location to the database file. </param>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// Database.newDatabase("C:\\Users\\2232607\\Documents\\Sprint2\\Milestone3_tests\\testDBInput.db");
+        /// ]]>
+        /// </code>
+        /// </example>
         public static void newDatabase(string filename)
         {
             // If there was a database open before, close it and release the lock
@@ -87,52 +94,13 @@ namespace Calendar
 
         }
 
-        //tested and it works
-
+        // ===================================================================
+        // open an existing database
+        // ===================================================================
         /// <summary>
         /// This method only goes inside the database (i.e connecting to it). No need to create a database because it already exists. 
         /// </summary>
         /// <param name="filename"> The full location to the database file. </param>
-
-        public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
-        {
-            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
-            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
-            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Availability.ToString());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
-            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.AllDayEvent.ToString());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-
-            cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
-            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Holiday.ToString());
-            cmd.Prepare();
-            cmd.ExecuteNonQuery();
-
-        }
-
-
-
-
-        public static void PopulateEventsTable(SQLiteCommand cmd)
-        {
-            Events e = new Events();
-            List<Event> newList = e.List();
-
-
-        }
-
-
-        // ===================================================================
-        // open an existing database
-        // ===================================================================
         public static void existingDatabase(string filename)
         {
 
@@ -147,11 +115,6 @@ namespace Calendar
         /// <summary>
         ///  close existing database, wait for garbage collector to release the lock before continuing
         /// </summary>
-=======
-        // ===================================================================
-        // close existing database, wait for garbage collector to
-        // release the lock before continuing
-        // ===================================================================
         static public void CloseDatabaseAndReleaseFile()
         {
             if (Database.dbConnection != null)

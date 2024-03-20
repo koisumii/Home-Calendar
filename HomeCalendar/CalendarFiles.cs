@@ -14,7 +14,7 @@ namespace Calendar
 {
 
     /// <summary>
-    /// CalendarFiles class is used to manage the files used in the Calendar project
+    /// It manages the files used in the Calendar project.
     /// </summary>
     public class CalendarFiles
     {
@@ -26,6 +26,26 @@ namespace Calendar
         // is it readable?
         // throws System.IO.FileNotFoundException if file does not exist
         // ====================================================================
+        /// <summary>
+        /// Verifies that the specified location of the file exists. 
+        /// </summary>
+        /// <param name="FilePath"> A string that has the location of the file. </param>
+        /// <param name="DefaultFileName"> A string that holds the title of the file. </param>
+        /// <returns> A string with the name and the location of the file. </returns>
+        /// <exception cref="FileNotFoundException"> Thrown when FilePath does not exist. </exception>
+        /// <example>
+        /// Sample code: 
+        /// <code>
+        /// <![CDATA[
+        /// String file = CalendarFiles.VerifyReadFromFileName("./test.calendar", "testingReadFromFile.txt");
+        /// Console.WriteLine(file);
+        /// ]]>
+        /// </code>
+        /// Sample output: 
+        /// <code>
+        /// ./test.calendar
+        /// </code>
+        /// </example>
         public static String VerifyReadFromFileName(String? FilePath, String DefaultFileName)
         {
 
@@ -57,6 +77,26 @@ namespace Calendar
         // is it writable
         // ====================================================================
 
+        /// <summary>
+        /// Verifies if it is possible to write information to a file. 
+        /// </summary>
+        /// <param name="FilePath"> A string that has the location of the file. </param>
+        /// <param name="DefaultFileName"> A string that holds the title of the file. </param>
+        /// <returns></returns>
+        /// <exception cref="Exception"> Thrown when we do not have permission to write to the file or when FilePath does not exist. </exception>
+        /// <example>
+        /// Sample code:
+        /// <code>
+        /// <![CDATA[
+        /// String file = CalendarFiles.VerifyWriteToFileName("./test.calendar", "testingWriteFromFile.txt");
+        /// Console.WriteLine(file);
+        /// ]]>
+        /// </code>
+        /// Sample output: 
+        /// <code>
+        /// ./test.calendar
+        /// </code>
+        /// </example>
         public static String VerifyWriteToFileName(String? FilePath, String DefaultFileName)
         {
             // ---------------------------------------------------------------
