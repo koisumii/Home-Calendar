@@ -30,6 +30,9 @@ using System.Threading;
 
 namespace Calendar
 {
+    /// <summary>
+    /// This 
+    /// </summary>
     public class Database
     {
 
@@ -40,12 +43,15 @@ namespace Calendar
         // create and open a new database
         // filename: full file path to the database file
         // ===================================================================
+        /// <summary>
+        /// Creates a new database to store information. In this case, we are creating events, categories and category types. 
+        /// </summary>
+        /// <param name="filename"> The full location to the database file. </param>
         public static void newDatabase(string filename)
         {
             // If there was a database open before, close it and release the lock
             CloseDatabaseAndReleaseFile();
 
-            // your code
             //connecting to the db and opening it  
             string cs = $"Data Source={filename}; Foreign Keys=1";
             _connection = new SQLiteConnection(cs);
@@ -78,25 +84,20 @@ namespace Calendar
             cmd.CommandText = @"CREATE TABLE events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id));";
             cmd.ExecuteNonQuery();
 
-            //cmd.CommandText = @"INSERT INTO events(Id INTEGER PRIMARY KEY, CategoryId INT NOT NULL, StartDateTime TEXT, DurationInMinutes REAL, Details TEXT, FOREIGN KEY(CategoryId) REFERENCES categories(Id)) VALUES(1,1,'2024-02-14', 55, 'BLABLA');";
-
-            //have to comment it out to pass 'SQLite_TestNewDatabase_newDBDoesExist_shouldHaveNoData'
-            //PopulateCategoriesTypeTable(cmd);
-
-            //populating categories table 
-            //PopulateCategoriesTable(cmd);
-
-            //PopulateEventsTable(cmd);
-
 
         }
 
         //tested and it works
 
+        /// <summary>
+        /// This method only goes inside the database (i.e connecting to it). No need to create a database because it already exists. 
+        /// </summary>
+        /// <param name="filename"> The full location to the database file. </param>
+
         public static void PopulateCategoriesTypeTable(SQLiteCommand cmd)
         {
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
-            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString()); 
+            cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Event.ToString());
             cmd.Prepare();
             cmd.ExecuteNonQuery();
 
@@ -108,7 +109,7 @@ namespace Calendar
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
             cmd.Parameters.AddWithValue("@Description", Category.CategoryType.AllDayEvent.ToString());
             cmd.Prepare();
-            cmd.ExecuteNonQuery(); 
+            cmd.ExecuteNonQuery();
 
             cmd.CommandText = "INSERT INTO categoryTypes(Description) VALUES(@Description);";
             cmd.Parameters.AddWithValue("@Description", Category.CategoryType.Holiday.ToString());
@@ -117,15 +118,15 @@ namespace Calendar
 
         }
 
-        
-        
+
+
 
         public static void PopulateEventsTable(SQLiteCommand cmd)
         {
             Events e = new Events();
             List<Event> newList = e.List();
 
-            
+
         }
 
 
@@ -141,21 +142,23 @@ namespace Calendar
             string cs = $"Data Source={filename}; Foreign Keys=1";
             _connection = new SQLiteConnection(cs);
             _connection.Open();
-            //using var cmd = new SQLiteCommand(_connection);
-            //PopulateCategoriesTypeTable(cmd);
         }
 
-       // ===================================================================
-       // close existing database, wait for garbage collector to
-       // release the lock before continuing
-       // ===================================================================
+        /// <summary>
+        ///  close existing database, wait for garbage collector to release the lock before continuing
+        /// </summary>
+=======
+        // ===================================================================
+        // close existing database, wait for garbage collector to
+        // release the lock before continuing
+        // ===================================================================
         static public void CloseDatabaseAndReleaseFile()
         {
             if (Database.dbConnection != null)
             {
                 // close the database connection
                 Database.dbConnection.Close();
-                
+
 
                 // wait for the garbage collector to remove the
                 // lock from the database file

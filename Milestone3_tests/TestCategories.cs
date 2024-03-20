@@ -60,7 +60,7 @@ namespace CalendarCodeTests
         {
             // Arrange
             String folder = TestConstants.GetSolutionDir();
-              String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String existingDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, existingDB, true);
 
