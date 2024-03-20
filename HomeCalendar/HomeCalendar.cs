@@ -187,10 +187,13 @@ namespace Calendar
             // ------------------------------------------------------------------------
             // return joined list within time frame
             // ------------------------------------------------------------------------
+
+            //date parsing whole deal
             Start = Start ?? new DateTime(1900, 1, 1);
 
             DateTime tmpStart = Start ?? DateTime.Now;
             string y = tmpStart.ToString();
+            //getting rid of AM 
             y.Remove(y.Length - 3, 3);
             DateTime Startdate = DateTime.Parse(y);
 
@@ -198,11 +201,13 @@ namespace Calendar
 
             DateTime tmpEnd = End ?? DateTime.Now;
             string x = tmpEnd.ToString();
+            //getting rid of AM 
             x.Remove(x.Length - 3, 3);
             DateTime EndDate = DateTime.Parse(x);
             
-            string query = "SELECT c.Id, c.Description, c.TypeId FROM categories c JOIN events ON c.Id == events.CategoryId WHERE events.StartDateTime >= @Start AND events.StartDateTime <= @End ORDER BY events.StartDateTime";
-            SQLiteCommand cmd = new SQLiteCommand(query, this._dbConnection);
+            string q = "SELECT c.Id, c.Description, c.TypeId FROM categories c JOIN events ON c.Id == events.CategoryId WHERE events.StartDateTime >= @Start AND events.StartDateTime <= @End ORDER BY events.StartDateTime";
+            SQLiteCommand cmd = new SQLiteCommand(q, this._dbConnection);
+            //NEED YYYY/MM/DD BUT GETTING YYYY-MM-DD
             cmd.Parameters.AddWithValue("@Start", Startdate.ToString("yyyy/MM/dd hh:mm tt"));
             cmd.Parameters.AddWithValue("@End", EndDate.ToString("yyyy/MM/dd hh:mm tt"));
             cmd.Prepare();
@@ -224,47 +229,43 @@ namespace Calendar
                             
             }
 
-            // query working but returns nothing
-            // SELECT c.Id, c.Description, c.TypeId FROM categories c JOIN events e ON c.Id == e.CategoryId WHERE e.StartDateTi
-            // me >= '2018-01-01' AND e.StartDateTime <= '2020-01-01';
-
             // do the query
             // loop over the read results
             //      add result to items
 
-            //var query = from c in _categories.List()
-            //            join e in _events.List() on c.Id equals e.Category
-            //            where e.StartDateTime >= Start && e.StartDateTime <= End
-            //            orderby e.StartDateTime
-            //            select new { CatId = c.Id, EventId = e.Id, e.StartDateTime, Category = c.Description, e.Details, e.DurationInMinutes };
+            var query = from c in _categories.List()
+                        join e in _events.List() on c.Id equals e.Category
+                        where e.StartDateTime >= Start && e.StartDateTime <= End
+                        orderby e.StartDateTime
+                        select new { CatId = c.Id, EventId = e.Id, e.StartDateTime, Category = c.Description, e.Details, e.DurationInMinutes };
 
             // ------------------------------------------------------------------------
             // create a CalendarItem list with totals,
             // ------------------------------------------------------------------------
-            
+
             Double totalBusyTime = 0;
 
-            //foreach (var e in query.OrderBy(q => q.StartDateTime))
-            //{
-            //    // filter out unwanted categories if filter flag is on
-            //    if (FilterFlag && CategoryID != e.CatId)
-            //    {
-            //        continue;
-            //    }
+            foreach (var e in query.OrderBy(q => q.StartDateTime))
+            {
+                // filter out unwanted categories if filter flag is on
+                if (FilterFlag && CategoryID != e.CatId)
+                {
+                    continue;
+                }
 
-            //    // keep track of running totals
-            //    totalBusyTime = totalBusyTime + e.DurationInMinutes;
-            //  items.Add(new CalendarItem
-            //  {
-            //    CategoryID = e.CatId,
-            //    EventID = e.EventId,
-            //    ShortDescription = e.Details,
-            //    StartDateTime = e.StartDateTime,
-            //    DurationInMinutes = e.DurationInMinutes,
-            //    Category = e.Category,
-            //    BusyTime = totalBusyTime
-            //  });
-            //}
+                // keep track of running totals
+                totalBusyTime = totalBusyTime + e.DurationInMinutes;
+                items.Add(new CalendarItem
+                {
+                    CategoryID = e.CatId,
+                    EventID = e.EventId,
+                    ShortDescription = e.Details,
+                    StartDateTime = e.StartDateTime,
+                    DurationInMinutes = e.DurationInMinutes,
+                    Category = e.Category,
+                    BusyTime = totalBusyTime
+                });
+            }
 
             return items;
         }
