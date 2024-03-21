@@ -20,6 +20,9 @@ namespace Calendar
     //        - etc
     // ====================================================================
 
+    /// <summary>
+    /// This class will retrieve <see cref="Events">events</see> and <see cref="Categories">categories</see> from a database.
+    /// </summary>
     public class HomeCalendar
     {
         private SQLiteConnection _dbConnection;
@@ -32,7 +35,14 @@ namespace Calendar
         public SQLiteConnection DbConnection { get { return _dbConnection; } }
 
         // Properties (categories and events object)
+        /// <summary>
+        /// Gets multiple groups of different activities.
+        /// </summary>
         public Categories categories { get { return _categories; } }
+
+        /// <summary>
+        /// Gets the activities. 
+        /// </summary>
         public Events events { get { return _events; } }
 
         // -------------------------------------------------------------------
@@ -40,8 +50,7 @@ namespace Calendar
         // -------------------------------------------------------------------
         public HomeCalendar()
         {
-            //_categories = new Categories();
-            //_events = new Events();
+            
         }
 
         // -------------------------------------------------------------------
@@ -62,117 +71,9 @@ namespace Calendar
             _categories = new Categories(this._dbConnection, newDB);
             _events = new Events(this._dbConnection);
         }
-        //public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
-        //{
-        //    if (!newDB && File.Exists(databaseFile))
-        //    {
-        //        Database.existingDatabase(databaseFile);
-        //    }
-        //    else
-        //    {
-        //        Database.newDatabase(databaseFile);
-        //        newDB = true;
-        //    }
-        //    _categories = new Categories(Database._dbConnection, newDB);
-        //    _events = new Events();
-        //    _events.ReadFromFile(eventsXMLFile);
-        //}
 
         #region OpenNewAndSave
-        // ---------------------------------------------------------------
-        // Read
-        // Throws Exception if any problem reading this file
-        // ---------------------------------------------------------------
-        /*public void ReadFromFile(String? calendarFileName)
-        {
-            // ---------------------------------------------------------------
-            // read the calendar file and process
-            // ---------------------------------------------------------------
-            try
-            {
-                // get filepath name (throws exception if it doesn't exist)
-                calendarFileName = CalendarFiles.VerifyReadFromFileName(calendarFileName, "");
-
-                // If file exists, read it
-                string[] filenames = System.IO.File.ReadAllLines(calendarFileName);
-
-                // ----------------------------------------------------------------
-                // Save information about the calendar file
-                // ----------------------------------------------------------------
-                string? folder = Path.GetDirectoryName(calendarFileName);
-                _FileName = Path.GetFileName(calendarFileName);
-
-                // read the events and categories from their respective files
-                _categories.ReadFromFile(folder + "\\" + filenames[0]);
-                _events.ReadFromFile(folder + "\\" + filenames[1]);
-
-                // Save information about calendar file
-                _DirName = Path.GetDirectoryName(calendarFileName);
-                _FileName = Path.GetFileName(calendarFileName);
-
-            }
-
-            // ----------------------------------------------------------------
-            // throw new exception if we cannot get the info that we need
-            // ----------------------------------------------------------------
-            catch (Exception e)
-            {
-                throw new Exception("Could not read calendar info: \n" + e.Message);
-            }
-
-        }*/
-
-        // ====================================================================
-        // save to a file
-        // saves the following files:
-        //  filepath_events.evts  # events file
-        //  filepath_categories.cats # categories files
-        //  filepath # a file containing the names of the events and categories files.
-        //  Throws exception if we cannot write to that file (ex: invalid dir, wrong permissions)
-        // ====================================================================
-        //public void SaveToFile(String filepath)
-        //{
-
-        //    ---------------------------------------------------------------
-        //    just in case filepath doesn't exist, reset path info
-        //    -------------------------------------------------------------- -
-        //   _DirName = null;
-        //        _FileName = null;
-
-        //        ---------------------------------------------------------------
-        //        get filepath name(throws exception if we can't write to the file)
-        //        -------------------------------------------------------------- -
-        //       filepath = CalendarFiles.VerifyWriteToFileName(filepath, "");
-
-        //        String? path = Path.GetDirectoryName(Path.GetFullPath(filepath));
-        //        String file = Path.GetFileNameWithoutExtension(filepath);
-        //        String ext = Path.GetExtension(filepath);
-
-        //        ---------------------------------------------------------------
-        //        construct file names for events and categories
-        //        -------------------------------------------------------------- -
-        //       String eventpath = path + "\\" + file + "_events" + ".evts";
-        //        String categorypath = path + "\\" + file + "_categories" + ".cats";
-
-        //        ---------------------------------------------------------------
-        //        save the events and categories into their own files
-        //     ---------------------------------------------------------------
-        //    _events.SaveToFile(eventpath);
-        //        _categories.SaveToFile(categorypath);
-
-        //        ---------------------------------------------------------------
-        //        save filenames of events and categories to calendar file
-        //     ---------------------------------------------------------------
-        //    string[] files = { Path.GetFileName(categorypath), Path.GetFileName(eventpath) };
-        //        System.IO.File.WriteAllLines(filepath, files);
-
-        //        ----------------------------------------------------------------
-        //        save filename info for later use
-
-        //        ----------------------------------------------------------------
-        //       _DirName = path;
-        //       _FileName = Path.GetFileName(filepath);
-        //    }
+        
         #endregion OpenNewAndSave
 
         #region GetList
@@ -182,6 +83,98 @@ namespace Calendar
         // ============================================================================
         // Get all events list
         // ============================================================================
+        /// <summary>
+        /// Gets all the activities that have been marked in the calendar between a beginning date and a stop date and puts them inside of a list.
+        /// </summary>
+        /// <param name="Start"> A DateTime object that represents the oldest date marked in the calendar. </param>
+        /// <param name="End">A DateTime object that represents the most recent date marked in the calendar. </param>
+        /// <param name="FilterFlag"> A boolean value that only gets activities for the specified category ID </param>
+        /// <param name="CategoryID"> An integer that represents the unique number that identifies a category. </param>
+        /// <returns> A list with all activities in the calendar. </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020,01,01); 
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<CalendarItem> calendarItems1 = h1.GetCalendarItems(start1, DateTime.Now, false, 5);
+        /// for(int i = 0; i<calendarItems1.Count; i++)
+        /// {
+        ///     Console.WriteLine($"Item {i+1}");
+        ///     Console.Write($"BusyTime: {calendarItems1[i].BusyTime} min\n" +
+        ///     $"Category: {calendarItems1[i].Category} \n" +
+        ///     $"CategoryID: {calendarItems1[i].CategoryID} \n" +
+        ///     $"DurationInMinutes: {calendarItems1[i].DurationInMinutes} min\n" +
+        ///     $"ShortDescription: {calendarItems1[i].ShortDescription} \n" +
+        ///     $"StartDateTime: {calendarItems1[i].StartDateTime.Date}");
+        ///     Console.WriteLine("\n");
+        /// }
+        /// ]]>
+        /// </code>
+        /// 
+        /// Sample output:
+        /// <code>
+        /// Item 1
+        /// BusyTime: 1440 min
+        /// Category: Canadian Holidays
+        /// CategoryID: 8
+        /// DurationInMinutes: 1440 min
+        /// ShortDescription:
+        /// StartDateTime: 1/1/2020 12:00:00 AM
+        /// 
+        /// Item 2
+        /// BusyTime: 2880 min
+        /// Category: Vacation
+        /// CategoryID: 9
+        /// DurationInMinutes: 1440 min
+        /// ShortDescription:
+        /// StartDateTime: 1/9/2020 12:00:00 AM
+        ///
+        /// Item 3
+        ///  BusyTime: 4320 min
+        /// Category: Vacation
+        /// CategoryID: 9
+        /// DurationInMinutes: 1440 min
+        /// ShortDescription:
+        /// StartDateTime: 1/10/2020 12:00:00 AM
+        ///
+        /// Item 4
+        /// BusyTime: 5760 min
+        /// Category: Birthdays
+        /// CategoryID: 11
+        /// DurationInMinutes: 1440 min
+        /// ShortDescription:
+        /// StartDateTime: 1/12/2020 12:00:00 AM
+        ///
+        /// Item 5
+        /// BusyTime: 5940 min
+        /// Category: On call
+        /// CategoryID: 7
+        /// DurationInMinutes: 180 min
+        /// ShortDescription:
+        /// StartDateTime: 1/20/2020 12:00:00 AM
+        /// </code>
+        /// 
+        /// Sample code if the filter flag is true: 
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020,01,01); 
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<CalendarItem> calendarItems1 = h1.GetCalendarItems(start1, DateTime.Now, true, 7);
+        /// ]]>
+        /// </code>
+        ///
+        /// Sample output if the filter flag is true:
+        /// 
+        /// <code>
+        /// Item 1
+        /// BusyTime: 180 min
+        /// Category: On call
+        /// CategoryID: 7
+        /// DurationInMinutes: 180 min
+        /// ShortDescription:
+        /// StartDateTime: 1/20/2020 12:00:00 AM
+        /// </code>
+        /// </example>
         public List<CalendarItem> GetCalendarItems(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // ------------------------------------------------------------------------
@@ -275,6 +268,84 @@ namespace Calendar
         // returns a list of CalendarItemsByMonth which is 
         // "year/month", list of calendar items, and totalBusyTime for that month
         // ============================================================================
+        /// <summary>
+        /// Gets all the activities that were marked in your calendar for a specific month.
+        /// </summary>
+        /// <param name="Start"> A DateTime object that represents the oldest date marked in the calendar. </param>
+        /// <param name="End"> A DateTime object that represents the most recent date marked in the calendar. </param>
+        /// <param name="FilterFlag"> A boolean value that only gets activities for the specified category ID </param>
+        /// <param name="CategoryID"> An integer that represents the unique number that identifies a category. </param>
+        /// <returns> A list with all activities for a specific month in the calendar. </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020,01,01); 
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<CalendarItemsByMonth> itemsByMonths = h1.GetCalendarItemsByMonth(start1, DateTime.Now, false, 7);
+        ///
+        /// for(int i = 0; i<itemsByMonths.Count; i ++)
+        /// {
+        ///     Console.WriteLine($"Items for the month of: {itemsByMonths[i].Month}. You were busy for a total of {itemsByMonths[i].TotalBusyTime} minute(s) this month.");
+        ///     Console.WriteLine("Your activities for this month: ");
+        ///     for(int j = 0; j<itemsByMonths[i].Items.Count; j++)
+        ///     {
+        ///         Console.WriteLine($"Item {j+1}");
+        ///         Console.WriteLine($"Category: {itemsByMonths[i].Items[j].Category}\n" +
+        ///                           $"Duration (in minutes): {itemsByMonths[i].Items[j].DurationInMinutes}\n" +
+        ///                           $"Start date: {itemsByMonths[i].Items[j].StartDateTime}\n");
+        ///     }
+        /// }
+        /// ]]>
+        /// </code>
+        /// Sample output:
+        /// <code>
+        /// Items for the month of: 2020/01. You were busy for a total of 5940 minute(s) this year.
+        /// Your activities for this month:
+        /// Item 1
+        /// Category: Canadian Holidays
+        /// Duration(in minutes) : 1440
+        /// Start date: 1/1/2020 12:00:00 AM
+        ///
+        /// Item 2
+        /// Category: Vacation
+        /// Duration(in minutes): 1440
+        /// Start date: 1/9/2020 12:00:00 AM
+        ///
+        /// Item 3
+        /// Category: Vacation
+        /// Duration(in minutes): 1440
+        /// Start date: 1/10/2020 12:00:00 AM
+        ///
+        /// Item 4
+        /// Category: Birthdays
+        /// Duration(in minutes): 1440
+        /// Start date: 1/12/2020 12:00:00 AM
+        ///
+        /// Item 5
+        /// Category: On call
+        /// Duration(in minutes) : 180
+        /// Start date: 1/20/2020 11:00:00 AM
+        /// </code>
+        /// 
+        /// Sample code when the filter flag is true:
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020,01,01); 
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<CalendarItemsByMonth> itemsByMonths = h1.GetCalendarItemsByMonth(start1, DateTime.Now, true, 7);
+        /// ]]>
+        /// </code>
+        /// Sample output when the filter flag is true:
+        /// <code>
+        /// Items for the month of: 2020/01. You were busy for a total of 180 minute(s) this year.
+        /// Your activities for this month:
+        /// 
+        /// Item 1
+        /// Category: On call
+        /// Duration(in minutes) : 180
+        /// Start date: 1/20/2020 11:00:00 AM
+        /// </code>
+        /// </example>
         public List<CalendarItemsByMonth> GetCalendarItemsByMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
@@ -317,6 +388,77 @@ namespace Calendar
         // ============================================================================
         // Group all events by category (ordered by category name)
         // ============================================================================
+        /// <summary>
+        /// Gets all the activities that were marked in your calendar for a specific category.
+        /// </summary>
+        /// <param name="Start"> A DateTime object that represents the oldest date marked in the calendar. </param>
+        /// <param name="End"> A DateTime object that represents the most recent date marked in the calendar. </param>
+        /// <param name="FilterFlag"> A boolean value that only gets activities for the specified category ID </param>
+        /// <param name="CategoryID"> An integer that represents the unique number that identifies a category. </param>
+        /// <returns> A list with all activities for a specific category in the calendar. </returns>
+        /// <example>
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020,01,01); 
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<CalendarItemsByCategory> itemsByCategories = h1.GetCalendarItemsByCategory(start1, DateTime.Now, false, 7);
+        ///
+        /// for(int i = 0; i<itemsByCategories.Count; i++)
+        /// {
+        ///     Console.WriteLine($"The category is: {itemsByCategories[i].Category}");
+        ///     for(int j = 0; j<itemsByCategories[i].Items.Count; j++)
+        ///     {
+        ///         Console.WriteLine($"Busy time for this category (in minutes): {itemsByCategories[i].Items[j].BusyTime}\n" +
+        ///                           $"Start date: {itemsByCategories[i].Items[j].StartDateTime}\n" +
+        ///                           $"Category ID: {itemsByCategories[i].Items[j].CategoryID}\n");
+        ///     }
+        /// }
+        /// ]]>
+        /// </code>
+        /// Sample output:
+        /// <code>
+        /// The category is: Birthdays
+        /// Busy time for this category(in minutes) : 5760
+        /// Start date: 1/12/2020 12:00:00 AM
+        /// Category ID: 11
+        ///
+        /// The category is: Canadian Holidays
+        /// Busy time for this category(in minutes) : 1440
+        /// Start date: 1/1/2020 12:00:00 AM
+        /// Category ID: 8
+        ///
+        /// The category is: On call
+        /// Busy time for this category(in minutes) : 5940
+        /// Start date: 1/20/2020 11:00:00 AM
+        /// Category ID: 7
+        ///
+        /// The category is: Vacation
+        /// Busy time for this category(in minutes) : 2880
+        /// Start date: 1/9/2020 12:00:00 AM
+        /// Category ID: 9
+        ///
+        /// Busy time for this category(in minutes) : 4320
+        /// Start date: 1/10/2020 12:00:00 AM
+        /// Category ID: 9
+        /// </code>
+        /// 
+        /// Sample code when the filter flag is on:
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020,01,01); 
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<CalendarItemsByCategory> itemsByCategories = h1.GetCalendarItemsByCategory(start1, DateTime.Now, true, 7);
+        /// ]]>
+        /// </code>
+        /// 
+        /// Sample output when the filter flag is on:
+        /// <code>
+        /// The category is: On call
+        /// Busy time for this category(in minutes) : 180
+        /// Start date: 1/20/2020 11:00:00 AM
+        /// Category ID: 7
+        /// </code>
+        /// </example>
         public List<CalendarItemsByCategory> GetCalendarItemsByCategory(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
@@ -374,6 +516,109 @@ namespace Calendar
         //             for each category for which there is an event in ANY month:
         //             "category", the total busy time for that category for all the months
         // ============================================================================
+        /// <summary>
+        /// Gets all activities for each months of the year and places them in a dictionary for each month.
+        /// </summary>
+        /// <param name="Start"> A DateTime object that represents the oldest date marked in the calendar. </param>
+        /// <param name="End"> A DateTime object that represents the most recent date marked in the calendar. </param>
+        /// <param name="FilterFlag"> A boolean value that only gets activities for the specified category ID </param>
+        /// <param name="CategoryID"> An integer that represents the unique number that identifies a category. </param>
+        /// <returns> A dictionary with all the activities marked in the calendar. </returns>
+        /// <example>
+        /// Sample code:
+        /// <code>
+        /// <![CDATA[
+        /// DateTime start1 = new DateTime(2020, 01, 01);
+        /// HomeCalendar h1 = new HomeCalendar("./test.calendar");
+        /// List<Dictionary<string, object>> d1 = h1.GetCalendarDictionaryByCategoryAndMonth(start1, DateTime.Now, false, 7);
+        /// int counter = 1;
+        ///
+        /// for(int i = 0; i<d1.Count; i++)
+        /// {
+        ///     foreach(string key in d1[i].Keys)
+        ///     {
+        ///         if (d1[i][key] is double )
+        ///         {
+        ///             Console.WriteLine($"Item #{counter}\n" +
+        ///                               $"Category: {key}\n" +
+        ///                               $"Value: {d1[i][key]} minutes\n");
+        ///         }
+        ///         else
+        ///         {
+        ///             Console.WriteLine($"Item #{counter}\n" +
+        ///                               $"Category: {key}\n" +
+        ///                               $"Value: {d1[i][key]}\n");
+        ///         }
+        ///
+        ///         counter++;
+        ///     }
+        /// }
+        /// ]]>
+        /// </code>
+        /// 
+        /// Sample output:
+        /// <code>
+        /// Item #1
+        /// Category: Month
+        /// Value: 2020/01
+        ///
+        /// Item #2
+        /// Category: TotalBusyTime
+        /// Value: 5940 minutes
+        ///
+        /// Item #3
+        /// Category: items:Birthdays
+        /// Value: 1
+        ///
+        /// Item #4
+        /// Category: Birthdays
+        /// Value: 1440 minutes
+        ///
+        /// Item #5
+        /// Category: items:Canadian Holidays
+        /// Value: 1
+        ///
+        /// Item #6
+        /// Category: Canadian Holidays
+        /// Value: 1440 minutes
+        ///
+        /// Item #7
+        /// Category: items:On call
+        /// Value: 1
+        ///
+        /// Item #8
+        /// Category: On call
+        /// Value: 180 minutes
+        ///
+        /// Item #9
+        /// Category: items:Vacation
+        /// Value: 1
+        ///
+        /// Item #10
+        /// Category: Vacation
+        /// Value: 2880 minutes
+        ///
+        /// Item #11
+        /// Category: Month
+        /// Value: TOTALS
+        ///
+        /// Item #12
+        /// Category: On call
+        /// Value: 180 minutes
+        ///
+        /// Item #13
+        /// Category: Canadian Holidays
+        /// Value: 1440 minutes
+        ///
+        /// Item #14
+        /// Category: Vacation
+        /// Value: 2880 minutes
+        ///
+        /// Item #15
+        /// Category: Birthdays
+        /// Value: 1440 minutes
+        /// </code>
+        /// </example>
         public List<Dictionary<string, object>> GetCalendarDictionaryByCategoryAndMonth(DateTime? Start, DateTime? End, bool FilterFlag, int CategoryID)
         {
             // -----------------------------------------------------------------------
