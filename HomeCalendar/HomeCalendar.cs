@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SQLite;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 
@@ -20,32 +22,14 @@ namespace Calendar
 
     public class HomeCalendar
     {
-        private string? _FileName;
-        private string? _DirName;
+        private SQLiteConnection _dbConnection;
         private Categories _categories;
         private Events _events;
 
         // ====================================================================
         // Properties
         // ===================================================================
-
-        // Properties (location of files etc)
-        public String? FileName { get { return _FileName; } }
-        public String? DirName { get { return _DirName; } }
-        public String? PathName
-        {
-            get
-            {
-                if (_FileName != null && _DirName != null)
-                {
-                    return Path.GetFullPath(_DirName + "\\" + _FileName);
-                }
-                else
-                {
-                    return null;
-                }
-            }
-        }
+        public SQLiteConnection DbConnection { get { return _dbConnection; } }
 
         // Properties (categories and events object)
         public Categories categories { get { return _categories; } }
@@ -61,13 +45,22 @@ namespace Calendar
         }
 
         // -------------------------------------------------------------------
-        // Constructor (existing calendar ... must specify file)
+        // // Constructor (existing calendar ... must specify database)
         // -------------------------------------------------------------------
-        public HomeCalendar(String calendarFileName)
+        public HomeCalendar(string databaseFile, bool newDB)
         {
-            //_categories = new Categories();
-            //_events = new Events();
-            //ReadFromFile(calendarFileName);
+            if (newDB)
+            {
+                Database.newDatabase(databaseFile);
+            }
+            else
+            {
+                Database.existingDatabase(databaseFile);
+            }
+
+            this._dbConnection = Database.dbConnection;
+            _categories = new Categories(this._dbConnection, newDB);
+            _events = new Events(this._dbConnection);
         }
         //public HomeCalendar(string databaseFile, string eventsXMLFile, bool newDB = false)
         //{
@@ -194,8 +187,51 @@ namespace Calendar
             // ------------------------------------------------------------------------
             // return joined list within time frame
             // ------------------------------------------------------------------------
+
+            //date parsing whole deal
             Start = Start ?? new DateTime(1900, 1, 1);
-            End = End ?? new DateTime(2500, 1, 1);
+
+            DateTime tmpStart = Start ?? DateTime.Now;
+            string y = tmpStart.ToString();
+            //getting rid of AM 
+            y.Remove(y.Length - 3, 3);
+            DateTime Startdate = DateTime.Parse(y);
+
+            End = End ?? new DateTime(2020, 12, 31);
+
+            DateTime tmpEnd = End ?? DateTime.Now;
+            string x = tmpEnd.ToString();
+            //getting rid of AM 
+            x.Remove(x.Length - 3, 3);
+            DateTime EndDate = DateTime.Parse(x);
+            
+            string q = "SELECT c.Id, c.Description, c.TypeId FROM categories c JOIN events ON c.Id == events.CategoryId WHERE events.StartDateTime >= @Start AND events.StartDateTime <= @End ORDER BY events.StartDateTime";
+            SQLiteCommand cmd = new SQLiteCommand(q, this._dbConnection);
+            //NEED YYYY/MM/DD BUT GETTING YYYY-MM-DD
+            cmd.Parameters.AddWithValue("@Start", Startdate.ToString("yyyy/MM/dd hh:mm tt"));
+            cmd.Parameters.AddWithValue("@End", EndDate.ToString("yyyy/MM/dd hh:mm tt"));
+            cmd.Prepare();
+
+            List<CalendarItem> items = new List<CalendarItem>();
+            using SQLiteDataReader reader = cmd.ExecuteReader();
+            while (reader.Read()) 
+            {
+                int id = reader.GetInt32(0);
+                String description = reader.GetString(1);
+                int typeId = reader.GetInt32(2);
+
+                items.Add(new CalendarItem
+                {
+                    CategoryID = id,
+                    ShortDescription = description,
+                    StartDateTime = Startdate,
+                });
+                            
+            }
+
+            // do the query
+            // loop over the read results
+            //      add result to items
 
             var query = from c in _categories.List()
                         join e in _events.List() on c.Id equals e.Category
@@ -206,7 +242,7 @@ namespace Calendar
             // ------------------------------------------------------------------------
             // create a CalendarItem list with totals,
             // ------------------------------------------------------------------------
-            List<CalendarItem> items = new List<CalendarItem>();
+
             Double totalBusyTime = 0;
 
             foreach (var e in query.OrderBy(q => q.StartDateTime))

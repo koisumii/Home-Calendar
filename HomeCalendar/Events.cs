@@ -7,6 +7,7 @@ using System.IO;
 using System.Xml;
 using System.Data.SQLite;
 using System.Globalization;
+using System.Data.Common;
 
 // ============================================================================
 // (c) Sandy Bultena 2018
@@ -66,7 +67,7 @@ namespace Calendar
         /// ]]>
         /// </code>
         /// </example>
-        public void Add(string date, int categoryId, double duration, string details)
+        public void Add(DateTime date, int categoryId, Double duration, String details)
         {
             var pragmaOff = new SQLiteCommand("PRAGMA foreign_keys=OFF", this._dbConnection);
             pragmaOff.ExecuteNonQuery();
@@ -74,10 +75,13 @@ namespace Calendar
             string query = "INSERT INTO events(CategoryId, StartDateTime, DurationInMinutes, Details) VALUES(@CategoryId, @StartDateTime, @DurationInMinutes, @Details)";
             using var cmd = new SQLiteCommand(query, _dbConnection);
             cmd.Parameters.AddWithValue("@CategoryId", categoryId);
-            cmd.Parameters.AddWithValue("@StartDateTime", date);
+            cmd.Parameters.AddWithValue("@StartDateTime", date.ToString());
             cmd.Parameters.AddWithValue("@DurationInMinutes", duration);
             cmd.Parameters.AddWithValue("@Details", details);
             cmd.ExecuteNonQuery();
+
+            var pragmaOn = new SQLiteCommand("PRAGMA foreign_keys=ON", this._dbConnection);
+            pragmaOn.ExecuteNonQuery();
         }
 
         // ====================================================================
@@ -180,15 +184,13 @@ namespace Calendar
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
-                int categoryId = reader.GetInt32(1);
-                string startDateTime = reader.GetString(2);
-                float durationInMinutes = reader.GetFloat(3);
-                string details = reader.GetString(4);
-                //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                String startDateTime = reader.GetString(1);
+                Double durationInMinutes = reader.GetFloat(2);
+                string details = reader.GetString(3);
+                int categoryId = reader.GetInt32(4);
 
-                //Console.WriteLine($"{id}, {description}, {typeId}");
-                // should be added to the list, eventsList.Add
-                Add(startDateTime, categoryId, durationInMinutes, details); 
+                DateTime startDate = DateTime.Parse(startDateTime);
+                eventsList.Add(new Event(id, startDate, categoryId, durationInMinutes, details));
             }
 
 
