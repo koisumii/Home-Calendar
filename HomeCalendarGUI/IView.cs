@@ -8,6 +8,6 @@ namespace HomeCalendarGUI
 {
     public interface IView
     {
-
+        //public void ShowOpenFileDialog();
     }
 }
