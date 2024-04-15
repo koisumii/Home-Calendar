@@ -20,10 +20,13 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center" FontFamily="Times New Roman" FontWeight="Bold" FontSize="40">Welcome To Your Home Calendar App</TextBlock>
-                 
+
         <Button Click="btn_Specify_File" Grid.Column="1" Grid.Row="1" Margin="50" Background="Blue" FontSize="12" Foreground="Wheat" FontWeight="Bold" FontFamily="Sans Serif">Specify Home Calendar File</Button>
 
-        <ComboBox x:Name="catsComboBox" Grid.Row="2" Grid.Column="0" Margin="60" Text="Categories"></ComboBox>
-        
+        <Button Click="btn_TestComboBox" Grid.Column="1" Grid.Row="2" Margin="50" Background="Red" FontWeight="ExtraBold" Foreground="Wheat">Test Combo Box</Button>
+
+        <ComboBox ScrollBar.Scroll="catsComboBox_Scroll" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="catsComboBox" MouseDoubleClick="catsComboBox_MouseDoubleClick" Grid.Row="1" Grid.Column="2" Margin="55,60,55,50" Text="Categories" DisplayMemberPath="Description"></ComboBox>
+
+
     </Grid>
 </Window>

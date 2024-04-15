@@ -21,6 +21,7 @@ namespace HomeCalendarGUI
     {
         private readonly Presenter presenter;
         private readonly OpenFileDialog fileDialog;
+        private Category selectedCategoryObject;
         
 
         public MainWindow()
@@ -32,13 +33,12 @@ namespace HomeCalendarGUI
         }
 
         public void ShowCategoriesOnComboBox(List<Category> categories)
-        {
-            const int DEFAULT = 0;
-            categories.ForEach(c =>
-            {
-                catsComboBox.Items.Add(c.Description);
-                catsComboBox.SelectedIndex = DEFAULT;
+        {           
+            const int DEFAULT = 0;                        
+            categories.ForEach(c => {
+                catsComboBox.Items.Add(c);                
             });
+            catsComboBox.SelectedIndex = DEFAULT;
         }
 
         public void ShowOpenFileDialog()
@@ -54,6 +54,24 @@ namespace HomeCalendarGUI
             fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName("Documents/Calendar");
             fileDialog.Filter = "Database files (*.db)|";
             fileDialog.ShowDialog();
+        }
+
+        private void catsComboBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            //https://stackoverflow.com/questions/6506171/how-to-set-scrollbar-in-combobox-from-top
+            var scrollViewerCombo = catsComboBox.Template.FindName("PART_ScrollViewer", catsComboBox) as ScrollViewer;
+            scrollViewerCombo?.ScrollToTop();
+        }
+
+        private void catsComboBox_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
+        {
+            var testMethod = "hui";
+        }
+
+        private void btn_TestComboBox(object sender, RoutedEventArgs e)
+        {
+            Category c = new Category(catsComboBox.SelectedItem as Category);
+            MessageBox.Show($"Category Id: {c.Id} \n Category Description: {c.Description} \n Category Type: {c.Type}","Selected combo box item");
         }
     }
 }
