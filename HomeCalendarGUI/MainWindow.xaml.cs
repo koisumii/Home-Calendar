@@ -56,22 +56,22 @@ namespace HomeCalendarGUI
             fileDialog.ShowDialog();
         }
 
-        private void catsComboBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            //https://stackoverflow.com/questions/6506171/how-to-set-scrollbar-in-combobox-from-top
-            var scrollViewerCombo = catsComboBox.Template.FindName("PART_ScrollViewer", catsComboBox) as ScrollViewer;
-            scrollViewerCombo?.ScrollToTop();
-        }
-
-        private void catsComboBox_Scroll(object sender, System.Windows.Controls.Primitives.ScrollEventArgs e)
-        {
-            var testMethod = "hui";
-        }
-
         private void btn_TestComboBox(object sender, RoutedEventArgs e)
         {
             Category c = new Category(catsComboBox.SelectedItem as Category);
-            MessageBox.Show($"Category Id: {c.Id} \n Category Description: {c.Description} \n Category Type: {c.Type}","Selected combo box item");
+
+            if(c != null)
+            {
+                MessageBox.Show($"Category Id: {c.Id} \n Category Description: {c.Description} \n Category Type: {c.Type}", "Selected combo box item");
+            }
+            else if (catsComboBox.SelectedIndex > 0)
+            {
+                MessageBox.Show("You did not select a category","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+            else
+            {
+                MessageBox.Show("Unknown error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
         }
     }
 }
