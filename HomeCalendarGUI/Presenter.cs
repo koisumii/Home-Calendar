@@ -39,7 +39,7 @@ namespace HomeCalendarGUI
         public void GetCategoriesForComboBox()
         {
             List<Category> categories = model.categories.List();
-
+            view.ShowCategoriesOnComboBox(categories);
         }
     }
 }
