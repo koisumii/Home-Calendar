@@ -20,20 +20,24 @@ namespace HomeCalendarGUI
     public partial class MainWindow : Window,IView
     {
         private readonly Presenter presenter;
-        private readonly OpenFileDialog fileDialog;        
+        private readonly OpenFileDialog fileDialog;
+        
 
         public MainWindow()
         {
             InitializeComponent();
             fileDialog = new OpenFileDialog();
             presenter = new Presenter(this);
+            presenter.GetCategoriesForComboBox();
         }
 
         public void ShowCategoriesOnComboBox(List<Category> categories)
         {
+            const int DEFAULT = 0;
             categories.ForEach(c =>
             {
-                catsComboBox.DataContext = c;
+                catsComboBox.Items.Add(c.Description);
+                catsComboBox.SelectedIndex = DEFAULT;
             });
         }
 

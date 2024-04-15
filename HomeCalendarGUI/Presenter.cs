@@ -21,7 +21,7 @@ namespace HomeCalendarGUI
         /// <param name="v">IView interface implemented class</param>
         public Presenter(IView v) 
         {
-            model = new HomeCalendar();            
+            model = new HomeCalendar();
             view = v;            
         }
 
