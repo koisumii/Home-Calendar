@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +9,10 @@ namespace HomeCalendarGUI
 {
     public interface IView
     {
-        //public void ShowOpenFileDialog();
+        /// <summary>
+        /// Displays all categories currently in the database on the drop-down button
+        /// </summary>
+        /// <param name="categories">A list of current categories</param>
+        public void ShowCategoriesOnComboBox(List<Category> categories);
     }
 }

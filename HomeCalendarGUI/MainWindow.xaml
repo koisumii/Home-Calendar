@@ -7,6 +7,23 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center" FontFamily="Times New Roman" FontWeight="Bold" FontSize="40">Welcome To Your Home Calendar App</TextBlock>
+                 
+        <Button Click="btn_Specify_File" Grid.Column="1" Grid.Row="1" Margin="50" Background="Blue" FontSize="12" Foreground="Wheat" FontWeight="Bold" FontFamily="Sans Serif">Specify Home Calendar File</Button>
+
+        <ComboBox x:Name="catsComboBox" Grid.Row="2" Grid.Column="0" Margin="60" Text="Categories"></ComboBox>
+        
     </Grid>
 </Window>

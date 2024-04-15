@@ -26,7 +26,15 @@ namespace HomeCalendarGUI
         {
             InitializeComponent();
             fileDialog = new OpenFileDialog();
-            presenter = new Presenter(this); 
+            presenter = new Presenter(this);
+        }
+
+        public void ShowCategoriesOnComboBox(List<Category> categories)
+        {
+            categories.ForEach(c =>
+            {
+                catsComboBox.DataContext = c;
+            });
         }
 
         public void ShowOpenFileDialog()
@@ -35,6 +43,13 @@ namespace HomeCalendarGUI
             fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName("Documents");
             fileDialog.Filter = "All files (*.*)|";
             fileDialog.ShowDialog();            
+        }
+
+        private void btn_Specify_File(object sender, RoutedEventArgs e)
+        {
+            fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName("Documents/Calendar");
+            fileDialog.Filter = "Database files (*.db)|";
+            fileDialog.ShowDialog();
         }
     }
 }
