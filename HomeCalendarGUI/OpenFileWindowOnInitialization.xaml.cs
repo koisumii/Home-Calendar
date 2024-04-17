@@ -40,6 +40,7 @@ namespace HomeCalendarGUI
         {
             //https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.openfiledialog?view=windowsdesktop-8.0            
             //https://www.c-sharpcorner.com/UploadFile/mahesh/openfiledialog-in-C-Sharp/
+            //https://wpf-tutorial.com/dialogs/the-openfiledialog/
 
 
             string defaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
@@ -54,17 +55,17 @@ namespace HomeCalendarGUI
             fileDialog = new OpenFileDialog()
             {
                 InitialDirectory = defaultDirectory,
-                Filter = "Database files (*.db)|",
+                Filter = "Database files (*.db)|*.db|All Files|*.*",
                 CheckFileExists = true,
-                CheckPathExists = true,      
+                CheckPathExists = true,
                 RestoreDirectory = true,
                 DefaultExt = "db"
-            };           
-            
-           if(fileDialog.ShowDialog() == DialogResult)
-           {
+            };
 
-           }
+            if (fileDialog.ShowDialog() == true)
+            {
+                string filePath = fileDialog.FileName;
+            }
 
         }
     }
