@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="840" Width="600">
+        Title="MainWindow" Height="600" Width="600">
     <Grid>
         <Label>Create a new Category</Label>
         <StackPanel Margin="0,50,0,50"  HorizontalAlignment="Center" Width="500">
@@ -15,7 +15,7 @@
             <TextBlock FontWeight="Bold" FontSize="20">Event type</TextBlock>
             <ComboBox x:Name="cmbEventTypes"></ComboBox>
 
-            <Button Margin="0,20,20,0" Width="50" Click="Button_ClickAddCategory">Done</Button>
+            <Button Margin="0,20" Width="50" HorizontalAlignment="Left" Click="Button_ClickAddCategory">Done</Button>
             <TextBlock x:Name="message" Margin="0,15,15,0" FontWeight="Bold" FontSize="15"></TextBlock>
         </StackPanel>
     </Grid>
