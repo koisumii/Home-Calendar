@@ -25,9 +25,9 @@ namespace HomeCalendarGUI
             InitializeComponent();
             ShowEventsTypeOnCmb();
             _presenter = new Presenter();
-            Events events = new Events();
-            events.Show();
-            this.Hide();
+            //Events events = new Events();
+            //events.Show();
+            //this.Hide();
         }
 
         public void ShowEventsTypeOnCmb()

@@ -19,7 +19,7 @@ namespace HomeCalendarGUI
             _model = new HomeCalendar();
         }
 
-        public void AddNewCategory(string desc, CategoryType type = CategoryType.Event)
+        public void AddNewCategory(string desc, CategoryType type)
         {
             _model.categories.Add(desc, type);
         }

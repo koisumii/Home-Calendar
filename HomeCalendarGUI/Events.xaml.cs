@@ -23,12 +23,19 @@ namespace HomeCalendarGUI
         public Events()
         {
             InitializeComponent();
+            SetTodaysDateOnDatePicker(); 
             ShowCategoriesOnCmb();
         }
 
         private void cmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             
+        }
+
+        public void SetTodaysDateOnDatePicker() 
+        { 
+            StartDate.DisplayDateStart = DateTime.Now;
+            EndDate.DisplayDateEnd = DateTime.Now;
         }
 
         public void ShowCategoriesOnCmb()
