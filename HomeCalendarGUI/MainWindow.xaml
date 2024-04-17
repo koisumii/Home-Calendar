@@ -25,7 +25,7 @@
 
         <Button Click="btn_TestComboBox" Grid.Column="1" Grid.Row="2" Margin="50" Background="Red" FontWeight="ExtraBold" Foreground="Wheat">Test Combo Box</Button>
 
-        <ComboBox MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" x:Name="catsComboBox" Grid.Row="1" Grid.Column="2" Margin="55,60,55,50" Text="Categories" DisplayMemberPath="Description"/>
+        <ComboBox x:Name="catsComboBox" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="55,60,55,50" Text="Categories" DisplayMemberPath="Description"/>
 
 
     </Grid>

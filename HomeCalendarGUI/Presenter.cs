@@ -36,10 +36,15 @@ namespace HomeCalendarGUI
             view = v;
         }
 
+        /// <summary>
+        /// Gets all categories listed in the database
+        /// </summary>
         public void GetCategoriesForComboBox()
         {
             List<Category> categories = model.categories.List();
             view.ShowCategoriesOnComboBox(categories);
         }
+
+
     }
 }

@@ -12,24 +12,33 @@ using System.Windows.Shapes;
 using System.IO;
 using Microsoft.Win32;
 
+
 namespace HomeCalendarGUI
 {
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window,IView
+    public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
         private readonly OpenFileDialog fileDialog;
         private Category selectedCategoryObject;
         
 
-        public MainWindow()
+        public MainWindow(bool useDefault, string filePath = null)
         {
+
             InitializeComponent();
             fileDialog = new OpenFileDialog();
-            presenter = new Presenter(this);
-            presenter.GetCategoriesForComboBox();
+
+            if (useDefault)
+            {
+                presenter = new Presenter(this);
+            }
+            else
+            {
+                presenter = new Presenter(this, filePath);
+            }
         }
 
         public void ShowCategoriesOnComboBox(List<Category> categories)
@@ -41,19 +50,26 @@ namespace HomeCalendarGUI
             catsComboBox.SelectedIndex = DEFAULT;
         }
 
-        public void ShowOpenFileDialog()
-        {
-            //https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.openfiledialog?view=windowsdesktop-8.0
-            fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName("Documents");
-            fileDialog.Filter = "All files (*.*)|";
-            fileDialog.ShowDialog();            
-        }
-
         private void btn_Specify_File(object sender, RoutedEventArgs e)
         {
-            fileDialog.InitialDirectory = System.IO.Path.GetDirectoryName("Documents/Calendar");
+            //https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.openfiledialog?view=windowsdesktop-8.0            
+            bool wait = true;
+
+
+            string defaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            defaultDirectory += "\\Calendar";
+            
+            if (!Directory.Exists(defaultDirectory))
+            {
+                Directory.CreateDirectory(defaultDirectory);
+                MessageBox.Show("Calendar Directory Created","Notice");
+            }
+
+            fileDialog.InitialDirectory = defaultDirectory;
             fileDialog.Filter = "Database files (*.db)|";
-            fileDialog.ShowDialog();
+            fileDialog.ShowDialog(); 
+
+
         }
 
         private void btn_TestComboBox(object sender, RoutedEventArgs e)
@@ -72,6 +88,6 @@ namespace HomeCalendarGUI
             {
                 MessageBox.Show("Unknown error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-        }
+        }   
     }
 }
