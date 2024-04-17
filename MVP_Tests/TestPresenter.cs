@@ -6,7 +6,7 @@ namespace MVP_Tests
         [Fact]
         public void TestAddNewCategory_Fail()
         {
-            Presenter p = new Presenter();
+            
         }
     }
 }
