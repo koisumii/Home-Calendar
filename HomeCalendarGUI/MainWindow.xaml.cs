@@ -23,7 +23,7 @@ namespace HomeCalendarGUI
         private readonly Presenter presenter;
         private readonly OpenFileDialog openFileDialog;
         private SaveFileDialog saveFileDialog;
-        private string currentDbFileLocation;
+        private string saveFileToLocation;
         private string dbFile;
         private Category selectedCategoryObject;
         
@@ -35,11 +35,12 @@ namespace HomeCalendarGUI
             saveFileDialog = new SaveFileDialog()
             {
                 Filter = "Database files (*.db)|*.db|All Files|*.*",
+                DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments)+"\\Calendar",
                 RestoreDirectory = true,
                 DefaultExt = "db"
             };
 
-            currentDbFileLocation = filePath;
+            saveFileToLocation = filePath;
             dbFile = System.IO.Path.GetFileName(filePath);
 
 
@@ -68,8 +69,9 @@ namespace HomeCalendarGUI
         {
             saveFileDialog.FileName = dbFile;
             if (saveFileDialog.ShowDialog() == true)
-            {
-                currentDbFileLocation = saveFileDialog.FileName;
+            {               
+                saveFileToLocation = saveFileDialog.FileName;
+                saveFileDialog.InitialDirectory = saveFileToLocation;
             }
         }
     }

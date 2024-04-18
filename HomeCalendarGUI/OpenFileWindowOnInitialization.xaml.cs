@@ -25,8 +25,7 @@ namespace HomeCalendarGUI
         private OpenFileDialog fileDialog;
         public OpenFileWindowOnInitialization()
         {
-            InitializeComponent();  
-               
+            InitializeComponent();              
         }
 
         private void Btn_Use_Default_File(object sender, RoutedEventArgs e)
@@ -44,7 +43,7 @@ namespace HomeCalendarGUI
 
 
             string defaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            defaultDirectory += "\\Calendar";
+            //defaultDirectory += "\\Calendar";
 
             if (!Directory.Exists(defaultDirectory))
             {
