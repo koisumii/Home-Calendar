@@ -21,17 +21,29 @@ namespace HomeCalendarGUI
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
-        private readonly OpenFileDialog fileDialog;
+        private readonly OpenFileDialog openFileDialog;
+        private SaveFileDialog saveFileDialog;
+        private string currentDbFileLocation;
+        private string dbFile;
         private Category selectedCategoryObject;
         
 
-        public MainWindow(bool useDefault, string filePath = null)
+        public MainWindow(bool useDefaultDb, string filePath = null)
         {
-
             InitializeComponent();
-            fileDialog = new OpenFileDialog();
+            openFileDialog = new OpenFileDialog();
+            saveFileDialog = new SaveFileDialog()
+            {
+                Filter = "Database files (*.db)|*.db|All Files|*.*",
+                RestoreDirectory = true,
+                DefaultExt = "db"
+            };
 
-            if (useDefault)
+            currentDbFileLocation = filePath;
+            dbFile = System.IO.Path.GetFileName(filePath);
+
+
+            if (useDefaultDb)
             {
                 presenter = new Presenter(this);
             }
@@ -39,6 +51,8 @@ namespace HomeCalendarGUI
             {
                 presenter = new Presenter(this, filePath);
             }
+
+            presenter.GetCategoriesForComboBox();
         }
 
         public void ShowCategoriesOnComboBox(List<Category> categories)
@@ -50,44 +64,13 @@ namespace HomeCalendarGUI
             catsComboBox.SelectedIndex = DEFAULT;
         }
 
-        private void btn_Specify_File(object sender, RoutedEventArgs e)
+        private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
         {
-            //https://learn.microsoft.com/en-us/dotnet/api/system.windows.forms.openfiledialog?view=windowsdesktop-8.0            
-            bool wait = true;
-
-
-            string defaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            defaultDirectory += "\\Calendar";
-            
-            if (!Directory.Exists(defaultDirectory))
+            saveFileDialog.FileName = dbFile;
+            if (saveFileDialog.ShowDialog() == true)
             {
-                Directory.CreateDirectory(defaultDirectory);
-                MessageBox.Show("Calendar Directory Created","Notice");
+                currentDbFileLocation = saveFileDialog.FileName;
             }
-
-            fileDialog.InitialDirectory = defaultDirectory;
-            fileDialog.Filter = "Database files (*.db)|";
-            fileDialog.ShowDialog(); 
-
-
         }
-
-        private void btn_TestComboBox(object sender, RoutedEventArgs e)
-        {
-            Category c = new Category(catsComboBox.SelectedItem as Category);
-
-            if(c != null)
-            {
-                MessageBox.Show($"Category Id: {c.Id} \n Category Description: {c.Description} \n Category Type: {c.Type}", "Selected combo box item");
-            }
-            else if (catsComboBox.SelectedIndex > 0)
-            {
-                MessageBox.Show("You did not select a category","Error",MessageBoxButton.OK,MessageBoxImage.Error);
-            }
-            else
-            {
-                MessageBox.Show("Unknown error", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-        }   
     }
 }

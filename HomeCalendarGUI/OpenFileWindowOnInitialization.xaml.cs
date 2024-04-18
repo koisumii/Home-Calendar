@@ -48,8 +48,7 @@ namespace HomeCalendarGUI
 
             if (!Directory.Exists(defaultDirectory))
             {
-                Directory.CreateDirectory(defaultDirectory);
-                MessageBox.Show("Calendar Directory Created", "Notice");
+                Directory.CreateDirectory(defaultDirectory);                
             }
             
             fileDialog = new OpenFileDialog()
@@ -62,9 +61,13 @@ namespace HomeCalendarGUI
                 DefaultExt = "db"
             };
 
+            //Validates if user clicked open or cancel
             if (fileDialog.ShowDialog() == true)
             {
                 string filePath = fileDialog.FileName;
+                main = new MainWindow(false,filePath);
+                main.Show();
+                Close();
             }
 
         }
