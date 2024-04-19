@@ -44,7 +44,5 @@ namespace HomeCalendarGUI
             List<Category> categories = model.categories.List();
             view.ShowCategoriesOnComboBox(categories);
         }
-
-
     }
 }

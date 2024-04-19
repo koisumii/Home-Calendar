@@ -41,15 +41,8 @@ namespace HomeCalendarGUI
             //https://www.c-sharpcorner.com/UploadFile/mahesh/openfiledialog-in-C-Sharp/
             //https://wpf-tutorial.com/dialogs/the-openfiledialog/
 
-
             string defaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            //defaultDirectory += "\\Calendar";
-
-            if (!Directory.Exists(defaultDirectory))
-            {
-                Directory.CreateDirectory(defaultDirectory);                
-            }
-            
+                        
             fileDialog = new OpenFileDialog()
             {
                 InitialDirectory = defaultDirectory,

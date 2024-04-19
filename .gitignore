@@ -367,3 +367,5 @@ MigrationBackup/
 FodyWeavers.xsd
 /HomeCalendarGUI/dlls/Model
 *.db
+/HomeCalendarGUI/dlls
+/HomeCalendar
