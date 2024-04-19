@@ -43,9 +43,12 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
+        //this should be in view 
         public void SetTodaysDateOnDatePicker() 
         { 
             StartDate.DisplayDateStart = DateTime.Now;
+            
+
             EndDate.DisplayDateStart = DateTime.Now;
         }
 
