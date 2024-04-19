@@ -11,17 +11,31 @@ using static Calendar.Category;
 
 namespace HomeCalendarGUI
 {
-    internal class Presenter
+    public class Presenter
     {
-        private HomeCalendar _model; 
-        public Presenter()
+        private HomeCalendar _model;
+        private ViewInterface _view;
+        public Presenter(ViewInterface v)
         {
             _model = new HomeCalendar();
+            _view = v;
         }
 
         public void AddNewCategory(string desc, CategoryType type)
         {
             _model.categories.Add(desc, type);
         }
+
+        //should call view over here 
+        //public void GetCategoriesList()
+        //{
+        //    _model.categories.List();
+        //}
+
+        public void GetCategoriesTypeInList() 
+        {
+            _view.ShowInformationOnCmb(_model.categories.List());
+        }
+
     }
 }

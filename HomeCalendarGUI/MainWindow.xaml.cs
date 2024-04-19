@@ -17,25 +17,28 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, ViewInterface
     {
         private Presenter _presenter; 
         public MainWindow()
         {
             InitializeComponent();
-            ShowEventsTypeOnCmb();
-            _presenter = new Presenter();
-            //Events events = new Events();
-            //events.Show();
-            //this.Hide();
+            _presenter = new Presenter(this);
+            _presenter.GetCategoriesTypeInList(); 
         }
 
-        public void ShowEventsTypeOnCmb()
+        public void ShowInformationOnCmb(List<Category> categories)
         {
-            cmbEventTypes.Items.Add(Category.CategoryType.Event);
-            cmbEventTypes.Items.Add(Category.CategoryType.AllDayEvent);
-            cmbEventTypes.Items.Add(Category.CategoryType.Holiday);
-            cmbEventTypes.Items.Add(Category.CategoryType.Availability);
+            foreach (var category in categories) 
+            {   
+                if (cmbEventTypes.Items.Contains(category.Type))
+                {
+                    //ignoring event types that have already been added because we do not want duplicates
+                    continue;
+                }
+                cmbEventTypes.Items.Add(category.Type);
+            }
+
         }
 
 
@@ -57,20 +60,6 @@ namespace HomeCalendarGUI
             
         }
 
-        public Category.CategoryType GetEnumFromString(string str)
-        {
-            foreach (CategoryType types in Enum.GetValues(typeof(Category.CategoryType))) 
-            { 
-                if(types.ToString() == str)
-                {
-                    return types; 
-                }
-            }
-
-            // safety net 
-            return CategoryType.Event; 
-        }
-
         public void DisplayErrorMessage(string msg)
         {
             message.Foreground = Brushes.Red;
@@ -82,5 +71,6 @@ namespace HomeCalendarGUI
             message.Foreground = Brushes.Green;
             message.Text = msg; 
         }
+
     }
 }

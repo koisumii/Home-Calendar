@@ -18,31 +18,40 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for Events.xaml
     /// </summary>
-    public partial class Events : Window
+    public partial class Events : Window, ViewInterface
     {
+        private Presenter _presenter;
         public Events()
         {
+            _presenter = new Presenter(this); 
             InitializeComponent();
-            SetTodaysDateOnDatePicker(); 
-            ShowCategoriesOnCmb();
+
+            //also put this in presenter
+            SetTodaysDateOnDatePicker();
+
+
+            _presenter.GetCategoriesTypeInList();
         }
 
-        private void cmbCategory_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        public void DisplayErrorMessage(string msg)
         {
-            
+            throw new NotImplementedException();
+        }
+
+        public void DisplaySuccessfulMessage(string msg)
+        {
+            throw new NotImplementedException();
         }
 
         public void SetTodaysDateOnDatePicker() 
         { 
             StartDate.DisplayDateStart = DateTime.Now;
-            EndDate.DisplayDateEnd = DateTime.Now;
+            EndDate.DisplayDateStart = DateTime.Now;
         }
 
-        public void ShowCategoriesOnCmb()
+        public void ShowInformationOnCmb(List<Category> categories)
         {
-            HomeCalendar h1 = new HomeCalendar();
-            List<Category> categories = h1.categories.List();
-
+            //List<Category> categories = _presenter.GetCategoriesList();
             for (int i = 0; i < categories.Count; i++)
             {
                 cmbCategory.Items.Add(categories[i]);
