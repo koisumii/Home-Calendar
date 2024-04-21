@@ -9,7 +9,7 @@ using static System.Net.WebRequestMethods;
 
 namespace HomeCalendarGUI
 {
-    internal class Presenter
+    public class Presenter
     {
         private readonly HomeCalendar model;
         private readonly IView view;
