@@ -26,10 +26,6 @@ namespace HomeCalendarGUI
 
         private OpenFolderDialog openFolderDialog;
         private string fileDirectoryToStore;
-        private string currentDbFileLocation;
-        private string dbFileName;
-       
-        
 
         public MainWindow(bool useDefaultDb, string filePath = null)
         {
@@ -40,10 +36,6 @@ namespace HomeCalendarGUI
             {
                 Directory.CreateDirectory(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar");
             }
-
-            //Db file information
-            currentDbFileLocation = filePath;
-            dbFileName = System.IO.Path.GetFileName(filePath);
 
             //Open Folder Dialog properties
             openFolderDialog = new OpenFolderDialog
