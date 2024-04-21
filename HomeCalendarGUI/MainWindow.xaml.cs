@@ -23,19 +23,17 @@ namespace HomeCalendarGUI
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
-        private readonly OpenFileDialog openFileDialog;
-        private SaveFileDialog saveFileDialog;
+
         private OpenFolderDialog openFolderDialog;
         private string fileDirectoryToStore;
         private string currentDbFileLocation;
         private string dbFileName;
-        private Category selectedCategoryObject;
+       
         
 
         public MainWindow(bool useDefaultDb, string filePath = null)
         {
-            InitializeComponent();
-            openFileDialog = new OpenFileDialog();
+            InitializeComponent();            
 
             //Create Calendar directory if it doesn't exist
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar"))
@@ -46,18 +44,8 @@ namespace HomeCalendarGUI
             //Db file information
             currentDbFileLocation = filePath;
             dbFileName = System.IO.Path.GetFileName(filePath);
-            
-            //Save file dialog properties
-            saveFileDialog = new SaveFileDialog()
-            {
-                Filter = "Database files (*.db)|*.db|All Files|*.*",
-                DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar",
-                InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar",
-                RestoreDirectory = true,
-                DefaultExt = "db",
-                FileName = dbFileName
-            };
 
+            //Open Folder Dialog properties
             openFolderDialog = new OpenFolderDialog
             {
                 DefaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar",
@@ -92,36 +80,8 @@ namespace HomeCalendarGUI
             {
                 fileDirectoryToStore = openFolderDialog.FolderName;
                 openFolderDialog.InitialDirectory = fileDirectoryToStore;
-                openFolderDialog.FolderName = System.IO.Path.GetDirectoryName(fileDirectoryToStore);                                             
+                openFolderDialog.FolderName = "";                                             
             }
-
-
-            //if (saveFileDialog.ShowDialog() == true)
-            //{
-
-            //    //If the file exists at specified directory, replace it, otherwise move the file
-            //    if (!File.Exists(saveFileDialog.FileName))
-            //    {
-            //        Database.CloseDatabaseAndReleaseFile();
-            //        File.Move(currentDbFileLocation, saveFileDialog.FileName);
-            //        Database.existingDatabase(saveFileDialog.FileName);
-            //    }
-            //    else
-            //    {
-            //        Database.CloseDatabaseAndReleaseFile();
-                    
-            //        //Replace operation in 4 steps
-            //        File.Copy(currentDbFileLocation, saveFileDialog.FileName +"- 1");                   
-            //        File.Delete(saveFileDialog.FileName);
-            //        File.Copy(saveFileDialog.FileName + "- 1", saveFileDialog.FileName);
-            //        File.Delete(saveFileDialog.FileName + "- 1");
-            //        Database.existingDatabase(saveFileDialog.FileName);
-            //    }
-            //    RefreshMainView();  
-            //    currentDbFileLocation = saveFileDialog.FileName;
-            //    saveFileDialog.InitialDirectory = saveFileDialog.FileName;
-            //    saveFileDialog.FileName = dbFileName;
-            //}
         }
 
         private void RefreshMainView()
