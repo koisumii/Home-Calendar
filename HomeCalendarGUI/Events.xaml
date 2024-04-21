@@ -10,14 +10,14 @@
         <StackPanel Margin="15">
             <TextBlock FontWeight="Bold">Choose a start date and time for your event</TextBlock>
             <DatePicker Name="StartDate" SelectedDateFormat="Long" FirstDayOfWeek="Monday"></DatePicker>
-            <DatePicker Name="StartTime" />
-
+            
             <TextBlock FontWeight="Bold" Margin="0,20,0,0">Choose an end date and time for your event</TextBlock>
             <DatePicker Name="EndDate" SelectedDateFormat="Long" FirstDayOfWeek="Monday"></DatePicker>
-            <DatePicker Name="EndTime" ></DatePicker>
             
             <TextBlock FontWeight="Bold" Margin="0,20,0,0">Choose a category</TextBlock>
-            <ComboBox x:Name="cmbCategory"></ComboBox>    
+            <ComboBox x:Name="cmbCategory"></ComboBox>
+
+            <TextBlock x:Name="message" Margin="0,15,15,0" FontWeight="Bold" FontSize="15"></TextBlock>
         </StackPanel>
         
     </Grid>

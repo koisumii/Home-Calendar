@@ -27,7 +27,7 @@ namespace HomeCalendarGUI
             InitializeComponent();
 
             //also put this in presenter
-            SetTodaysDateOnDatePicker();
+            ShowTodaysDate();
 
 
             _presenter.GetCategoriesTypeInList();
@@ -35,7 +35,8 @@ namespace HomeCalendarGUI
 
         public void DisplayErrorMessage(string msg)
         {
-            throw new NotImplementedException();
+            message.Foreground = Brushes.Red;
+            message.Text = msg;
         }
 
         public void DisplaySuccessfulMessage(string msg)
@@ -43,8 +44,7 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
-        //this should be in view 
-        public void SetTodaysDateOnDatePicker() 
+        public void ShowTodaysDate() 
         { 
             StartDate.DisplayDateStart = DateTime.Now;
             

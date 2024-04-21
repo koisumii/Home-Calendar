@@ -23,19 +23,24 @@ namespace HomeCalendarGUI
 
         public void AddNewCategory(string desc, CategoryType type)
         {
-            _model.categories.Add(desc, type);
+            if (desc == null || type == null)
+            {
+                _view.DisplayErrorMessage("You can not leave any empty boxes."); 
+            }
+            else
+            {
+                _model.categories.Add(desc, type);
+                _view.DisplaySuccessfulMessage("Category has been successfully added!");
+            }
+            
         }
 
-        //should call view over here 
-        //public void GetCategoriesList()
-        //{
-        //    _model.categories.List();
-        //}
 
         public void GetCategoriesTypeInList() 
         {
             _view.ShowInformationOnCmb(_model.categories.List());
         }
+
 
     }
 }

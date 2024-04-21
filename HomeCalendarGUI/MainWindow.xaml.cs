@@ -47,15 +47,10 @@ namespace HomeCalendarGUI
             var eventTypeChoice = cmbEventTypes.SelectedItem;
             string desc = DescriptionBox.Text;
 
-            if (eventTypeChoice != null || desc != null) 
+            if (eventTypeChoice != null) 
             {
                 CategoryType type = (CategoryType)eventTypeChoice;
                 _presenter.AddNewCategory(desc, type);
-                DisplaySuccessfulMessage("Category has been successfully added!");
-            }
-            else
-            {
-                DisplayErrorMessage("You can not leave any empty boxes."); 
             }
             
         }

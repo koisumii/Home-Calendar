@@ -24,6 +24,7 @@ namespace HomeCalendarGUI
         /// <summary>
         /// 
         /// </summary>
-        void ShowInformationOnCmb(List<Category> categories); 
+        void ShowInformationOnCmb(List<Category> categories);
+
     }
 }
