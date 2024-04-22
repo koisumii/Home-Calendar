@@ -16,20 +16,20 @@ namespace HomeCalendarGUI
         public void ShowCategoriesOnComboBox(List<Category> categories);
 
         /// <summary>
-        /// 
+        /// Displays a message letting the user know the operation was successful.
         /// </summary>
-        /// <param name="msg"></param>
-        void DisplayErrorMessage(string msg);
+        /// <param name="msg"> A string that holds the message the user will see. </param>
+        public void DisplayErrorMessage(string msg);
 
         /// <summary>
-        /// 
+        /// Displays a message letting the user know the operation failed.
         /// </summary>
-        /// <param name="msg"></param>
-        void DisplaySuccessfulMessage(string msg);
+        /// <param name="msg"> A string that holds the message the user will see.</param>
+        public void DisplaySuccessfulMessage(string msg);
 
         /// <summary>
-        /// 
+        /// Shows the neccessary information on a combobox for example, types of events. 
         /// </summary>
-        void ShowInformationOnCmb(List<Category> categories);
+        public void ShowInformationOnCmb(List<Category> categories);
     }
 }

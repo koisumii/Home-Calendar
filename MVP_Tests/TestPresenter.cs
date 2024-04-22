@@ -79,20 +79,7 @@ namespace MVP_Tests
         }
 
         [Fact]
-        public void TestShowInfoOnCmb()
-        {
-            //arrange
-            TestView view = new TestView(); 
-
-            //act
-            Presenter presenter = new Presenter(view);
-
-            //assert
-            Assert.True(view.calledShowInfoOnCmb); 
-        }
-
-        [Fact]
-        public void TestDisplayErrorMessage()
+        public void TestAddCategory_Fail()
         {
             //arrange 
             TestView view = new TestView();
@@ -106,7 +93,7 @@ namespace MVP_Tests
         }
 
         [Fact]
-        public void TestDisplaySuccessfulMessage() 
+        public void TestAddCategory_Success() 
         {
             //arrange
             TestView view = new TestView();
@@ -117,6 +104,20 @@ namespace MVP_Tests
 
             //assert
             Assert.True(view.calledDisplaySuccessfulMessage);
+        }
+
+        [Fact]
+        public void TestGetCategoryTypesInList()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act 
+            p.GetCategoriesTypeInList();
+
+            //assert 
+            Assert.True(view.calledShowInfoOnCmb); 
         }
     }
 }
