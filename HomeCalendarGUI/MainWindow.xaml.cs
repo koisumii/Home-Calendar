@@ -120,6 +120,8 @@ namespace HomeCalendarGUI
             {
                 CategoryType type = (CategoryType)eventTypeChoice;
                 presenter.AddNewCategory(desc, type);
+                DescriptionBox.Clear();
+                cmbEventTypes.SelectedIndex = -1;
             }
             else
             {
