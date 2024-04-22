@@ -15,6 +15,7 @@ using Microsoft.Win32;
 using System.Data.Entity.Core.Objects;
 using System.Xml.Linq;
 using System.Windows.Interop;
+using static Calendar.Category;
 
 
 namespace HomeCalendarGUI
@@ -58,18 +59,19 @@ namespace HomeCalendarGUI
             }
 
             presenter.GetCategoriesForComboBox();
+            presenter.GetCategoriesTypeInList();
         }
 
         public void DisplayErrorMessage(string msg)
         {
-            //message.Foreground = Brushes.Red;
-            //message.Text = msg;
+            message.Foreground = Brushes.Red;
+            message.Text = msg;
         }
 
         public void DisplaySuccessfulMessage(string msg)
         {
-            //message.Foreground = Brushes.Red;
-            //message.Text = msg;
+            message.Foreground = Brushes.Green;
+            message.Text = msg;
         }
 
         public void ShowCategoriesOnComboBox(List<Category> categories)
@@ -83,16 +85,15 @@ namespace HomeCalendarGUI
 
         public void ShowInformationOnCmb(List<Category> categories)
         {
-            //foreach (var category in categories)
-            //{
-            //    if (cmbEventTypes.Items.Contains(category.Type))
-            //    {
-            //        //ignoring event types that have already been added because we do not want duplicates
-            //        continue;
-            //    }
-            //    cmbEventTypes.Items.Add(category.Type);
-            //    cmbCategories.Items.Add(category);
-            //}
+            foreach (var category in categories)
+            {
+                if (cmbEventTypes.Items.Contains(category.Type))
+                {
+                    //ignoring event types that have already been added because we do not want duplicates
+                    continue;
+                }
+                cmbEventTypes.Items.Add(category.Type);
+            }
         }
 
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
@@ -110,5 +111,78 @@ namespace HomeCalendarGUI
             presenter.GetCategoriesForComboBox();
         }
 
+        private void Button_ClickAddCategory(object sender, RoutedEventArgs e)
+        {
+            var eventTypeChoice = cmbEventTypes.SelectedItem;
+            string desc = DescriptionBox.Text;
+
+            if (eventTypeChoice != null && !string.IsNullOrEmpty(desc))
+            {
+                CategoryType type = (CategoryType)eventTypeChoice;
+                presenter.AddNewCategory(desc, type);
+                DescriptionBox.Clear();
+                cmbEventTypes.SelectedIndex = -1;
+            }
+            else
+            {
+                DisplayErrorMessage("You cannot leave any fields empty.");
+            }
+        }
+
+        private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
+        {
+            if (StartDate.SelectedDate == null)
+            {
+                DisplayErrorMessage("Please select a start date for the event.");
+                return;
+            }
+            if (EndDate.SelectedDate == null)
+            {
+                DisplayErrorMessage("Please select an end date for the event.");
+                return;
+            }
+            if (catsComboBox.SelectedItem == null)
+            {
+                DisplayErrorMessage("Please select a category for the event.");
+                return;
+            }
+            if (string.IsNullOrWhiteSpace(EventDescriptionBox.Text))
+            {
+                DisplayErrorMessage("Please enter a description for the event.");
+                return;
+            }
+
+            DateTime startDate = StartDate.SelectedDate.Value;
+            DateTime endDate = EndDate.SelectedDate.Value;
+
+            if (endDate < startDate)
+            {
+                DisplayErrorMessage("The end date cannot be before the start date.");
+                return;
+            }
+
+            Category selectedCategory = (Category)catsComboBox.SelectedItem;
+            string description = EventDescriptionBox.Text;
+
+            presenter.AddNewEvent(startDate, endDate, selectedCategory.Id, description);
+
+            // Clear the input fields
+            StartDate.SelectedDate = null;
+            EndDate.SelectedDate = null;
+            catsComboBox.SelectedIndex = -1;
+            EventDescriptionBox.Clear();
+
+            DisplaySuccessfulMessage("Event added successfully.");
+        }
+
+        private void Button_ClickCancelEvent(object sender, RoutedEventArgs e)
+        {
+            EventDescriptionBox.Clear();
+        }
+
+        private void CloseApplication(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }
