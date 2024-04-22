@@ -14,7 +14,7 @@
 
   <ItemGroup>
     <Reference Include="TeamHeavyWeight_HomeCalendarApp">
-      <HintPath>..\..\..\Downloads\dllsv2\TeamHeavyWeight_HomeCalendarApp.dll</HintPath>
+      <HintPath>..\HomeCalendar\dlls\Model\TeamHeavyWeight_HomeCalendarApp.dll</HintPath>
     </Reference>
   </ItemGroup>
 

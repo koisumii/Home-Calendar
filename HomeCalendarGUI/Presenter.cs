@@ -1,11 +1,15 @@
-﻿using Calendar;
-using System;
+
+﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.Migrations.Model;
+using System.IO;
 using System.Linq;
-using System.Printing;
 using System.Text;
 using System.Threading.Tasks;
+using Calendar;
+using static System.Net.WebRequestMethods;
+﻿using Calendar;
+using System.Data.Entity.Migrations.Model;
+using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
 using static Calendar.Category;
 
@@ -13,24 +17,50 @@ namespace HomeCalendarGUI
 {
     public class Presenter
     {
-        private HomeCalendar _model;
-        private ViewInterface _view;
-        public Presenter(ViewInterface v)
+        private readonly HomeCalendar model;
+        private readonly IView view;
+        
+
+        /// <summary>
+        /// Initiates presenter with default settings
+        /// </summary>
+        /// <param name="v">IView interface implemented class</param>
+        public Presenter(IView v) 
         {
-            _model = new HomeCalendar();
-            _view = v;
+            model = new HomeCalendar();
+            view = v;            
+        }
+
+        /// <summary>
+        /// Instantiates presenter with an existing database
+        /// </summary>
+        /// <param name="v">IView interface implemented class</param>
+        /// <param name="dbFile">File path to the database</param>
+        public Presenter(IView v,string dbFile)
+        {
+            model = new HomeCalendar(dbFile,false);
+            view = v;
+        }
+
+        /// <summary>
+        /// Gets all categories listed in the database
+        /// </summary>
+        public void GetCategoriesForComboBox()
+        {
+            List<Category> categories = model.categories.List();
+            view.ShowCategoriesOnComboBox(categories);
         }
 
         public void AddNewCategory(string desc, CategoryType type)
         {
             if (desc == null || type == null)
             {
-                _view.DisplayErrorMessage("You can not leave any empty boxes."); 
+                view.DisplayErrorMessage("You can not leave any empty boxes."); 
             }
             else
             {
-                _model.categories.Add(desc, type);
-                _view.DisplaySuccessfulMessage("Category has been successfully added!");
+                model.categories.Add(desc, type);
+                view.DisplaySuccessfulMessage("Category has been successfully added!");
             }
             
         }
@@ -38,7 +68,7 @@ namespace HomeCalendarGUI
 
         public void GetCategoriesTypeInList() 
         {
-            _view.ShowInformationOnCmb(_model.categories.List());
+            view.ShowInformationOnCmb(_model.categories.List());
         }
 
 

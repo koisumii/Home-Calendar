@@ -5,23 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="600" Width="600">
+
+        Title="MainWindow" Height="450" Width="800">
     <Grid>
-        <Label>Create a new Category</Label>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <TextBlock Grid.Column="0" Grid.ColumnSpan="3" TextAlignment="Center" FontFamily="Times New Roman" FontWeight="Bold" FontSize="40">Welcome To Your Home Calendar App</TextBlock>
+
+        <Button Grid.Column="0" Grid.Row="1" Margin="50" Background="Green" FontSize="25">New Event</Button>
         
-        <StackPanel Margin="0,50,0,50"  HorizontalAlignment="Center" Width="500">
-
-            <TextBlock FontSize="20" FontWeight="Bold">Choose an existing category</TextBlock>
-            <ComboBox x:Name="cmbCategories" ></ComboBox>
-
-            <TextBlock x:Name="DescriptionBox" Margin="0,20,0,0" FontWeight="Bold" FontSize="20">Description</TextBlock>
-            <TextBox Height="50" Margin="0,0,0,30"></TextBox>
-
-            <TextBlock FontWeight="Bold" FontSize="20">Event type</TextBlock>
-            <ComboBox x:Name="cmbEventTypes"></ComboBox>
-
-            <Button Margin="0,20" Width="50" HorizontalAlignment="Left" Click="Button_ClickAddCategory">Done</Button>
-            <TextBlock x:Name="message" Margin="0,15,15,0" FontWeight="Bold" FontSize="15"></TextBlock>
-        </StackPanel>
+                
+        <Button Click="Btn_SaveCalendarFileTo" Grid.Column="0" Grid.Row="2" Margin="50" Background="Azure">
+            <TextBlock TextAlignment="Center">Change Calendar File Directory<LineBreak/>
+            Location</TextBlock>
+        </Button>
+        <ComboBox x:Name="catsComboBox" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="55,60,55,50" Text="Categories" DisplayMemberPath="Description"/>
     </Grid>
 </Window>
