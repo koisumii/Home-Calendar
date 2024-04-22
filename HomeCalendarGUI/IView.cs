@@ -19,17 +19,17 @@ namespace HomeCalendarGUI
         /// 
         /// </summary>
         /// <param name="msg"></param>
-        void DisplayErrorMessage(string msg);
+        public void DisplayErrorMessage(string msg);
 
         /// <summary>
         /// 
         /// </summary>
         /// <param name="msg"></param>
-        void DisplaySuccessfulMessage(string msg);
+        public void DisplaySuccessfulMessage(string msg);
 
         /// <summary>
         /// 
         /// </summary>
-        void ShowInformationOnCmb(List<Category> categories);
+        public void ShowInformationOnCmb(List<Category> categories);
     }
 }
