@@ -116,10 +116,14 @@ namespace HomeCalendarGUI
             var eventTypeChoice = cmbEventTypes.SelectedItem;
             string desc = DescriptionBox.Text;
 
-            if (eventTypeChoice != null || desc != null)
+            if (eventTypeChoice != null && !string.IsNullOrEmpty(desc))
             {
                 CategoryType type = (CategoryType)eventTypeChoice;
                 presenter.AddNewCategory(desc, type);
+            }
+            else
+            {
+                DisplayErrorMessage("You cannot leave any fields empty.");
             }
         }
 
@@ -130,7 +134,7 @@ namespace HomeCalendarGUI
 
         private void Button_ClickCancelEvent(object sender, RoutedEventArgs e)
         {
-
+            EventDescriptionBox.Clear();
         }
 
         private void CloseApplication(object sender, RoutedEventArgs e)
