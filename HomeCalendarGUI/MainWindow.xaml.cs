@@ -14,6 +14,7 @@ using System.IO;
 using Microsoft.Win32;
 using System.Data.Entity.Core.Objects;
 using System.Xml.Linq;
+using System.Windows.Interop;
 
 
 namespace HomeCalendarGUI
@@ -59,6 +60,18 @@ namespace HomeCalendarGUI
             presenter.GetCategoriesForComboBox();
         }
 
+        public void DisplayErrorMessage(string msg)
+        {
+            //message.Foreground = Brushes.Red;
+            //message.Text = msg;
+        }
+
+        public void DisplaySuccessfulMessage(string msg)
+        {
+            //message.Foreground = Brushes.Red;
+            //message.Text = msg;
+        }
+
         public void ShowCategoriesOnComboBox(List<Category> categories)
         {           
             const int DEFAULT = 0;                        
@@ -66,6 +79,20 @@ namespace HomeCalendarGUI
                 catsComboBox.Items.Add(c);                
             });
             catsComboBox.SelectedIndex = DEFAULT;
+        }
+
+        public void ShowInformationOnCmb(List<Category> categories)
+        {
+            //foreach (var category in categories)
+            //{
+            //    if (cmbEventTypes.Items.Contains(category.Type))
+            //    {
+            //        //ignoring event types that have already been added because we do not want duplicates
+            //        continue;
+            //    }
+            //    cmbEventTypes.Items.Add(category.Type);
+            //    cmbCategories.Items.Add(category);
+            //}
         }
 
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)

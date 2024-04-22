@@ -18,7 +18,7 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for Events.xaml
     /// </summary>
-    public partial class Events : Window, ViewInterface
+    public partial class Events : Window, IView
     {
         private Presenter _presenter;
         public Events()
@@ -59,6 +59,11 @@ namespace HomeCalendarGUI
             {
                 cmbCategory.Items.Add(categories[i]);
             }
+        }
+
+        public void ShowCategoriesOnComboBox(List<Category> categories)
+        {
+            throw new NotImplementedException();
         }
     }
 }

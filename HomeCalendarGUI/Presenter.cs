@@ -68,7 +68,7 @@ namespace HomeCalendarGUI
 
         public void GetCategoriesTypeInList() 
         {
-            view.ShowInformationOnCmb(_model.categories.List());
+            view.ShowInformationOnCmb(model.categories.List());
         }
 
 
