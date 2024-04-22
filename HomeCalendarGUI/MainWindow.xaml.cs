@@ -1,4 +1,5 @@
 ﻿using Calendar;
+using System.Data.SQLite;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -20,6 +21,7 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
+
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
@@ -80,5 +82,6 @@ namespace HomeCalendarGUI
         {
             presenter.GetCategoriesForComboBox();
         }
+
     }
 }

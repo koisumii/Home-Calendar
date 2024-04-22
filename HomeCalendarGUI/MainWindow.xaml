@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarGUI"
         mc:Ignorable="d"
+
         Title="MainWindow" Height="450" Width="800">
     <Grid>
         <Grid.RowDefinitions>
@@ -29,7 +30,5 @@
             Location</TextBlock>
         </Button>
         <ComboBox x:Name="catsComboBox" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="55,60,55,50" Text="Categories" DisplayMemberPath="Description"/>
-        
-        
     </Grid>
 </Window>

@@ -5,11 +5,13 @@ VisualStudioVersion = 17.7.34009.444
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCalendar", "HomeCalendar\HomeCalendar.csproj", "{F4EC8856-0CF3-4A7D-A670-CE80F68E1595}"
 EndProject
+
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Milestone3_tests", "Milestone3_tests\Milestone3_tests.csproj", "{00ED7DDB-0255-4702-A553-A5F4E34806C2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HomeCalendarGUI", "HomeCalendarGUI\HomeCalendarGUI.csproj", "{4DBADADB-D8FB-4BD8-B6EB-CB017E631E63}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVP_Tests", "MVP_Tests\MVP_Tests.csproj", "{4B2840C3-A63E-488A-96E0-BFE31B4E77EA}"
+
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

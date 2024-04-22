@@ -1,3 +1,4 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
@@ -6,6 +7,11 @@ using System.Text;
 using System.Threading.Tasks;
 using Calendar;
 using static System.Net.WebRequestMethods;
+﻿using Calendar;
+using System.Data.Entity.Migrations.Model;
+using System.Printing;
+using TeamHeavyWeight_HomeCalendarApp;
+using static Calendar.Category;
 
 namespace HomeCalendarGUI
 {
@@ -44,5 +50,27 @@ namespace HomeCalendarGUI
             List<Category> categories = model.categories.List();
             view.ShowCategoriesOnComboBox(categories);
         }
+
+        public void AddNewCategory(string desc, CategoryType type)
+        {
+            if (desc == null || type == null)
+            {
+                view.DisplayErrorMessage("You can not leave any empty boxes."); 
+            }
+            else
+            {
+                model.categories.Add(desc, type);
+                view.DisplaySuccessfulMessage("Category has been successfully added!");
+            }
+            
+        }
+
+
+        public void GetCategoriesTypeInList() 
+        {
+            view.ShowInformationOnCmb(_model.categories.List());
+        }
+
+
     }
 }
