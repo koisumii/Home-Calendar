@@ -51,6 +51,11 @@ namespace HomeCalendarGUI
             view.ShowCategoriesOnComboBox(categories);
         }
 
+        /// <summary>
+        /// Adds a new category to the database with the details and the type the user provided.
+        /// </summary>
+        /// <param name="desc"> A string that holds the details about this category. </param>
+        /// <param name="type"> An enum that contains the kind of activity. </param>
         public void AddNewCategory(string desc, CategoryType type)
         {
             if (desc == null || type == null)
@@ -65,7 +70,9 @@ namespace HomeCalendarGUI
             
         }
 
-
+        /// <summary>
+        /// Gets the all the types of activity to display it. 
+        /// </summary>
         public void GetCategoriesTypeInList() 
         {
             view.ShowInformationOnCmb(model.categories.List());
