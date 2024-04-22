@@ -19,7 +19,7 @@ namespace HomeCalendarGUI
     /// </summary>
     public partial class MainWindow : Window, ViewInterface
     {
-        private Presenter _presenter; 
+        private Presenter _presenter;
         public MainWindow()
         {
             InitializeComponent();
@@ -37,6 +37,7 @@ namespace HomeCalendarGUI
                     continue;
                 }
                 cmbEventTypes.Items.Add(category.Type);
+                cmbCategories.Items.Add(category); 
             }
 
         }

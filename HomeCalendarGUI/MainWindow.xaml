@@ -8,8 +8,13 @@
         Title="MainWindow" Height="600" Width="600">
     <Grid>
         <Label>Create a new Category</Label>
+        
         <StackPanel Margin="0,50,0,50"  HorizontalAlignment="Center" Width="500">
-            <TextBlock x:Name="DescriptionBox" FontWeight="Bold" FontSize="20">Description</TextBlock>
+
+            <TextBlock FontSize="20" FontWeight="Bold">Choose an existing category</TextBlock>
+            <ComboBox x:Name="cmbCategories" ></ComboBox>
+
+            <TextBlock x:Name="DescriptionBox" Margin="0,20,0,0" FontWeight="Bold" FontSize="20">Description</TextBlock>
             <TextBox Height="50" Margin="0,0,0,30"></TextBox>
 
             <TextBlock FontWeight="Bold" FontSize="20">Event type</TextBlock>
