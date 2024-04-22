@@ -14,5 +14,22 @@ namespace HomeCalendarGUI
         /// </summary>
         /// <param name="categories">A list of current categories</param>
         public void ShowCategoriesOnComboBox(List<Category> categories);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        void DisplayErrorMessage(string msg);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="msg"></param>
+        void DisplaySuccessfulMessage(string msg);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        void ShowInformationOnCmb(List<Category> categories);
     }
 }
