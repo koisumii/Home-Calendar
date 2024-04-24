@@ -184,10 +184,10 @@ namespace Calendar
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
-                var durationInMinutes = reader.GetString(1);
+                var durationInMinutes = reader.GetDouble(1);
                 var startDateTime = reader.GetString(2); 
                 var details = reader.GetString(3);
-                var categoryId = reader.GetString(4);
+                var categoryId = reader.GetInt32(4);
                 //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
                 DateTime startDate = DateTime.Parse(startDateTime);

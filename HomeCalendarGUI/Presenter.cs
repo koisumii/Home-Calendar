@@ -69,10 +69,9 @@ namespace HomeCalendarGUI
             
         }
 
-        public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description)
+        public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description, double duration)
         {
             // Calculate the duration of the event
-            double duration = (endDate - startDate).TotalMinutes;
 
             if (duration <= 0)
             {

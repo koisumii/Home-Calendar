@@ -60,6 +60,13 @@ namespace HomeCalendarGUI
 
             presenter.GetCategoriesForComboBox();
             presenter.GetCategoriesTypeInList();
+            SetTodaysDateOnDatePicker();
+        }
+
+        public void SetTodaysDateOnDatePicker()
+        {
+            StartDate.DisplayDateStart = DateTime.Now;
+            EndDate.DisplayDateStart = DateTime.Now;
         }
 
         public void DisplayErrorMessage(string msg)
@@ -85,12 +92,6 @@ namespace HomeCalendarGUI
                 catsComboBox.Items.Add(c);
             });
             catsComboBox.SelectedIndex = DEFAULT;
-
-            //const int DEFAULT = 0;                        
-            //categories.ForEach(c => {
-            //    catsComboBox.Items.Add(c);                
-            //});
-            //catsComboBox.SelectedIndex = DEFAULT;
         }
 
         public void ShowInformationOnCmb(List<Category> categories)
@@ -162,6 +163,11 @@ namespace HomeCalendarGUI
                 DisplayErrorMessage("Please enter a description for the event.");
                 return;
             }
+            if (EndTime.Text == null)
+            {
+                DisplayErrorMessage("Please choose a duration in minutes for your event.");
+                return;
+            }
 
             DateTime startDate = StartDate.SelectedDate.Value;
             DateTime endDate = EndDate.SelectedDate.Value;
@@ -172,10 +178,17 @@ namespace HomeCalendarGUI
                 return;
             }
 
+            //getting duration in minutes
+            if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
+            {
+                DisplayErrorMessage("Invalid input: please enter a number for your duration in minutes.");
+                return;
+            }
+
             Category selectedCategory = (Category)catsComboBox.SelectedItem;
             string description = EventDescriptionBox.Text;
 
-            presenter.AddNewEvent(startDate, endDate, selectedCategory.Id, description);
+            presenter.AddNewEvent(startDate, endDate, selectedCategory.Id, description, endTimeInMinutes);
 
             // Clear the input fields
             StartDate.SelectedDate = null;
