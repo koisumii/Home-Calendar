@@ -3,10 +3,11 @@ using Xunit;
 using System.IO;
 using System.Collections.Generic;
 using Calendar;
+using System.Data.SQLite;
 
 namespace CalendarCodeTests
 {
-    /*
+    
     [Collection("Sequential")]
     public class TestHomeCalendar_GetCalendarItems
     {
@@ -22,11 +23,12 @@ namespace CalendarCodeTests
         {
             // Arrange
             string folder = TestConstants.GetSolutionDir();
-            string inFile = TestConstants.GetSolutionDir() + "\\" + testInputFile;
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB,inFile,false);
+
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
+
             List<Event> listEvents = homeCalendar.events.List();
             List<Category> listCategories = homeCalendar.categories.List();
 
@@ -55,7 +57,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
 
             // Act
             List<CalendarItem> CalendarItems = homeCalendar.GetCalendarItems(null, null, false, 9);
@@ -81,7 +83,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             int filterCategory = 2;
             List<Event> listEvents = TestConstants.filteredbyCat2();
             List<Category> listCategories = homeCalendar.categories.List();
@@ -113,7 +115,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             List<Event> listEvents = TestConstants.filteredbyYear2018();
             List<Category> listCategories = homeCalendar.categories.List();
 
@@ -144,7 +146,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             List<Event> listEvents = TestConstants.filteredbyCat2();
             List<Category> listCategories = homeCalendar.categories.List();
 
@@ -168,7 +170,7 @@ namespace CalendarCodeTests
             String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
             String messyDB = $"{folder}\\messy.db";
             System.IO.File.Copy(goodDB, messyDB, true);
-            HomeCalendar homeCalendar = new HomeCalendar(messyDB, inFile, false);
+            HomeCalendar homeCalendar = new HomeCalendar(messyDB, false);
             List<Event> listEvents = TestConstants.filteredbyYear2018AndCategory3();
             List<Category> listCategories = homeCalendar.categories.List();
 
@@ -187,6 +189,6 @@ namespace CalendarCodeTests
                 Assert.Equal(CalendarItem.ShortDescription, Event.Details);
             }
         }
-    }*/
+    }
 }
 
