@@ -180,10 +180,10 @@ namespace Calendar
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
-                int categoryId = reader.GetInt32(1);
-                string startDateTime = reader.GetString(2);
-                float durationInMinutes = reader.GetFloat(3);
-                string details = reader.GetString(4);
+                var durationInMinutes = reader.GetString(1);
+                var startDateTime = reader.GetString(2); 
+                var details = reader.GetString(3);
+                var categoryId = reader.GetString(4);
                 //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
                 //Console.WriteLine($"{id}, {description}, {typeId}");
