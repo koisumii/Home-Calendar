@@ -57,7 +57,15 @@
             </GroupBox>
         </StackPanel>
 
-        <DataGrid x:Name="EventsDataGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" Margin="0,0,-211,0" >
+        <StackPanel Grid.Row="1" Grid.Column="1">
+            <WrapPanel>  
+            <CheckBox>Filter by Date Range</CheckBox>
+            <DatePicker x:Name="Start" Margin="5,0,0,0"/>
+            <DatePicker x:Name="End" Margin="5,0,0,0"/>            
+            </WrapPanel>           
+        </StackPanel>  
+        
+        <DataGrid x:Name="EventsDataGrid" Grid.Column="1" Margin="10,30,1,0" Grid.Row="1" AutoGenerateColumns="False">
             <DataGrid.Columns>                
                 <DataGridTextColumn Header="StartDateTime" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
@@ -70,7 +78,10 @@
                     <MenuItem MouseRightButtonUp="MenuItem_MouseRightButtonUp" Click="MenuItem_Click" Header="Click"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
-        </DataGrid>
+        </DataGrid>        
+        
+
+        
 
         <Button Content="Close Application" Click="CloseApplication" Grid.Row="2"
                 HorizontalAlignment="Right" Margin="10" Width="200"
