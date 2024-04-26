@@ -7,13 +7,17 @@ using Xunit;
 namespace MVP_Tests
 {
     public class TestView : IView
-    {
-        public bool calledShowCategoriesOnComboBox = false;
+    {        
         public List<Category> categories;
+        public List<Event> events;
+        public bool calledShowCategoriesOnComboBox = false;
         public bool calledDisplayErrorMessage = false;
         public bool calledDisplaySuccessfulMessage = false;    
         public bool calledShowInfoOnCmb = false;
-        
+        public bool calledShowEventsOnDataGrid = false;
+        public bool calledShowEventsWithFiltersOn = false;
+
+
         public void ShowCategoriesOnComboBox(List<Category> categories)
         {
             calledShowCategoriesOnComboBox = true;
@@ -33,6 +37,18 @@ namespace MVP_Tests
         public void ShowInformationOnCmb(List<Category> categories)
         {
             calledShowInfoOnCmb = true;
+        }
+
+        public void ShowEventsOnDataGrid(List<Event> events)
+        {
+            calledShowEventsOnDataGrid = true;
+            this.events = events;
+        }
+
+        public void ShowEventsWithFiltersOn(List<Event> events)
+        {
+            calledShowEventsWithFiltersOn = true;
+            this.events = events;
         }
     }
 
@@ -118,6 +134,37 @@ namespace MVP_Tests
 
             //assert 
             Assert.True(view.calledShowInfoOnCmb); 
+        }
+
+        [Fact]
+        public void Test_ShowEventsWithDateFiltersOn()
+        {
+            //Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            SQLiteConnection conn = Database.dbConnection;
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, existingDB);
+            List<Event> expectedResults = TestConstants.filteredbyYear2018();
+            int expectedNumberOfItems = 3;
+            DateTime? start = DateTime.Parse("January 1 2018");
+            DateTime? end = DateTime.Parse("December 31 2018");
+
+
+            //Act 
+            p.GetEventsFilteredByDateRange(start,end);
+            List<Event> results = view.events;
+
+            //Assert
+
+            Assert.Equal(expectedNumberOfItems, results.Count);            
+            for (int i = 0; i < results.Count; i++)
+            {                
+                Assert.Equal(expectedResults[i].StartDateTime, results[i].StartDateTime);
+                Assert.Equal(expectedResults[i].DurationInMinutes, results[i].DurationInMinutes);
+                Assert.Equal(expectedResults[i].Category, results[i].Category);
+                Assert.Equal(expectedResults[i].Details, results[i].Details);
+            }
         }
     }
 }
