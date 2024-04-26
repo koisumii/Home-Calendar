@@ -41,7 +41,8 @@ namespace HomeCalendarGUI
 
         public void DisplaySuccessfulMessage(string msg)
         {
-            throw new NotImplementedException();
+            message.Foreground = Brushes.Green;
+            message.Text = msg;
         }
 
         public void ShowTodaysDate() 

@@ -71,14 +71,6 @@ namespace HomeCalendarGUI
 
         public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description, double duration)
         {
-            // Calculate the duration of the event
-
-            if (duration <= 0)
-            {
-                view.DisplayErrorMessage("End date must be later than start date.");
-                return;
-            }
-
             // Here we call the Add method of the Events class from your model
             model.events.Add(startDate, categoryId, duration, description);
 

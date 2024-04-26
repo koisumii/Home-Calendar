@@ -130,7 +130,18 @@ namespace HomeCalendarGUI
             if (eventTypeChoice != null && !string.IsNullOrEmpty(desc))
             {
                 CategoryType type = (CategoryType)eventTypeChoice;
-                presenter.AddNewCategory(desc, type);
+
+                //checking if description is filled of numbers which would be unvalid 
+                if (!float.TryParse(desc, out float n))
+                {
+                    presenter.AddNewCategory(desc, type);
+                }
+                else
+                {
+                    DisplayErrorMessage("Your description has to contain letters.");
+                    return;
+                }
+
                 DescriptionBox.Clear();
                 cmbEventTypes.SelectedIndex = -1;
                 RefreshMainView();
@@ -181,7 +192,13 @@ namespace HomeCalendarGUI
             //getting duration in minutes
             if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
             {
-                DisplayErrorMessage("Invalid input: please enter a number for your duration in minutes.");
+                DisplayErrorMessage("Please enter a number for your duration in minutes.");
+                return;
+            }
+
+            if (endTimeInMinutes <= 0)
+            {
+                DisplayErrorMessage("The duration of your event must not be negative.");
                 return;
             }
 
