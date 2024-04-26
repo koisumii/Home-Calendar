@@ -101,5 +101,26 @@ namespace HomeCalendarGUI
         {
             view.ShowEventsOnDataGrid(model.events.List());
         }
+
+        /// <summary>
+        /// Filters events by date
+        /// </summary>
+        /// <param name="startDate">Start date of events</param>
+        /// <param name="endDate">End date of events</param>
+        public void GetEventsFilteredByDateRange(DateTime? startDate,DateTime? endDate)
+        {
+            List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
+            
+            List<Event> eventsByDate = new List<Event>();
+
+            items = items.OrderBy(i => i.EventID).ToList();
+
+            items.ForEach(item =>
+            {
+                eventsByDate.Add(new Event(item.EventID,item.StartDateTime,item.CategoryID,item.DurationInMinutes,item.ShortDescription));
+            });
+
+            view.ShowEventsWithFiltersOn(eventsByDate);
+        }
     }
 }

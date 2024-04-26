@@ -112,7 +112,12 @@ namespace HomeCalendarGUI
         {
             EventsDataGrid.ItemsSource = events;
         }
-
+        
+        public void ShowEventsWithFiltersOn(List<Event> events)
+        {
+            EventsDataGrid.ItemsSource = events;
+        }
+        
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
         {
             if (openFolderDialog.ShowDialog() == true)
@@ -223,6 +228,18 @@ namespace HomeCalendarGUI
         private void MenuItem_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
         {
 
+        }
+
+        private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)
+        {
+            if (DateFilterCheckBox.IsChecked == true)
+            {
+                presenter.GetEventsFilteredByDateRange(Start.SelectedDate,End.SelectedDate);
+            }
+            else
+            {
+                presenter.GetEvents();
+            }
         }
     }
 }

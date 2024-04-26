@@ -70,5 +70,10 @@ namespace HomeCalendarGUI
         {
             throw new NotImplementedException();
         }
+
+        public void ShowEventsWithFiltersOn(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -1,9 +1,4 @@
 ﻿using Calendar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeCalendarGUI
 {
@@ -35,5 +30,11 @@ namespace HomeCalendarGUI
         /// </summary>
         /// <param name="events">Current events from the database</param>
         public void ShowEventsOnDataGrid(List<Event> events);
+
+        /// <summary>
+        /// Displays events with specified filters
+        /// </summary>
+        /// <param name="events">List of events</param>
+        public void ShowEventsWithFiltersOn(List<Event> events);
     }
 }

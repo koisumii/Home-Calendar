@@ -59,7 +59,7 @@
 
         <StackPanel Grid.Row="1" Grid.Column="1">
             <WrapPanel>  
-            <CheckBox>Filter by Date Range</CheckBox>
+            <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick">Filter by Date Range</CheckBox>
             <DatePicker x:Name="Start" Margin="5,0,0,0"/>
             <DatePicker x:Name="End" Margin="5,0,0,0"/>            
             </WrapPanel>           
