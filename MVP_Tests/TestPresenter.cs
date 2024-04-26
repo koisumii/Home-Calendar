@@ -166,5 +166,15 @@ namespace MVP_Tests
                 Assert.Equal(expectedResults[i].Details, results[i].Details);
             }
         }
+
+        [Fact]
+        public void Test_DeleteAnEvent()
+        {
+            //Arrange 
+
+            //Act
+
+            //Assert
+        }
     }
 }

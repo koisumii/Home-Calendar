@@ -131,5 +131,14 @@ namespace HomeCalendarGUI
 
             view.ShowEventsWithFiltersOn(eventsByDate);
         }
+
+        /// <summary>
+        /// Deletes an event from the database
+        /// </summary>
+        public void DeleteAnEvent(Event e)
+        {
+            model.events.DeleteEvent(e.Id);
+            view.ShowEventsOnDataGrid(model.events.List());
+        }
     }
 }

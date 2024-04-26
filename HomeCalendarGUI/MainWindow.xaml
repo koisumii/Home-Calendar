@@ -75,7 +75,7 @@
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem MouseRightButtonUp="MenuItem_MouseRightButtonUp" Click="MenuItem_Click" Header="Click"/>
+                    <MenuItem Click="DeleteEvent" Header="Delete"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>        

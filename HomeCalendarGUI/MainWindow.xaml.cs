@@ -220,14 +220,12 @@ namespace HomeCalendarGUI
             Close();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void DeleteEvent(object sender, RoutedEventArgs e)
         {
-
-        }
-
-        private void MenuItem_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
-        {
-
+            if (MessageBox.Show("Are you sure you would like to delete this event? By clicking yes, this event will be permanently deleted", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                
+            }
         }
 
         private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)

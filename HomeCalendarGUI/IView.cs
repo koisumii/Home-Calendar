@@ -35,6 +35,6 @@ namespace HomeCalendarGUI
         /// Displays events with specified filters
         /// </summary>
         /// <param name="events">List of events</param>
-        public void ShowEventsWithFiltersOn(List<Event> events);
+        public void ShowEventsWithFiltersOn(List<Event> events);        
     }
 }
