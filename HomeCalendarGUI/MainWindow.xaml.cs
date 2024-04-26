@@ -132,16 +132,13 @@ namespace HomeCalendarGUI
                 CategoryType type = (CategoryType)eventTypeChoice;
 
                 //checking if description is filled of numbers which would be unvalid 
-                if (!float.TryParse(desc, out float n))
+                if (!IsValidDescription(desc))
                 {
-                    presenter.AddNewCategory(desc, type);
-                }
-                else
-                {
-                    DisplayErrorMessage("Your description has to contain letters.");
+                    DisplayErrorMessage("Please enter a valid description.");
                     return;
                 }
 
+                presenter.AddNewCategory(desc, type);
                 DescriptionBox.Clear();
                 cmbEventTypes.SelectedIndex = -1;
                 RefreshMainView();
@@ -154,6 +151,7 @@ namespace HomeCalendarGUI
 
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
         {
+            //verifying input data for events 
             if (StartDate.SelectedDate == null)
             {
                 DisplayErrorMessage("Please select a start date for the event.");
@@ -169,7 +167,7 @@ namespace HomeCalendarGUI
                 DisplayErrorMessage("Please select a category for the event.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(EventDescriptionBox.Text))
+            if (!IsValidDescription(EventDescriptionBox.Text))
             {
                 DisplayErrorMessage("Please enter a description for the event.");
                 return;
@@ -224,6 +222,23 @@ namespace HomeCalendarGUI
         private void CloseApplication(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        public bool IsValidDescription(string desc)
+        {
+            if (string.IsNullOrEmpty(desc))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(desc))
+            {
+                return false;   
+            }
+            if (float.TryParse(desc, out float s))
+            {
+                return false; 
+            }
+            return true;    
         }
     }
 }

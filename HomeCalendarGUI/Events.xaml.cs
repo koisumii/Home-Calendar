@@ -48,7 +48,6 @@ namespace HomeCalendarGUI
         public void ShowTodaysDate() 
         { 
             StartDate.DisplayDateStart = DateTime.Now;
-            
 
             EndDate.DisplayDateStart = DateTime.Now;
         }
