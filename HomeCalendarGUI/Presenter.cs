@@ -69,6 +69,14 @@ namespace HomeCalendarGUI
             
         }
 
+        /// <summary>
+        /// Adds new events to database
+        /// </summary>
+        /// <param name="startDate">Start date of event</param>
+        /// <param name="endDate">End date of event</param>
+        /// <param name="categoryId">Category Id of event</param>
+        /// <param name="description">Description of event</param>
+        /// <param name="duration">Duration of event</param>
         public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description, double duration)
         {
             // Calculate the duration of the event
@@ -115,6 +123,7 @@ namespace HomeCalendarGUI
 
             items = items.OrderBy(i => i.EventID).ToList();
 
+            //Gather data and put in a list of events
             items.ForEach(item =>
             {
                 eventsByDate.Add(new Event(item.EventID,item.StartDateTime,item.CategoryID,item.DurationInMinutes,item.ShortDescription));
