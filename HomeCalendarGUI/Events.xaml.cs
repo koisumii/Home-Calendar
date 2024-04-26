@@ -65,5 +65,10 @@ namespace HomeCalendarGUI
         {
             throw new NotImplementedException();
         }
+
+        public void ShowEventsOnDataGrid(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

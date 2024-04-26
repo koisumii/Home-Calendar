@@ -94,6 +94,12 @@ namespace HomeCalendarGUI
             view.ShowInformationOnCmb(model.categories.List());
         }
 
-
+        /// <summary>
+        /// Gets all events from the database
+        /// </summary>
+        public void GetEvents()
+        {
+            view.ShowEventsOnDataGrid(model.events.List());
+        }
     }
 }

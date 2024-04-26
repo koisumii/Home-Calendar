@@ -60,6 +60,7 @@ namespace HomeCalendarGUI
 
             presenter.GetCategoriesForComboBox();
             presenter.GetCategoriesTypeInList();
+            presenter.GetEvents();
             SetTodaysDateOnDatePicker();
         }
 
@@ -105,6 +106,11 @@ namespace HomeCalendarGUI
                 }
                 cmbEventTypes.Items.Add(category.Type);
             }
+        }
+
+        public void ShowEventsOnDataGrid(List<Event> events)
+        {
+            EventsDataGrid.ItemsSource = events;
         }
 
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
@@ -207,6 +213,16 @@ namespace HomeCalendarGUI
         private void CloseApplication(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void MenuItem_MouseRightButtonUp(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }

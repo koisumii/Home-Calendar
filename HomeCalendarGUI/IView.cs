@@ -29,5 +29,11 @@ namespace HomeCalendarGUI
         /// Shows the neccessary information on a combobox for example, types of events. 
         /// </summary>
         public void ShowInformationOnCmb(List<Category> categories);
+
+        /// <summary>
+        /// Displays a list of events on the main page
+        /// </summary>
+        /// <param name="events">Current events from the database</param>
+        public void ShowEventsOnDataGrid(List<Event> events);
     }
 }

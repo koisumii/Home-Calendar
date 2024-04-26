@@ -9,13 +9,18 @@
         Title="MainWindow" Height="700" Width="800">
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="50"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
+
         <TextBlock Text="Home Calendar Application" FontSize="20" FontWeight="Bold"
-                   HorizontalAlignment="Center" Padding="10" Grid.Row="0"/>
+                   HorizontalAlignment="Left" TextAlignment="Center" Padding="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="264,0,0,0"/>
 
         <StackPanel Grid.Row="1" Margin="10">
             <GroupBox Header="Category Management">
@@ -37,8 +42,8 @@
                     <TextBlock Text="End Date:" Margin="0,5,0,0" FontWeight="Bold"/>
                     <DatePicker x:Name="EndDate" />
                     <TextBlock Margin="0,5,0,0" FontWeight="Bold">Enter a duration in minutes for this event:</TextBlock>
-                    <TextBox x:Name="EndTime"></TextBox>    
-                    
+                    <TextBox x:Name="EndTime"></TextBox>
+
                     <TextBlock Text="Available Categories:" Margin="0,5,0,0" FontWeight="Bold"></TextBlock>
                     <ComboBox x:Name="catsComboBox" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0.5,15,0.5,0.5" Text="Categories" DisplayMemberPath="Description"/>
                     <Button Content="Add Event" Click="Button_ClickAddEvent" Margin="0,10" Width="100"/>
@@ -51,6 +56,21 @@
                 </Button>
             </GroupBox>
         </StackPanel>
+
+        <DataGrid x:Name="EventsDataGrid" Grid.Column="1" Grid.Row="1" AutoGenerateColumns="False" Margin="0,0,-211,0" >
+            <DataGrid.Columns>                
+                <DataGridTextColumn Header="StartDateTime" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
+                <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
+                <DataGridTextColumn Header="DurationInMinutes" Binding="{Binding DurationInMinutes}"/>
+                <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>                
+            </DataGrid.Columns>
+            <DataGrid.ContextMenu>
+                <ContextMenu>
+                    <MenuItem MouseRightButtonUp="MenuItem_MouseRightButtonUp" Click="MenuItem_Click" Header="Click"/>
+                </ContextMenu>
+            </DataGrid.ContextMenu>
+        </DataGrid>
 
         <Button Content="Close Application" Click="CloseApplication" Grid.Row="2"
                 HorizontalAlignment="Right" Margin="10" Width="200"
