@@ -2,7 +2,9 @@ using Calendar;
 using CalendarCodeTests;
 using HomeCalendarGUI;
 using System.Data.SQLite;
+using System.Reflection;
 using Xunit;
+using Xunit.Sdk;
 
 namespace MVP_Tests
 {
@@ -171,10 +173,24 @@ namespace MVP_Tests
         public void Test_DeleteAnEvent()
         {
             //Arrange 
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
+            TestView view = new TestView();
+            Presenter p = new Presenter(view,messyDB);
+            int eveIdToDelete = 3;
 
             //Act
+            p.GetEvents();
+            List<Event> initial = view.events;
+            Event eveToDelete = initial.Where(e => e.Id == eveIdToDelete).First();
+            p.DeleteAnEvent(eveToDelete);
+            List<Event> results = view.events;
 
             //Assert
+            Assert.True(results.Count < initial.Count);
+            Assert.Throws<InvalidOperationException>(() => { p.DeleteAnEvent(eveToDelete); });
         }
     }
 }
