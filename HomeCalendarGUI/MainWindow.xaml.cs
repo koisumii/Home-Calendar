@@ -224,7 +224,14 @@ namespace HomeCalendarGUI
         {
             if (MessageBox.Show("Are you sure you would like to delete this event? By clicking yes, this event will be permanently deleted", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                
+                try
+                {
+                    presenter.DeleteAnEvent(EventsDataGrid.SelectedItem as Event);
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Hand);
+                }                
             }
         }
 

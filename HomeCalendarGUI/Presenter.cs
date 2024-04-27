@@ -92,6 +92,7 @@ namespace HomeCalendarGUI
 
             // You might want to call a method to update the UI or a list of events here as well
             view.DisplaySuccessfulMessage("Event added successfully.");
+            view.ShowEventsOnDataGrid(model.events.List());
         }
 
         /// <summary>
