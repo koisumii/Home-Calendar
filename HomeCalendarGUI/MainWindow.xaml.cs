@@ -240,5 +240,10 @@ namespace HomeCalendarGUI
             }
             return true;    
         }
+
+        public void ShowEventsFilteredByMonth(List<Event> eventsByMonth)
+        {
+            Console.WriteLine();
+        }
     }
 }

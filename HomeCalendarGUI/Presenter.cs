@@ -11,6 +11,7 @@ using System.Data.Entity.Migrations.Model;
 using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
 using static Calendar.Category;
+using System.Collections;
 
 namespace HomeCalendarGUI
 {
@@ -27,7 +28,11 @@ namespace HomeCalendarGUI
         public Presenter(IView v) 
         {
             model = new HomeCalendar();
-            view = v;            
+            view = v;
+
+            //testing 
+            DateTime start = new DateTime(2018, 01, 01);
+            GetEventsFilteredByMonth(start, start.AddMonths(8)); 
         }
 
         /// <summary>
@@ -39,6 +44,9 @@ namespace HomeCalendarGUI
         {
             model = new HomeCalendar(dbFile,false);
             view = v;
+            //testing 
+            DateTime start = new DateTime(2018, 01, 01);
+            GetEventsFilteredByMonth(start, start.AddMonths(8));
         }
 
         /// <summary>
@@ -84,6 +92,22 @@ namespace HomeCalendarGUI
         public void GetCategoriesTypeInList() 
         {
             view.ShowInformationOnCmb(model.categories.List());
+        }
+
+        public void GetEventsFilteredByMonth(DateTime startMonth, DateTime endMonth)
+        {
+            //good
+            List<CalendarItem> calendarItemsByMonths = model.GetCalendarItems(null, null, false, 0);
+            calendarItemsByMonths = calendarItemsByMonths.OrderBy(i => i.StartDateTime.Month).ToList(); 
+
+            List<Event> eventsByMonth = new List<Event>();
+
+            foreach (CalendarItem item in calendarItemsByMonths)
+            {
+                eventsByMonth.Add(new Event(item.EventID, item.StartDateTime, item.CategoryID, item.DurationInMinutes, item.ShortDescription));
+            }
+
+            view.ShowEventsFilteredByMonth(eventsByMonth);
         }
 
 

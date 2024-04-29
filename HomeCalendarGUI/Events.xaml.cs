@@ -65,5 +65,10 @@ namespace HomeCalendarGUI
         {
             throw new NotImplementedException();
         }
+
+        public void ShowEventsFilteredByMonth(List<Event> eventsByMonth)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

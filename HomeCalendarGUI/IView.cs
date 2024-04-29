@@ -29,5 +29,11 @@ namespace HomeCalendarGUI
         /// Shows the neccessary information on a combobox for example, types of events. 
         /// </summary>
         public void ShowInformationOnCmb(List<Category> categories);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="eventsByMonth"></param>
+        public void ShowEventsFilteredByMonth(List<Event> eventsByMonth);
     }
 }
