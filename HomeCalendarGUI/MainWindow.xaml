@@ -24,7 +24,7 @@
         </Grid.ColumnDefinitions>
 
         <TextBlock Text="Home Calendar Application" FontSize="20" FontWeight="Bold"
-                   HorizontalAlignment="Left" TextAlignment="Center" Padding="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="264,0,0,0"/>
+                   HorizontalAlignment="Left" TextAlignment="Center" Padding="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="264,0,0,0" Foreground="AliceBlue"/>
 
         <StackPanel Grid.Row="1" Margin="10">
             <GroupBox Header="Category Management" Foreground="AliceBlue">
@@ -32,8 +32,8 @@
                     <TextBlock Text="Description:" FontWeight="Bold"/>
                     <TextBox x:Name="DescriptionBox" Height="30" Margin="0,5"/>
                     <TextBlock Text="Event Type:" FontWeight="Bold"/>
-                    <ComboBox x:Name="cmbEventTypes" Height="30" Margin="0,5"/>
-                    <Button Content="Add Category" Click="Button_ClickAddCategory" Margin="0,10" Width="100"/>
+                    <ComboBox x:Name="cmbEventTypes" Height="30" Margin="0,5" BorderBrush="OrangeRed" BorderThickness="4" FontFamily="Comfortaa"/>
+                    <Button Content="Add Category" Click="Button_ClickAddCategory" Margin="0,10" Width="100" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown"/>
                 </StackPanel>
             </GroupBox>
             <TextBlock x:Name="message" FontWeight="Bold"/>
@@ -49,13 +49,13 @@
                     <TextBox x:Name="EndTime"></TextBox>
 
                     <TextBlock Text="Available Categories:" Margin="0,5,0,0" FontWeight="Bold"></TextBlock>
-                    <ComboBox x:Name="catsComboBox" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0.5,15,0.5,0.5" Text="Categories" DisplayMemberPath="Description"/>
-                    <Button Content="Add Event" Click="Button_ClickAddEvent" Margin="0,10" Width="100"/>
-                    <Button Content="Cancel Event" Click="Button_ClickCancelEvent" Margin="0,10" Width="100"/>
+                    <ComboBox x:Name="catsComboBox" FontFamily="Comfortaa" BorderBrush="Red" BorderThickness="2" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0.5,15,0.5,0.5" Text="Categories" DisplayMemberPath="Description"/>
+                    <Button Content="Add Event" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown" Click="Button_ClickAddEvent" Margin="0,10" Width="100"/>
+                    <Button Content="Cancel Event" Click="Button_ClickCancelEvent" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown" Margin="0,10" Width="100"/>
                 </StackPanel>
             </GroupBox>
             <GroupBox Header="Settings" Foreground="AliceBlue">
-                <Button Click="Btn_SaveCalendarFileTo" Grid.Row="2" Margin="10" Width="130" HorizontalAlignment="Center" Background="Azure">
+                <Button Click="Btn_SaveCalendarFileTo" Grid.Row="2" Margin="10" Width="130" HorizontalAlignment="Center" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown">
                     <TextBlock TextAlignment="Center">Change Calendar File <LineBreak/> Location</TextBlock>
                 </Button>
             </GroupBox>
@@ -63,30 +63,30 @@
 
         <StackPanel Grid.Row="1" Grid.Column="1">
             <WrapPanel>
-                <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Foreground="AliceBlue">Filter by Date Range</CheckBox>
-            <DatePicker x:Name="Start" Margin="5,0,0,0"/>
-            <DatePicker x:Name="End" Margin="5,0,0,0"/>            
-            </WrapPanel>           
-        </StackPanel>  
-        
-        <DataGrid x:Name="EventsDataGrid" Grid.Column="1" Margin="10,30,1,0" Grid.Row="1" AutoGenerateColumns="False" Background="LightBlue">
-            <DataGrid.Columns>                
+                <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
+                <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
+                <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
+            </WrapPanel>
+        </StackPanel>
+
+        <DataGrid x:Name="EventsDataGrid" Grid.Column="1" Margin="10,30,1,0" Grid.Row="1" AutoGenerateColumns="False" Background="LightBlue" Foreground="Brown" FontWeight="DemiBold" FontFamily="Comfortaa">
+            <DataGrid.Columns>
                 <DataGridTextColumn Header="StartDateTime" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
                 <DataGridTextColumn Header="DurationInMinutes" Binding="{Binding DurationInMinutes}"/>
                 <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
-                <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>                
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="DeleteEvent" Header="Delete"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
-        </DataGrid>        
-                
+        </DataGrid>
+
 
         <Button Content="Close Application" Click="CloseApplication" Grid.Row="2"
-                HorizontalAlignment="Right" Margin="10" Width="200"
+                HorizontalAlignment="Right" Margin="10" Width="200" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown"
         />
     </Grid>
 </Window>
