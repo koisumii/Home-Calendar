@@ -241,11 +241,9 @@ namespace HomeCalendarGUI
             return true;    
         }
 
-        public void ShowCalendarItemsFilteredByMonth(List<string> months, List<Double> totalBusyTimes)
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
         {
-            //Console.WriteLine();
-            //Events.ItemsSource = months;
-                 
+            EventsDataGrid.ItemsSource = itemsByMonthAndTime; 
         }
 
         private void BtnClick_Sort(object sender, RoutedEventArgs e)

@@ -58,8 +58,8 @@
 
                     <DataGrid x:Name="EventsDataGrid" Margin="0,5,0,0">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Header="Month" Binding="{Binding Month}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Busy Time" Binding="{Binding TotalBusyTime}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

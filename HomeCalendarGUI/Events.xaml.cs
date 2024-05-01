@@ -66,7 +66,7 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsFilteredByMonth(List<string> months, List<double> totalBusyTimes)
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
         {
             throw new NotImplementedException();
         }

@@ -100,7 +100,7 @@ namespace HomeCalendarGUI
             //good
             List<string> months = new List<string>();
             List<Double> totalBusyTimes = new List<Double>();
-            List<Dictionary<string, object>> itemsByMonth = model.GetCalendarDictionaryByCategoryAndMonth(new DateTime(2018,01,01), new DateTime(2024, 04, 01), false, 0);
+            List<Dictionary<string, object>> itemsByMonth = model.GetCalendarDictionaryByCategoryAndMonth(startMonth, endMonth, false, 0);
 
             for (int i = 0; i < itemsByMonth.Count - 1; i++)
             {
@@ -118,7 +118,14 @@ namespace HomeCalendarGUI
                 }
             }
 
-            view.ShowCalendarItemsFilteredByMonth(months, totalBusyTimes);
+            //making dictionary
+            Dictionary<string, Double> itemsByMonthAndTime = new Dictionary<string, Double>(); 
+            for(int i = 0; i < months.Count; i++)
+            {
+                itemsByMonthAndTime[$"{months[i]}"] = totalBusyTimes[i]; 
+            }
+
+            view.ShowCalendarItemsFilteredByMonth(itemsByMonthAndTime);
         }
 
 
