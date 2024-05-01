@@ -241,9 +241,23 @@ namespace HomeCalendarGUI
             return true;    
         }
 
-        public void ShowEventsFilteredByMonth(List<Event> eventsByMonth)
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, object> d1)
         {
-            Console.WriteLine();
+            //Console.WriteLine();
+            //Events.ItemsSource = items;
         }
+
+        private void BtnClick_Sort(object sender, RoutedEventArgs e)
+        {
+            DateTime start = StartMonth.SelectedDate.Value;
+            DateTime end = EndMonth.SelectedDate.Value; 
+
+            presenter.GetCalendarItemsFilteredByMonth(start, end); 
+        }
+
+        //public void ShowCalendarItemsFilteredByMonth(Dictionary<string, object> d1)
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

@@ -12,6 +12,7 @@ using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
 using static Calendar.Category;
 using System.Collections;
+using System.Data;
 
 namespace HomeCalendarGUI
 {
@@ -32,7 +33,7 @@ namespace HomeCalendarGUI
 
             //testing 
             DateTime start = new DateTime(2018, 01, 01);
-            GetEventsFilteredByMonth(start, start.AddMonths(8)); 
+            GetCalendarItemsFilteredByMonth(start, start.AddMonths(8)); 
         }
 
         /// <summary>
@@ -46,7 +47,7 @@ namespace HomeCalendarGUI
             view = v;
             //testing 
             DateTime start = new DateTime(2018, 01, 01);
-            GetEventsFilteredByMonth(start, start.AddMonths(8));
+            GetCalendarItemsFilteredByMonth(start, start.AddMonths(8));
         }
 
         /// <summary>
@@ -94,20 +95,61 @@ namespace HomeCalendarGUI
             view.ShowInformationOnCmb(model.categories.List());
         }
 
-        public void GetEventsFilteredByMonth(DateTime startMonth, DateTime endMonth)
+        public void GetCalendarItemsFilteredByMonth(DateTime startMonth, DateTime endMonth)
         {
             //good
-            List<CalendarItem> calendarItemsByMonths = model.GetCalendarItems(null, null, false, 0);
-            calendarItemsByMonths = calendarItemsByMonths.OrderBy(i => i.StartDateTime.Month).ToList(); 
 
-            List<Event> eventsByMonth = new List<Event>();
+            //get start date time, duration in minutes, details, category ID (translate this number to its category description)
+            //show this on datagrid
+            //List<CalendarItem> calendarItemsByMonths = model.GetCalendarItems(startMonth, endMonth, false, 0);
+            //calendarItemsByMonths = calendarItemsByMonths.OrderBy(i => i.StartDateTime.Month).ToList();
 
-            foreach (CalendarItem item in calendarItemsByMonths)
+            //List<Dictionary<string, object>> items = itemsByMonth.ToList();
+
+            //Dictionary<object, object> c2 = new Dictionary<object, object>();
+            
+            //List<CalendarItem> c1 = new List<CalendarItem>();
+            //Dictionary<string, object> c2 = new Dictionary<string, object>();
+            //List < Dictionary<string, object> > c3 = new List<Dictionary<string, object>>();
+            //c2["Month"] = months[0]["Month"];
+            //c2["TotalBusyTime"] = months[0]["TotalBusyTime"];
+            //foreach (var month in months[0]) 
+            //{ 
+
+            //}
+
+
+            //List<Event> eventsByMonth = new List<Event>();
+
+            //foreach (CalendarItem item in calendarItemsByMonths)
+            //{
+            //    eventsByMonth.Add(new Event(item.EventID, item.StartDateTime, item.CategoryID, item.DurationInMinutes, item.ShortDescription));
+            //}
+            List<string> months = new List<string>();
+            List<Double> totalBusyTimes = new List<Double>();
+            List<Dictionary<string, object>> itemsByMonth = model.GetCalendarDictionaryByCategoryAndMonth(new DateTime(2018,01,01), new DateTime(2024, 04, 01), false, 0);
+            
+
+            for (int i = 0; i < itemsByMonth.Count - 1; i++)
             {
-                eventsByMonth.Add(new Event(item.EventID, item.StartDateTime, item.CategoryID, item.DurationInMinutes, item.ShortDescription));
+                foreach (var item in itemsByMonth[i])
+                {
+                    if (item.Key == "Month")
+                    {
+                        months.Add(item.Value.ToString());
+                        //c2.Add([$"Month : {item.Value}"]);
+                        //["Month"] = item.Value
+                    }
+                    else if (item.Key == "TotalBusyTime")
+                    {
+                        totalBusyTimes.Add((Double)item.Value); 
+                        //c2[i]["TotalBusyTime"] = item.Value;
+                    }
+                    continue;
+                }
             }
-
-            view.ShowEventsFilteredByMonth(eventsByMonth);
+            Console.WriteLine();
+            //view.ShowCalendarItemsFilteredByMonth(items);
         }
 
 

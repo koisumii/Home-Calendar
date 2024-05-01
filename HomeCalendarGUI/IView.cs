@@ -34,6 +34,6 @@ namespace HomeCalendarGUI
         /// 
         /// </summary>
         /// <param name="eventsByMonth"></param>
-        public void ShowEventsFilteredByMonth(List<Event> eventsByMonth);
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, object> d1);
     }
 }
