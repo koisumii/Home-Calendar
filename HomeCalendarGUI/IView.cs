@@ -30,10 +30,6 @@ namespace HomeCalendarGUI
         /// </summary>
         public void ShowInformationOnCmb(List<Category> categories);
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="eventsByMonth"></param>
-        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, object> d1);
+        public void ShowCalendarItemsFilteredByMonth(List<string> months, List<Double> totalBusyTimes);
     }
 }

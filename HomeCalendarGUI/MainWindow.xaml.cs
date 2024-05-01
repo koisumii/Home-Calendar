@@ -241,10 +241,11 @@ namespace HomeCalendarGUI
             return true;    
         }
 
-        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, object> d1)
+        public void ShowCalendarItemsFilteredByMonth(List<string> months, List<Double> totalBusyTimes)
         {
             //Console.WriteLine();
-            //Events.ItemsSource = items;
+            //Events.ItemsSource = months;
+                 
         }
 
         private void BtnClick_Sort(object sender, RoutedEventArgs e)
@@ -255,9 +256,5 @@ namespace HomeCalendarGUI
             presenter.GetCalendarItemsFilteredByMonth(start, end); 
         }
 
-        //public void ShowCalendarItemsFilteredByMonth(Dictionary<string, object> d1)
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }
