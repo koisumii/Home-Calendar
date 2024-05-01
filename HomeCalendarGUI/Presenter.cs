@@ -97,6 +97,12 @@ namespace HomeCalendarGUI
 
         public void GetCalendarItemsFilteredByMonth(DateTime startMonth, DateTime endMonth)
         {
+            if(endMonth < startMonth)
+            {
+                view.DisplayErrorMessage("End month must be after start month. ");
+                return; 
+            }
+
             //good
             List<string> months = new List<string>();
             List<Double> totalBusyTimes = new List<Double>();

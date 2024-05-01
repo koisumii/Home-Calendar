@@ -2,6 +2,7 @@ using Calendar;
 using CalendarCodeTests;
 using HomeCalendarGUI;
 using System.Data.SQLite;
+using System.Runtime.CompilerServices;
 using Xunit;
 
 namespace MVP_Tests
@@ -13,6 +14,7 @@ namespace MVP_Tests
         public bool calledDisplayErrorMessage = false;
         public bool calledDisplaySuccessfulMessage = false;    
         public bool calledShowInfoOnCmb = false;
+        public bool calledShowCalendarItemsByMonth = false;
         
         public void ShowCategoriesOnComboBox(List<Category> categories)
         {
@@ -33,6 +35,11 @@ namespace MVP_Tests
         public void ShowInformationOnCmb(List<Category> categories)
         {
             calledShowInfoOnCmb = true;
+        }
+
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        {
+            calledShowCalendarItemsByMonth = true; 
         }
     }
 
@@ -118,6 +125,34 @@ namespace MVP_Tests
 
             //assert 
             Assert.True(view.calledShowInfoOnCmb); 
+        }
+
+        [Fact]
+        public void TestGetCalendarItemsFilteredByMonth_Sucess()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.GetCalendarItemsFilteredByMonth(new DateTime(2018, 01, 01), new DateTime(2020, 01, 01));
+
+            //assert 
+            Assert.True(view.calledShowCalendarItemsByMonth);
+        }
+
+        [Fact]
+        public void TestGetCalendarItemsFilteredByMonth_Fail()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act 
+            p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
+
+            //assert
+            Assert.True(view.calledDisplayErrorMessage);
         }
     }
 }
