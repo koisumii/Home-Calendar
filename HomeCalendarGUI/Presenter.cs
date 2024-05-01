@@ -119,16 +119,6 @@ namespace HomeCalendarGUI
         public void GetEventsFilteredByDateRange(DateTime? startDate,DateTime? endDate)
         {
             List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
-            
-            //List<Event> eventsByDate = new List<Event>();
-
-            //items = items.OrderBy(i => i.EventID).ToList();
-
-            ////Gather data and put in a list of events
-            //items.ForEach(item =>
-            //{
-            //    eventsByDate.Add(new Event(item.EventID,item.StartDateTime,item.CategoryID,item.DurationInMinutes,item.ShortDescription));
-            //});
 
             view.ShowCalendarItemsWithDateFiltersOn(items);
         }

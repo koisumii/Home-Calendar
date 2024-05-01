@@ -19,7 +19,6 @@ namespace MVP_Tests
         public bool calledShowInfoOnCmb = false;
         public bool calledShowCalendarItemOnDataGrid = false;
         public bool calledShowCalendarItemsWithDateFiltersOn = false;
-
         public bool calledShowEventsOnDataGrid = false;
         public bool calledShowEventsWithFiltersOn = false;
 
