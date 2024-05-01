@@ -8,6 +8,11 @@
         Background="Black"
         Title="OpenFileWindowOnInitialization" Height="450" Width="800">
     <Grid>
+        <!--Retrieved from https://themepack.me/theme/summer-flowers/-->
+        <Grid.Background>
+            <ImageBrush ImageSource="images/AppBackground.jpg"></ImageBrush>
+        </Grid.Background>
+        
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
@@ -18,9 +23,9 @@
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>            
         </Grid.ColumnDefinitions>
-        <TextBlock Text="Please select indicated options below" Foreground="WhiteSmoke" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="30"></TextBlock>
+        <TextBlock Text="Please select indicated options below" Foreground="Lavender" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="30"></TextBlock>
 
-        <Button Click="Btn_Use_Default_File" Grid.Row="1" Grid.Column="0" Margin="50" BorderBrush="Red" Background="Salmon" FontSize="20">Use default calendar file</Button>
+        <Button Click="Btn_Use_Default_File" Grid.Row="1" Grid.Column="0" Margin="50" BorderBrush="Red" Background="Salmon" FontSize="20" FontWeight="DemiBold"  FontFamily="Calibri">Use default calendar file</Button>
         <Button Click="Btn_Use_Specific_File" Grid.Row="1" Grid.Column="1" Margin="50" BorderBrush="Yellow" Background="Navy" Foreground="AntiqueWhite" FontSize="20">Use specific calendar file</Button>
 
     </Grid>

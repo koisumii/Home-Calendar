@@ -5,8 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="800">
-    <Grid>
+        Title="MainWindow" Height="700" Width="900">
+    <Grid SizeChanged="Grid_SizeChanged">
         <!--Retrieved from https://themepack.me/theme/summer-flowers/-->
         <Grid.Background>
             <ImageBrush ImageSource="images/AppBackground.jpg"></ImageBrush>
@@ -69,14 +69,23 @@
             </WrapPanel>
         </StackPanel>
 
-        <DataGrid x:Name="EventsDataGrid" Grid.Column="1" Margin="10,30,1,0" Grid.Row="1" AutoGenerateColumns="False" Background="LightBlue" Foreground="Brown" FontWeight="DemiBold" FontFamily="Comfortaa">
-            <DataGrid.Columns>
+        <DataGrid x:Name="CalendarItemsDataGrid" Grid.Column="1" Margin="18,30,-27,38" Grid.Row="1" AutoGenerateColumns="False" Background="LightBlue" Foreground="Brown" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
+            <!--<DataGrid.Columns>
                 <DataGridTextColumn Header="StartDateTime" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
                 <DataGridTextColumn Header="DurationInMinutes" Binding="{Binding DurationInMinutes}"/>
                 <DataGridTextColumn Header="Details" Binding="{Binding Details}"/>
                 <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
+            </DataGrid.Columns>-->
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
+                <DataGridTextColumn Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>
+                <DataGridTextColumn Header="Category" Binding="{Binding Category}"/>
+                <DataGridTextColumn Header="Description" Binding="{Binding ShortDescription}"/>
+                <DataGridTextColumn Header="Duration" Binding="{Binding DurationInMinutes}"/>
+                <DataGridTextColumn Header="Busy Time" Binding="{Binding BusyTime}"/>
             </DataGrid.Columns>
+
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="DeleteEvent" Header="Delete"/>

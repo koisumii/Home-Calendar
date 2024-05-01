@@ -28,13 +28,13 @@ namespace HomeCalendarGUI
         /// <summary>
         /// Displays a list of events on the main page
         /// </summary>
-        /// <param name="events">Current events from the database</param>
-        public void ShowEventsOnDataGrid(List<Event> events);
+        /// <param name="calendarItems">Current events from the database</param>
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems);
 
         /// <summary>
         /// Displays events with specified filters
         /// </summary>
-        /// <param name="events">List of events</param>
-        public void ShowEventsWithFiltersOn(List<Event> events);        
+        /// <param name="calendarItems">List of events</param>
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems);
     }
 }

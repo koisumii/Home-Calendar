@@ -12,10 +12,14 @@ namespace MVP_Tests
     {        
         public List<Category> categories;
         public List<Event> events;
+        public List<CalendarItem> calendarItems;
         public bool calledShowCategoriesOnComboBox = false;
         public bool calledDisplayErrorMessage = false;
         public bool calledDisplaySuccessfulMessage = false;    
         public bool calledShowInfoOnCmb = false;
+        public bool calledShowCalendarItemOnDataGrid = false;
+        public bool calledShowCalendarItemsWithDateFiltersOn = false;
+
         public bool calledShowEventsOnDataGrid = false;
         public bool calledShowEventsWithFiltersOn = false;
 
@@ -41,16 +45,17 @@ namespace MVP_Tests
             calledShowInfoOnCmb = true;
         }
 
-        public void ShowEventsOnDataGrid(List<Event> events)
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
         {
-            calledShowEventsOnDataGrid = true;
-            this.events = events;
+            calledShowCalendarItemOnDataGrid = true;   
+            this.calendarItems = calendarItems;
         }
 
-        public void ShowEventsWithFiltersOn(List<Event> events)
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
         {
-            calledShowEventsWithFiltersOn = true;
-            this.events = events;
+            calledShowCalendarItemsWithDateFiltersOn = true;
+            this.calendarItems = calendarItems;
+
         }
     }
 
@@ -81,7 +86,6 @@ namespace MVP_Tests
                 Assert.Equal(expectedResults[i].Type, view.categories[i].Type);
             }
         }
-
 
         [Fact]
         public void TestConstructor()
@@ -139,33 +143,36 @@ namespace MVP_Tests
         }
 
         [Fact]
-        public void Test_ShowEventsWithDateFiltersOn()
+        public void Test_ShowCalendarItemsWithDateFiltersOn()
         {
             //Arrange
             String folder = TestConstants.GetSolutionDir();
-            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
-            SQLiteConnection conn = Database.dbConnection;
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";            
             TestView view = new TestView();
             Presenter p = new Presenter(view, existingDB);
-            List<Event> expectedResults = TestConstants.filteredbyYear2018();
+            List<Event> expectedEventsResults = TestConstants.filteredbyYear2018();
+            expectedEventsResults = expectedEventsResults.OrderBy(e => e.Id).ToList();
+
             int expectedNumberOfItems = 3;
             DateTime? start = DateTime.Parse("January 1 2018");
             DateTime? end = DateTime.Parse("December 31 2018");
 
 
             //Act 
-            p.GetEventsFilteredByDateRange(start,end);
-            List<Event> results = view.events;
+            p.GetEventsFilteredByDateRange(start,end);            
+            List<CalendarItem> calendarItemsResults = view.calendarItems;
+            calendarItemsResults = calendarItemsResults.OrderBy(i => i.EventID).ToList();
+
 
             //Assert
-
-            Assert.Equal(expectedNumberOfItems, results.Count);            
-            for (int i = 0; i < results.Count; i++)
-            {                
-                Assert.Equal(expectedResults[i].StartDateTime, results[i].StartDateTime);
-                Assert.Equal(expectedResults[i].DurationInMinutes, results[i].DurationInMinutes);
-                Assert.Equal(expectedResults[i].Category, results[i].Category);
-                Assert.Equal(expectedResults[i].Details, results[i].Details);
+            Assert.Equal(expectedEventsResults.Count, calendarItemsResults.Count);
+            for (int i = 0; i < calendarItemsResults.Count; i++)
+            {
+                Assert.Equal(expectedEventsResults[i].Category, calendarItemsResults[i].CategoryID);
+                Assert.Equal(expectedEventsResults[i].Id, calendarItemsResults[i].EventID);
+                Assert.Equal(expectedEventsResults[i].Details, calendarItemsResults[i].ShortDescription);
+                Assert.Equal(expectedEventsResults[i].StartDateTime, calendarItemsResults[i].StartDateTime);
+                Assert.Equal(expectedEventsResults[i].DurationInMinutes, calendarItemsResults[i].DurationInMinutes);  
             }
         }
 
@@ -182,15 +189,15 @@ namespace MVP_Tests
             int eveIdToDelete = 3;
 
             //Act
-            p.GetEvents();
-            List<Event> initial = view.events;
-            Event eveToDelete = initial.Where(e => e.Id == eveIdToDelete).First();
-            p.DeleteAnEvent(eveToDelete);
-            List<Event> results = view.events;
+            p.GetCalendarItems();
+            List<CalendarItem> initial = view.calendarItems;
+            CalendarItem itemToDelete = initial.Where(e => e.EventID == eveIdToDelete).First();            
+            p.DeleteAnEvent(itemToDelete.EventID);
+            List<CalendarItem> results = view.calendarItems;
 
             //Assert
             Assert.True(results.Count < initial.Count);
-            Assert.Throws<InvalidOperationException>(() => { p.DeleteAnEvent(eveToDelete); });
+            Assert.Throws<InvalidOperationException>(() => { p.DeleteAnEvent(itemToDelete.EventID); });
         }
     }
 }

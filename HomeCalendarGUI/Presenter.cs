@@ -92,7 +92,7 @@ namespace HomeCalendarGUI
 
             // You might want to call a method to update the UI or a list of events here as well
             view.DisplaySuccessfulMessage("Event added successfully.");
-            view.ShowEventsOnDataGrid(model.events.List());
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
         }
 
         /// <summary>
@@ -106,9 +106,9 @@ namespace HomeCalendarGUI
         /// <summary>
         /// Gets all events from the database
         /// </summary>
-        public void GetEvents()
+        public void GetCalendarItems()
         {
-            view.ShowEventsOnDataGrid(model.events.List());
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null,null,false,0));
         }
 
         /// <summary>
@@ -120,26 +120,26 @@ namespace HomeCalendarGUI
         {
             List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
             
-            List<Event> eventsByDate = new List<Event>();
+            //List<Event> eventsByDate = new List<Event>();
 
-            items = items.OrderBy(i => i.EventID).ToList();
+            //items = items.OrderBy(i => i.EventID).ToList();
 
-            //Gather data and put in a list of events
-            items.ForEach(item =>
-            {
-                eventsByDate.Add(new Event(item.EventID,item.StartDateTime,item.CategoryID,item.DurationInMinutes,item.ShortDescription));
-            });
+            ////Gather data and put in a list of events
+            //items.ForEach(item =>
+            //{
+            //    eventsByDate.Add(new Event(item.EventID,item.StartDateTime,item.CategoryID,item.DurationInMinutes,item.ShortDescription));
+            //});
 
-            view.ShowEventsWithFiltersOn(eventsByDate);
+            view.ShowCalendarItemsWithDateFiltersOn(items);
         }
 
         /// <summary>
         /// Deletes an event from the database
         /// </summary>
-        public void DeleteAnEvent(Event e)
+        public void DeleteAnEvent(int eventId)
         {
-            model.events.DeleteEvent(e.Id);
-            view.ShowEventsOnDataGrid(model.events.List());
+            model.events.DeleteEvent(eventId);
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
         }
     }
 }

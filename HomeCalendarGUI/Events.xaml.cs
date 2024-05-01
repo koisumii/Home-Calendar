@@ -66,12 +66,22 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
-        public void ShowEventsOnDataGrid(List<Event> events)
+        public void ShowCalendarItemsOnDataGrid(List<Event> events)
         {
             throw new NotImplementedException();
         }
 
         public void ShowEventsWithFiltersOn(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
         {
             throw new NotImplementedException();
         }
