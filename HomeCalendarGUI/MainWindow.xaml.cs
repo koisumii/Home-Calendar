@@ -246,13 +246,13 @@ namespace HomeCalendarGUI
             EventsDataGrid.ItemsSource = itemsByMonthAndTime;
         }
 
-        private void BtnClick_Sort(object sender, RoutedEventArgs e)
+
+        private void CheckBox_CheckedSort(object sender, RoutedEventArgs e)
         {
             DateTime start = StartMonth.SelectedDate.Value;
-            DateTime end = EndMonth.SelectedDate.Value; 
+            DateTime end = EndMonth.SelectedDate.Value;
 
-            presenter.GetCalendarItemsFilteredByMonth(start, end); 
+            presenter.GetCalendarItemsFilteredByMonth(start, end);
         }
-
     }
 }

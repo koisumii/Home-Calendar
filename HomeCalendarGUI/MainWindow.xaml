@@ -54,8 +54,7 @@
                     <TextBlock Text="Enter an end month" FontWeight="Bold" Margin="0,5,0,0"></TextBlock>
                     <DatePicker Name="EndMonth" SelectedDateFormat="Short"/>
 
-                    <Button Content="Sort" Width="40" Margin="0,5,700,0" Click="BtnClick_Sort"></Button>
-
+                    <CheckBox Checked="CheckBox_CheckedSort">Filter By Month</CheckBox>
                     <DataGrid x:Name="EventsDataGrid" Margin="0,5,0,0" AutoGenerateColumns="False">
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
