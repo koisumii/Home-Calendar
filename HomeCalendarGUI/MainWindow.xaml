@@ -56,10 +56,10 @@
 
                     <Button Content="Sort" Width="40" Margin="0,5,700,0" Click="BtnClick_Sort"></Button>
 
-                    <DataGrid x:Name="EventsDataGrid" Margin="0,5,0,0">
+                    <DataGrid x:Name="EventsDataGrid" Margin="0,5,0,0" AutoGenerateColumns="False">
                         <DataGrid.Columns>
-                            <!--<DataGridTextColumn Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
-                            <DataGridTextColumn Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>-->
+                            <DataGridTextColumn Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
+                            <DataGridTextColumn Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </StackPanel>

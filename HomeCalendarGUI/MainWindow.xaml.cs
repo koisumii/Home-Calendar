@@ -244,15 +244,6 @@ namespace HomeCalendarGUI
         public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
         {
             EventsDataGrid.ItemsSource = itemsByMonthAndTime;
-            var col1 = new DataGridTextColumn();
-            col1.Header = "Month";
-            col1.Binding = new Binding("[Month]");
-            EventsDataGrid.Columns.Add(col1);
-
-            var col2 = new DataGridTextColumn();
-            col2.Header = "Total Busy Time";
-            col2.Binding = new Binding("[TotalBusyTime]");
-            EventsDataGrid.Columns.Add(col2);
         }
 
         private void BtnClick_Sort(object sender, RoutedEventArgs e)
