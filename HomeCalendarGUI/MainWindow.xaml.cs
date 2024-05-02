@@ -222,7 +222,7 @@ namespace HomeCalendarGUI
 
         private void DeleteEvent(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you would like to delete this event? By clicking yes, this event will be permanently deleted", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
                 CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;                
                 try
@@ -246,15 +246,6 @@ namespace HomeCalendarGUI
             {
                 presenter.GetCalendarItems();
             }
-        }
-
-        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //https://stackoverflow.com/questions/11013316/get-the-height-width-of-window-wpf
-
-            double newWindowHeight = e.NewSize.Height;
-            double newWindowWidth = e.NewSize.Width;
-                                    
         }
     }
 }
