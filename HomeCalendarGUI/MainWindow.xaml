@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HomeCalendarGUI"
         mc:Ignorable="d"
-        Title="MainWindow" Height="700" Width="800">
+        Title="MainWindow" Height="700" Width="900">
     <Grid SizeChanged="Grid_SizeChanged">
         <!--Retrieved from https://themepack.me/theme/summer-flowers/-->
         <Grid.Background>
@@ -60,9 +60,9 @@
                         <TextBlock TextAlignment="Center">Change Calendar File <LineBreak/> Location</TextBlock>
                     </Button>
                 </GroupBox>
-            </StackPanel>
+            </StackPanel> 
         </ScrollViewer>
-        
+
         <StackPanel Grid.Row="1" Grid.Column="1">
             <WrapPanel>
                 <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
@@ -71,7 +71,7 @@
             </WrapPanel>
         </StackPanel>
 
-        <DataGrid x:Name="CalendarItemsDataGrid" Grid.Column="1" Margin="10,40,10,10" Grid.Row="1" Width="390" AutoGenerateColumns="False" Background="LightBlue" Foreground="Brown" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
+        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,40,0,10" Grid.Row="1" AutoGenerateColumns="False" Background="LightBlue" Foreground="Brown" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>
