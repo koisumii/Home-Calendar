@@ -12,7 +12,7 @@ namespace CalendarCodeTests
     public class TestConstants
     {
 
-        private static Event Event1 = new Event(1, new DateTime(2018, 1, 10), 3, 40, "App Dev Homework");
+        private static Event Event1 = new Event(1, new DateTime(2018, 1, 10, 10,00,00), 3, 40, "App Dev Homework");
         private static CalendarItem CalendarItem1 = new CalendarItem
         {
             CategoryID = Event1.Category,
@@ -45,7 +45,7 @@ namespace CalendarCodeTests
         };
 
 
-        private static Event Event5 = new Event(5, new DateTime(2020, 1, 11, 7, 30, 0), 2, 15, "staff meeting");
+        private static Event Event5 = new Event(5, new DateTime(2018, 1, 11, 19, 30, 0), 2, 15, "staff meeting");
         private static CalendarItem CalendarItem5 = new CalendarItem
         {
             CategoryID = Event5.Category,

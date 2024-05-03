@@ -66,7 +66,22 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        public void ShowCalendarItemsOnDataGrid(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowEventsWithFiltersOn(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
         {
             throw new NotImplementedException();
         }

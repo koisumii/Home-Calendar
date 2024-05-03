@@ -60,6 +60,7 @@ namespace HomeCalendarGUI
 
             presenter.GetCategoriesForComboBox();
             presenter.GetCategoriesTypeInList();
+            presenter.GetCalendarItems();
             SetTodaysDateOnDatePicker();
         }
 
@@ -107,6 +108,16 @@ namespace HomeCalendarGUI
             }
         }
 
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        {
+            CalendarItemsDataGrid.ItemsSource = calendarItems;
+        }
+        
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
+        {
+            CalendarItemsDataGrid.ItemsSource = calendarItems;
+        }
+        
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
         {
             if (openFolderDialog.ShowDialog() == true)
@@ -222,6 +233,34 @@ namespace HomeCalendarGUI
         private void CloseApplication(object sender, RoutedEventArgs e)
         {
             Close();
+        }
+
+        private void DeleteEvent(object sender, RoutedEventArgs e)
+        {
+            if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            {
+                CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;                
+                try
+                {
+                    presenter.DeleteAnEvent(item.EventID);
+                }
+                catch (SQLiteException ex)
+                {
+                    MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Hand);
+                }                
+            }
+        }
+
+        private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)
+        {
+            if (DateFilterCheckBox.IsChecked == true)
+            {
+                presenter.GetEventsFilteredByDateRange(Start.SelectedDate,End.SelectedDate);
+            }
+            else
+            {
+                presenter.GetCalendarItems();
+            }
         }
 
         public bool IsValidDescription(string desc)
