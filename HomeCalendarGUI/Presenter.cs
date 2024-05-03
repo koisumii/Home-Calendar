@@ -30,10 +30,6 @@ namespace HomeCalendarGUI
         {
             model = new HomeCalendar();
             view = v;
-
-            //testing 
-            DateTime start = new DateTime(2018, 01, 01);
-            GetCalendarItemsFilteredByMonth(start, start.AddMonths(8)); 
         }
 
         /// <summary>
@@ -45,9 +41,6 @@ namespace HomeCalendarGUI
         {
             model = new HomeCalendar(dbFile,false);
             view = v;
-            //testing 
-            DateTime start = new DateTime(2018, 01, 01);
-            GetCalendarItemsFilteredByMonth(start, start.AddMonths(8));
         }
 
         /// <summary>

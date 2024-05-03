@@ -16,6 +16,7 @@ using System.Data.Entity.Core.Objects;
 using System.Xml.Linq;
 using System.Windows.Interop;
 using static Calendar.Category;
+using System.Windows.Markup;
 
 
 namespace HomeCalendarGUI
@@ -111,6 +112,15 @@ namespace HomeCalendarGUI
         public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
         {
             CalendarItemsDataGrid.ItemsSource = calendarItems;
+            DGBusyTime.Visibility = Visibility.Visible;
+            DGStartTime.Visibility = Visibility.Visible;
+            DGDurationInMinutes.Visibility = Visibility.Visible;
+            DGDescription.Visibility = Visibility.Visible;
+            DGCategory.Visibility = Visibility.Visible;
+            DGStartDate.Visibility = Visibility.Visible;
+
+            DGKeyColumn.Visibility = Visibility.Hidden;
+            DGValueColumn.Visibility = Visibility.Hidden;
         }
         
         public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
@@ -158,6 +168,37 @@ namespace HomeCalendarGUI
             {
                 DisplayErrorMessage("You cannot leave any fields empty.");
             }
+        }
+
+        public bool IsValidDescription(string desc)
+        {
+            if (string.IsNullOrEmpty(desc))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(desc))
+            {
+                return false;   
+            }
+            if (float.TryParse(desc, out float s))
+            {
+                return false; 
+            }
+            return true;    
+        }
+
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
+        {
+            CalendarItemsDataGrid.ItemsSource = itemsByMonthAndTime;
+            DGStartDate.Visibility = Visibility.Hidden;
+            DGBusyTime.Visibility = Visibility.Hidden;
+            DGStartTime.Visibility = Visibility.Hidden;
+            DGDurationInMinutes.Visibility = Visibility.Hidden;
+            DGDescription.Visibility = Visibility.Hidden;
+            DGCategory.Visibility = Visibility.Hidden;
+
+            DGKeyColumn.Visibility = Visibility.Visible;
+            DGValueColumn.Visibility = Visibility.Visible;
         }
 
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
@@ -263,35 +304,27 @@ namespace HomeCalendarGUI
             }
         }
 
-        public bool IsValidDescription(string desc)
+        private void CheckBox_ByMonthFilterCheckBox(object sender, RoutedEventArgs e)
         {
-            if (string.IsNullOrEmpty(desc))
+            try
             {
-                return false;
+                if (FilterByMonthCheckBox.IsChecked == true)
+                {
+                    DateTime start = Start.SelectedDate.Value;
+                    DateTime end = End.SelectedDate.Value;
+
+                    presenter.GetCalendarItemsFilteredByMonth(start, end);
+                }
+                else
+                {
+                    presenter.GetCalendarItems();
+                }
             }
-            if (string.IsNullOrWhiteSpace(desc))
+            catch (Exception ex)
             {
-                return false;   
+                MessageBox.Show("Must select a Start and End Date.","Start or End date not selected",MessageBoxButton.OK,MessageBoxImage.Error);
+                FilterByMonthCheckBox.IsChecked = false;
             }
-            if (float.TryParse(desc, out float s))
-            {
-                return false; 
-            }
-            return true;    
-        }
-
-        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
-        {
-            CalendarItemsDataGrid.ItemsSource = itemsByMonthAndTime;
-        }
-
-
-        private void CheckBox_CheckedSort(object sender, RoutedEventArgs e)
-        {
-            DateTime start = Start.SelectedDate.Value;
-            DateTime end = End.SelectedDate.Value;
-
-            presenter.GetCalendarItemsFilteredByMonth(start, end);
         }
     }
 }
