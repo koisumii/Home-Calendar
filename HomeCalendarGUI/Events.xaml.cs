@@ -85,5 +85,10 @@ namespace HomeCalendarGUI
         {
             throw new NotImplementedException();
         }
+
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

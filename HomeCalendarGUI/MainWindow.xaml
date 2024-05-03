@@ -79,10 +79,9 @@
                 <DataGridTextColumn Header="Description" Binding="{Binding ShortDescription}"/>
                 <DataGridTextColumn Header="Duration" Binding="{Binding DurationInMinutes}"/>
                 <DataGridTextColumn Header="Busy Time" Binding="{Binding BusyTime}"/>
-            </DataGrid.Columns>
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
-                <DataGridTextColumn Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>
+            
+                <DataGridTextColumn Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
+                <DataGridTextColumn Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>

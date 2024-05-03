@@ -282,14 +282,14 @@ namespace HomeCalendarGUI
 
         public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
         {
-            EventsDataGrid.ItemsSource = itemsByMonthAndTime;
+            CalendarItemsDataGrid.ItemsSource = itemsByMonthAndTime;
         }
 
 
         private void CheckBox_CheckedSort(object sender, RoutedEventArgs e)
         {
-            DateTime start = StartMonth.SelectedDate.Value;
-            DateTime end = EndMonth.SelectedDate.Value;
+            DateTime start = Start.SelectedDate.Value;
+            DateTime end = End.SelectedDate.Value;
 
             presenter.GetCalendarItemsFilteredByMonth(start, end);
         }

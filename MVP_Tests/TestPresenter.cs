@@ -57,7 +57,7 @@ namespace MVP_Tests
         {
             calledShowCalendarItemsByMonth = true; 
         }
-    }
+    
 
         public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
         {
