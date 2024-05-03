@@ -9,6 +9,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="images\AppBackground.jpg" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
   </ItemGroup>
 
@@ -16,6 +20,10 @@
     <Reference Include="TeamHeavyWeight_HomeCalendarApp">
       <HintPath>..\HomeCalendar\dlls\Model\TeamHeavyWeight_HomeCalendarApp.dll</HintPath>
     </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\AppBackground.jpg" />
   </ItemGroup>
 
 </Project>

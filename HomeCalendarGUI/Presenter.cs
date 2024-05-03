@@ -69,6 +69,14 @@ namespace HomeCalendarGUI
             
         }
 
+        /// <summary>
+        /// Adds new events to database
+        /// </summary>
+        /// <param name="startDate">Start date of event</param>
+        /// <param name="endDate">End date of event</param>
+        /// <param name="categoryId">Category Id of event</param>
+        /// <param name="description">Description of event</param>
+        /// <param name="duration">Duration of event</param>
         public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description, double duration)
         {
             // Calculate the duration of the event
@@ -84,6 +92,7 @@ namespace HomeCalendarGUI
 
             // You might want to call a method to update the UI or a list of events here as well
             view.DisplaySuccessfulMessage("Event added successfully.");
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
         }
 
         /// <summary>
@@ -94,6 +103,33 @@ namespace HomeCalendarGUI
             view.ShowInformationOnCmb(model.categories.List());
         }
 
+        /// <summary>
+        /// Gets all events from the database
+        /// </summary>
+        public void GetCalendarItems()
+        {
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null,null,false,0));
+        }
 
+        /// <summary>
+        /// Filters events by date
+        /// </summary>
+        /// <param name="startDate">Start date of events</param>
+        /// <param name="endDate">End date of events</param>
+        public void GetEventsFilteredByDateRange(DateTime? startDate,DateTime? endDate)
+        {
+            List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
+
+            view.ShowCalendarItemsWithDateFiltersOn(items);
+        }
+
+        /// <summary>
+        /// Deletes an event from the database
+        /// </summary>
+        public void DeleteAnEvent(int eventId)
+        {
+            model.events.DeleteEvent(eventId);
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
+        }
     }
 }

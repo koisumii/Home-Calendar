@@ -1,9 +1,4 @@
 ﻿using Calendar;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HomeCalendarGUI
 {
@@ -29,5 +24,17 @@ namespace HomeCalendarGUI
         /// Shows the neccessary information on a combobox for example, types of events. 
         /// </summary>
         public void ShowInformationOnCmb(List<Category> categories);
+
+        /// <summary>
+        /// Displays a list of events on the main page
+        /// </summary>
+        /// <param name="calendarItems">Current events from the database</param>
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems);
+
+        /// <summary>
+        /// Displays events with specified filters
+        /// </summary>
+        /// <param name="calendarItems">List of events</param>
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems);
     }
 }
