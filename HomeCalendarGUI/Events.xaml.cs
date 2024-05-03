@@ -41,13 +41,13 @@ namespace HomeCalendarGUI
 
         public void DisplaySuccessfulMessage(string msg)
         {
-            throw new NotImplementedException();
+            message.Foreground = Brushes.Green;
+            message.Text = msg;
         }
 
         public void ShowTodaysDate() 
         { 
             StartDate.DisplayDateStart = DateTime.Now;
-            
 
             EndDate.DisplayDateStart = DateTime.Now;
         }
@@ -62,6 +62,31 @@ namespace HomeCalendarGUI
         }
 
         public void ShowCategoriesOnComboBox(List<Category> categories)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsOnDataGrid(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowEventsWithFiltersOn(List<Event> events)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
         {
             throw new NotImplementedException();
         }

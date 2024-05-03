@@ -184,10 +184,11 @@ namespace Calendar
             while (reader.Read())
             {
                 int id = reader.GetInt32(0);
-                String startDateTime = reader.GetString(1);
-                Double durationInMinutes = reader.GetFloat(2);
-                string details = reader.GetString(3);
-                int categoryId = reader.GetInt32(4);
+                var durationInMinutes = reader.GetDouble(1);
+                var startDateTime = reader.GetString(2); 
+                var details = reader.GetString(3);
+                var categoryId = reader.GetInt32(4);
+                //DateTime startDate = DateTime.ParseExact(startDateTime, "yyyy-MM-dd", CultureInfo.InvariantCulture);
 
                 DateTime startDate = DateTime.Parse(startDateTime);
                 eventsList.Add(new Event(id, startDate, categoryId, durationInMinutes, details));

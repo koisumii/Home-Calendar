@@ -369,3 +369,5 @@ FodyWeavers.xsd
 *.db
 /HomeCalendarGUI/dlls
 /HomeCalendar
+/Milestone3_tests/messy.db
+/Milestone3_tests/messyDB

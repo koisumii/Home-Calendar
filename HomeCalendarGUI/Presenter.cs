@@ -10,6 +10,8 @@ using System.Data.Entity.Migrations.Model;
 using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
 using static Calendar.Category;
+using System.Collections;
+using System.Data;
 
 namespace HomeCalendarGUI
 {
@@ -26,7 +28,7 @@ namespace HomeCalendarGUI
         public Presenter(IView v) 
         {
             model = new HomeCalendar();
-            view = v;            
+            view = v;
         }
 
         /// <summary>
@@ -73,22 +75,22 @@ namespace HomeCalendarGUI
             
         }
 
-        public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description)
+        /// <summary>
+        /// Adds new events to database
+        /// </summary>
+        /// <param name="startDate">Start date of event</param>
+        /// <param name="endDate">End date of event</param>
+        /// <param name="categoryId">Category Id of event</param>
+        /// <param name="description">Description of event</param>
+        /// <param name="duration">Duration of event</param>
+        public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description, double duration)
         {
-            // Calculate the duration of the event
-            double duration = (endDate - startDate).TotalMinutes;
-
-            if (duration <= 0)
-            {
-                view.DisplayErrorMessage("End date must be later than start date.");
-                return;
-            }
-
             // Here we call the Add method of the Events class from your model
             model.events.Add(startDate, categoryId, duration, description);
 
             // You might want to call a method to update the UI or a list of events here as well
             view.DisplaySuccessfulMessage("Event added successfully.");
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
         }
 
         /// <summary>
@@ -99,11 +101,77 @@ namespace HomeCalendarGUI
             view.ShowInformationOnCmb(model.categories.List());
         }
 
+        /// <summary>
+        /// Gets all events from the database
+        /// </summary>
+        public void GetCalendarItems()
+        {
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null,null,false,0));
+        }
+
+        /// <summary>
+        /// Filters events by date
+        /// </summary>
+        /// <param name="startDate">Start date of events</param>
+        /// <param name="endDate">End date of events</param>
+        public void GetEventsFilteredByDateRange(DateTime? startDate,DateTime? endDate)
+        {
+            List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
+
+            view.ShowCalendarItemsWithDateFiltersOn(items);
+        }
+        public void GetCalendarItemsFilteredByMonth(DateTime startMonth, DateTime endMonth)
+        {
+            if(endMonth < startMonth)
+            {
+                view.DisplayErrorMessage("End month must be after start month. ");
+                return; 
+            }
+
+            //good
+            List<string> months = new List<string>();
+            List<Double> totalBusyTimes = new List<Double>();
+            List<Dictionary<string, object>> itemsByMonth = model.GetCalendarDictionaryByCategoryAndMonth(startMonth, endMonth, false, 0);
+
+            for (int i = 0; i < itemsByMonth.Count - 1; i++)
+            {
+                foreach (var item in itemsByMonth[i])
+                {
+                    if (item.Key == "Month")
+                    {
+                        months.Add(item.Value.ToString());
+                    }
+                    else if (item.Key == "TotalBusyTime")
+                    {
+                        totalBusyTimes.Add((Double)item.Value); 
+                    }
+                    continue;
+                }
+            }
+
+            //making dictionary
+            Dictionary<string, Double> itemsByMonthAndTime = new Dictionary<string, Double>(); 
+            for(int i = 0; i < months.Count; i++)
+            {
+                itemsByMonthAndTime[$"{months[i]}"] = totalBusyTimes[i]; 
+            }
+
+            view.ShowCalendarItemsFilteredByMonth(itemsByMonthAndTime);
+        }
         public void GetEventsFilteredByCategory(int categoryId)
         {
             var filteredEvents = model.GetCalendarItems(null, null, true, categoryId);
             view.ShowCalendarItemsWithCategoryFiltersOn(filteredEvents);
         }
 
+
+        /// <summary>
+        /// Deletes an event from the database
+        /// </summary>
+        public void DeleteAnEvent(int eventId)
+        {
+            model.events.DeleteEvent(eventId);
+            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
+        }
     }
 }

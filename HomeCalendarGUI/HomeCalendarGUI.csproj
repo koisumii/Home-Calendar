@@ -9,7 +9,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\flowers.gif" />
+    <None Remove="images\AppBackground.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +40,10 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="images\AppBackground.jpg" />
   </ItemGroup>
 
 </Project>
