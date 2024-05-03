@@ -3,6 +3,7 @@ using CalendarCodeTests;
 using HomeCalendarGUI;
 using System.Data.SQLite;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using Xunit;
 using Xunit.Sdk;
 
@@ -23,6 +24,8 @@ namespace MVP_Tests
         public bool calledShowEventsWithFiltersOn = false;
 
 
+        public bool calledShowCalendarItemsByMonth = false;
+        
         public void ShowCategoriesOnComboBox(List<Category> categories)
         {
             calledShowCategoriesOnComboBox = true;
@@ -49,6 +52,12 @@ namespace MVP_Tests
             calledShowCalendarItemOnDataGrid = true;   
             this.calendarItems = calendarItems;
         }
+
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        {
+            calledShowCalendarItemsByMonth = true; 
+        }
+    
 
         public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
         {
@@ -197,6 +206,34 @@ namespace MVP_Tests
             //Assert
             Assert.True(results.Count < initial.Count);
             Assert.Throws<InvalidOperationException>(() => { p.DeleteAnEvent(itemToDelete.EventID); });
+        }
+
+        [Fact]
+        public void TestGetCalendarItemsFilteredByMonth_Sucess()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.GetCalendarItemsFilteredByMonth(new DateTime(2018, 01, 01), new DateTime(2020, 01, 01));
+
+            //assert 
+            Assert.True(view.calledShowCalendarItemsByMonth);
+        }
+
+        [Fact]
+        public void TestGetCalendarItemsFilteredByMonth_Fail()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act 
+            p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
+
+            //assert
+            Assert.True(view.calledDisplayErrorMessage);
         }
     }
 }

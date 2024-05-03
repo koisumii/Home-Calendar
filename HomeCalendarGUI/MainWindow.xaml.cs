@@ -16,6 +16,7 @@ using System.Data.Entity.Core.Objects;
 using System.Xml.Linq;
 using System.Windows.Interop;
 using static Calendar.Category;
+using System.Windows.Markup;
 
 
 namespace HomeCalendarGUI
@@ -111,6 +112,15 @@ namespace HomeCalendarGUI
         public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
         {
             CalendarItemsDataGrid.ItemsSource = calendarItems;
+            DGBusyTime.Visibility = Visibility.Visible;
+            DGStartTime.Visibility = Visibility.Visible;
+            DGDurationInMinutes.Visibility = Visibility.Visible;
+            DGDescription.Visibility = Visibility.Visible;
+            DGCategory.Visibility = Visibility.Visible;
+            DGStartDate.Visibility = Visibility.Visible;
+
+            DGKeyColumn.Visibility = Visibility.Hidden;
+            DGValueColumn.Visibility = Visibility.Hidden;
         }
         
         public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
@@ -141,6 +151,14 @@ namespace HomeCalendarGUI
             if (eventTypeChoice != null && !string.IsNullOrEmpty(desc))
             {
                 CategoryType type = (CategoryType)eventTypeChoice;
+
+                //checking if description is filled of numbers which would be unvalid 
+                if (!IsValidDescription(desc))
+                {
+                    DisplayErrorMessage("Please enter a valid description.");
+                    return;
+                }
+
                 presenter.AddNewCategory(desc, type);
                 DescriptionBox.Clear();
                 cmbEventTypes.SelectedIndex = -1;
@@ -152,8 +170,40 @@ namespace HomeCalendarGUI
             }
         }
 
+        public bool IsValidDescription(string desc)
+        {
+            if (string.IsNullOrEmpty(desc))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(desc))
+            {
+                return false;   
+            }
+            if (float.TryParse(desc, out float s))
+            {
+                return false; 
+            }
+            return true;    
+        }
+
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
+        {
+            CalendarItemsDataGrid.ItemsSource = itemsByMonthAndTime;
+            DGStartDate.Visibility = Visibility.Hidden;
+            DGBusyTime.Visibility = Visibility.Hidden;
+            DGStartTime.Visibility = Visibility.Hidden;
+            DGDurationInMinutes.Visibility = Visibility.Hidden;
+            DGDescription.Visibility = Visibility.Hidden;
+            DGCategory.Visibility = Visibility.Hidden;
+
+            DGKeyColumn.Visibility = Visibility.Visible;
+            DGValueColumn.Visibility = Visibility.Visible;
+        }
+
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
         {
+            //verifying input data for events 
             if (StartDate.SelectedDate == null)
             {
                 DisplayErrorMessage("Please select a start date for the event.");
@@ -169,7 +219,7 @@ namespace HomeCalendarGUI
                 DisplayErrorMessage("Please select a category for the event.");
                 return;
             }
-            if (string.IsNullOrWhiteSpace(EventDescriptionBox.Text))
+            if (!IsValidDescription(EventDescriptionBox.Text))
             {
                 DisplayErrorMessage("Please enter a description for the event.");
                 return;
@@ -192,7 +242,13 @@ namespace HomeCalendarGUI
             //getting duration in minutes
             if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
             {
-                DisplayErrorMessage("Invalid input: please enter a number for your duration in minutes.");
+                DisplayErrorMessage("Please enter a number for your duration in minutes.");
+                return;
+            }
+
+            if (endTimeInMinutes <= 0)
+            {
+                DisplayErrorMessage("The duration of your event must not be negative.");
                 return;
             }
 
@@ -245,6 +301,29 @@ namespace HomeCalendarGUI
             else
             {
                 presenter.GetCalendarItems();
+            }
+        }
+
+        private void CheckBox_ByMonthFilterCheckBox(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                if (FilterByMonthCheckBox.IsChecked == true)
+                {
+                    DateTime start = Start.SelectedDate.Value;
+                    DateTime end = End.SelectedDate.Value;
+
+                    presenter.GetCalendarItemsFilteredByMonth(start, end);
+                }
+                else
+                {
+                    presenter.GetCalendarItems();
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Must select a Start and End Date.","Start or End date not selected",MessageBoxButton.OK,MessageBoxImage.Error);
+                FilterByMonthCheckBox.IsChecked = false;
             }
         }
     }

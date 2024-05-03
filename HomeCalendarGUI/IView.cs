@@ -36,5 +36,11 @@ namespace HomeCalendarGUI
         /// </summary>
         /// <param name="calendarItems">List of events</param>
         public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="itemsByMonthAndTime"></param>
+        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime);
     }
 }

@@ -11,6 +11,8 @@ using System.Data.Entity.Migrations.Model;
 using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
 using static Calendar.Category;
+using System.Collections;
+using System.Data;
 
 namespace HomeCalendarGUI
 {
@@ -27,7 +29,7 @@ namespace HomeCalendarGUI
         public Presenter(IView v) 
         {
             model = new HomeCalendar();
-            view = v;            
+            view = v;
         }
 
         /// <summary>
@@ -79,14 +81,6 @@ namespace HomeCalendarGUI
         /// <param name="duration">Duration of event</param>
         public void AddNewEvent(DateTime startDate, DateTime endDate, int categoryId, string description, double duration)
         {
-            // Calculate the duration of the event
-
-            if (duration <= 0)
-            {
-                view.DisplayErrorMessage("End date must be later than start date.");
-                return;
-            }
-
             // Here we call the Add method of the Events class from your model
             model.events.Add(startDate, categoryId, duration, description);
 
@@ -122,6 +116,45 @@ namespace HomeCalendarGUI
 
             view.ShowCalendarItemsWithDateFiltersOn(items);
         }
+        public void GetCalendarItemsFilteredByMonth(DateTime startMonth, DateTime endMonth)
+        {
+            if(endMonth < startMonth)
+            {
+                view.DisplayErrorMessage("End month must be after start month. ");
+                return; 
+            }
+
+            //good
+            List<string> months = new List<string>();
+            List<Double> totalBusyTimes = new List<Double>();
+            List<Dictionary<string, object>> itemsByMonth = model.GetCalendarDictionaryByCategoryAndMonth(startMonth, endMonth, false, 0);
+
+            for (int i = 0; i < itemsByMonth.Count - 1; i++)
+            {
+                foreach (var item in itemsByMonth[i])
+                {
+                    if (item.Key == "Month")
+                    {
+                        months.Add(item.Value.ToString());
+                    }
+                    else if (item.Key == "TotalBusyTime")
+                    {
+                        totalBusyTimes.Add((Double)item.Value); 
+                    }
+                    continue;
+                }
+            }
+
+            //making dictionary
+            Dictionary<string, Double> itemsByMonthAndTime = new Dictionary<string, Double>(); 
+            for(int i = 0; i < months.Count; i++)
+            {
+                itemsByMonthAndTime[$"{months[i]}"] = totalBusyTimes[i]; 
+            }
+
+            view.ShowCalendarItemsFilteredByMonth(itemsByMonthAndTime);
+        }
+
 
         /// <summary>
         /// Deletes an event from the database
