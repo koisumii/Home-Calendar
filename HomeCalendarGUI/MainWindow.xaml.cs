@@ -60,6 +60,7 @@ namespace HomeCalendarGUI
 
             presenter.GetCategoriesForComboBox();
             presenter.GetCategoriesTypeInList();
+            LoadCategoriesForFiltering();
         }
 
         public void DisplayErrorMessage(string msg)
@@ -93,6 +94,36 @@ namespace HomeCalendarGUI
             //catsComboBox.SelectedIndex = DEFAULT;
         }
 
+        private void LoadCategoriesForFiltering()
+        {
+            CategoryFilter.ItemsSource = presenter.RetrieveCategories();
+            CategoryFilter.DisplayMemberPath = "Description";
+            CategoryFilter.SelectedValuePath = "Id";
+            CategoryFilter.SelectedIndex = 0;  
+        }
+
+        public void ApplyFilters_Click(object sender, RoutedEventArgs e)
+        {
+            if (CategoryFilter.SelectedItem != null)
+            {
+                var selectedCategory = (Category)CategoryFilter.SelectedItem;
+                presenter.GetEventsFilteredByCategory(selectedCategory.Id);
+            }
+            else
+            {
+                DisplayErrorMessage("Please select a category to filter by.");
+            }
+        }
+
+        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        {
+            CalendarItemsDataGrid.ItemsSource = calendarItems;
+        }
+
+        public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        {
+            CalendarItemsDataGrid.ItemsSource = calendarItems;
+        }
         public void ShowInformationOnCmb(List<Category> categories)
         {
             foreach (var category in categories)

@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Calendar;
 using static System.Net.WebRequestMethods;
-﻿using Calendar;
 using System.Data.Entity.Migrations.Model;
 using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
@@ -48,6 +47,11 @@ namespace HomeCalendarGUI
         {
             List<Category> categories = model.categories.List();
             view.ShowCategoriesOnComboBox(categories);
+        }
+
+        public List<Category> RetrieveCategories()
+        {
+            return model.categories.List().OrderBy(c => c.Description).ToList();
         }
 
         /// <summary>
@@ -95,6 +99,11 @@ namespace HomeCalendarGUI
             view.ShowInformationOnCmb(model.categories.List());
         }
 
+        public void GetEventsFilteredByCategory(int categoryId)
+        {
+            var filteredEvents = model.GetCalendarItems(null, null, true, categoryId);
+            view.ShowCalendarItemsWithCategoryFiltersOn(filteredEvents);
+        }
 
     }
 }

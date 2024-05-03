@@ -29,5 +29,10 @@ namespace HomeCalendarGUI
         /// Shows the neccessary information on a combobox for example, types of events. 
         /// </summary>
         public void ShowInformationOnCmb(List<Category> categories);
+
+        /// <summary>
+        /// Displays a list of calendar items that have been filtered based on specific category criteria.
+        /// </summary>
+        void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems);
     }
 }
