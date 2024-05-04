@@ -111,6 +111,7 @@ namespace HomeCalendarGUI
             {
                 var selectedCategory = (Category)CategoryFilter.SelectedItem;
                 presenter.GetEventsFilteredByCategory(selectedCategory.Id);
+
             }
             else
             {
@@ -189,6 +190,7 @@ namespace HomeCalendarGUI
                 DescriptionBox.Clear();
                 cmbEventTypes.SelectedIndex = -1;
                 RefreshMainView();
+                LoadCategoriesForFiltering();
             }
             else
             {

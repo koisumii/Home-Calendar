@@ -22,8 +22,7 @@ namespace MVP_Tests
         public bool calledShowCalendarItemsWithDateFiltersOn = false;
         public bool calledShowEventsOnDataGrid = false;
         public bool calledShowEventsWithFiltersOn = false;
-
-
+        public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
         public bool calledShowCalendarItemsByMonth = false;
         
         public void ShowCategoriesOnComboBox(List<Category> categories)
@@ -51,6 +50,12 @@ namespace MVP_Tests
         {
             calledShowCalendarItemOnDataGrid = true;   
             this.calendarItems = calendarItems;
+        }
+
+        public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        {
+            this.calendarItems = calendarItems;
+            calledShowCalendarItemsWithCategoryFiltersOn = true;
         }
 
         public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
@@ -235,5 +240,48 @@ namespace MVP_Tests
             //assert
             Assert.True(view.calledDisplayErrorMessage);
         }
+
+        [Fact]
+        public void TestGetEventsFilteredByCategory_ShouldDisplayCorrectEvents()
+        {
+            // Arrange
+            TestView view = new TestView();
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+
+            Presenter presenter = new Presenter(view, databasePath);
+
+            int testCategoryId = 2;
+
+            // Act
+            presenter.GetEventsFilteredByCategory(testCategoryId);
+
+            // Assert
+            // Check that the correct method on the view was called to display filtered events
+            Assert.True(view.calledShowCalendarItemsWithCategoryFiltersOn);
+
+            // Ensures that every item in view.calendarItems matches the expected category ID
+            // which confirms that the filtering logic is functioning correctly
+            Assert.All(view.calendarItems, item => Assert.Equal(testCategoryId, item.CategoryID));
+        }
+
+        /*
+        [Fact]
+        public void TestFilterByCategoryWithNoEventsYet()
+        {
+            // Arrange
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+            TestView view = new TestView();
+            Presenter presenter = new Presenter(view, databasePath);
+            int newCategoryId = ..;  // category ID that currently has no events
+            // confused when creating this test because I am not able to fetch any newly created id
+
+            // Act
+            presenter.GetEventsFilteredByCategory(newCategoryId);
+
+            // Assert
+            Assert.True(view.calledShowCalendarItemsWithCategoryFiltersOn);
+            Assert.Empty(view.calendarItems);  // Check if no events are displayed
+        }
+        */
     }
 }
