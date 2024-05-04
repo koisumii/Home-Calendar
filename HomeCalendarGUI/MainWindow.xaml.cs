@@ -118,11 +118,6 @@ namespace HomeCalendarGUI
             }
         }
 
-        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
-        {
-            CalendarItemsDataGrid.ItemsSource = calendarItems;
-        }
-
         public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
         {
             CalendarItemsDataGrid.ItemsSource = calendarItems;
