@@ -42,5 +42,10 @@ namespace HomeCalendarGUI
         /// </summary>
         /// <param name="itemsByMonthAndTime"></param>
         public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime);
+
+        /// <summary>
+        /// Displays a list of calendar items that have been filtered based on specific category criteria.
+        /// </summary>
+        void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems);
     }
 }

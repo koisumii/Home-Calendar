@@ -63,6 +63,7 @@ namespace HomeCalendarGUI
             presenter.GetCategoriesTypeInList();
             presenter.GetCalendarItems();
             SetTodaysDateOnDatePicker();
+            LoadCategoriesForFiltering();
         }
 
         public void SetTodaysDateOnDatePicker()
@@ -96,6 +97,42 @@ namespace HomeCalendarGUI
             catsComboBox.SelectedIndex = DEFAULT;
         }
 
+        private void LoadCategoriesForFiltering()
+        {
+            CategoryFilter.ItemsSource = presenter.RetrieveCategories();
+            CategoryFilter.DisplayMemberPath = "Description";
+            CategoryFilter.SelectedValuePath = "Id";
+            CategoryFilter.SelectedIndex = 0;  
+        }
+
+        public void ApplyFilters_Click(object sender, RoutedEventArgs e)
+        {
+            if (CategoryFilter.SelectedItem != null)
+            {
+                var selectedCategory = (Category)CategoryFilter.SelectedItem;
+                presenter.GetEventsFilteredByCategory(selectedCategory.Id);
+
+            }
+            else
+            {
+                DisplayErrorMessage("Please select a category to filter by.");
+            }
+        }
+
+        public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        {
+            if (calendarItems.Count == 0)
+            {
+                message2.Text = "No events found for this category.";
+                message2.Foreground = Brushes.Red;
+            }
+            else
+            {
+                CalendarItemsDataGrid.ItemsSource = calendarItems;
+                // Clear any previous messages
+                message2.Text = "";
+            }
+        }
         public void ShowInformationOnCmb(List<Category> categories)
         {
             foreach (var category in categories)
@@ -163,6 +200,7 @@ namespace HomeCalendarGUI
                 DescriptionBox.Clear();
                 cmbEventTypes.SelectedIndex = -1;
                 RefreshMainView();
+                LoadCategoriesForFiltering();
             }
             else
             {
