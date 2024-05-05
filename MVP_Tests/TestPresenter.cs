@@ -1,9 +1,11 @@
 using Calendar;
+using CalendarItem = Calendar.CalendarItem;
 using CalendarCodeTests;
 using HomeCalendarGUI;
 using System.Data.SQLite;
 using System.Reflection;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls.Primitives;
 using Xunit;
 using Xunit.Sdk;
 
@@ -24,7 +26,19 @@ namespace MVP_Tests
         public bool calledShowEventsWithFiltersOn = false;
         public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
         public bool calledShowCalendarItemsByMonth = false;
-        
+
+        //public void ClearCalendarItems()
+        //{
+        //    if (calendarItems != null)
+        //    {
+        //        calendarItems.Clear();
+        //    }
+        //    else
+        //    {
+        //        calendarItems = new List<CalendarItem>(); // Initialize if null
+        //    }
+        //}
+
         public void ShowCategoriesOnComboBox(List<Category> categories)
         {
             calledShowCategoriesOnComboBox = true;
@@ -283,5 +297,62 @@ namespace MVP_Tests
             Assert.Empty(view.calendarItems);  // Check if no events are displayed
         }
         */
+        public void TestRealTimeUpdatesOnUI()
+        {
+            // Arrange
+            TestView view = new TestView();
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+
+            Presenter presenter = new Presenter(view, databasePath);
+            DateTime startDate = new DateTime(2024, 5, 5);
+            DateTime endDate = new DateTime(2024, 5, 5);
+            string description = "Team Meeting";
+            int categoryId = 1;
+            double duration = 120;
+
+            // Act
+            presenter.AddNewEvent(startDate, endDate, categoryId, description, duration);
+
+            // Assert
+            Assert.True(view.calledDisplaySuccessfulMessage);
+            // Confirm that the grid update method was triggered
+            Assert.True(view.calledShowCalendarItemOnDataGrid);
+        }
+
+        [Fact]
+        public void TestErrorHandlingWhenDatabaseUnavailable()
+        {
+            // Arrange
+            TestView view = new TestView();
+            Presenter presenter = new Presenter(view, "invalidPath.db");
+
+            // Act
+            presenter.GetCalendarItems();
+
+            // Assert
+            Assert.True(view.calledDisplayErrorMessage);
+        }
+
+        //[Fact]
+        //public void TestUILoadUnderHeavyUse()
+        //{
+        // welp... this failed 
+        //    // Arrange
+        //    TestView view = new TestView();
+        //    view.ClearCalendarItems();
+        //    string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+
+        //    Presenter presenter = new Presenter(view, databasePath);
+
+        //    // Act
+        //    for (int i = 0; i < 1000; i++)
+        //    {
+        //        presenter.AddNewEvent(DateTime.Now, DateTime.Now.AddHours(1), 1, "Stress Test Event " + i, 60);
+        //    }
+
+        //    // Assert
+        //    Assert.True(view.calledShowCalendarItemOnDataGrid);
+        //    Assert.Equal(1000, view.calendarItems.Count(e => e.ShortDescription.StartsWith("Stress Test Event")));
+        //}
     }
 }

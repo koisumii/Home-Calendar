@@ -121,7 +121,17 @@ namespace HomeCalendarGUI
 
         public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
         {
-            CalendarItemsDataGrid.ItemsSource = calendarItems;
+            if (calendarItems.Count == 0)
+            {
+                message2.Text = "No events found for this category.";
+                message2.Foreground = Brushes.Red;
+            }
+            else
+            {
+                CalendarItemsDataGrid.ItemsSource = calendarItems;
+                // Clear any previous messages
+                message2.Text = "";
+            }
         }
         public void ShowInformationOnCmb(List<Category> categories)
         {

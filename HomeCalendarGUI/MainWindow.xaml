@@ -68,6 +68,7 @@
         </ScrollViewer>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
+            <TextBlock x:Name="message2" FontWeight="Bold" Margin="10"/>
             <WrapPanel>
                 <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
                 <CheckBox x:Name="FilterByMonthCheckBox" Click="CheckBox_ByMonthFilterCheckBox" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Month</CheckBox>
@@ -81,7 +82,7 @@
             </StackPanel>
         </StackPanel>
 
-        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,60,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
+        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,95,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="DGStartDate" Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn x:Name="DGStartTime" Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>

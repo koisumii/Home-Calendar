@@ -38,8 +38,23 @@ namespace HomeCalendarGUI
         /// <param name="dbFile">File path to the database</param>
         public Presenter(IView v,string dbFile)
         {
-            model = new HomeCalendar(dbFile,false);
-            view = v;
+            view = v; 
+            try
+            {
+                model = new HomeCalendar(dbFile, false);
+            }
+            catch (FileNotFoundException ex)
+            {
+                // Notify the view to display an error message
+                view.DisplayErrorMessage("Database file could not be loaded. Please check the database path.");
+                model = null;
+            }
+            catch (Exception ex)
+            {
+                // Handle other unexpected exceptions
+                view.DisplayErrorMessage("An unexpected error occurred during initialization.");
+                model = null;
+            }
         }
 
         /// <summary>
@@ -106,6 +121,11 @@ namespace HomeCalendarGUI
         /// </summary>
         public void GetCalendarItems()
         {
+            if (model == null)
+            {
+                view.DisplayErrorMessage("Unable to load calendar items because the model is not initialized.");
+                return;
+            }
             view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null,null,false,0));
         }
 
