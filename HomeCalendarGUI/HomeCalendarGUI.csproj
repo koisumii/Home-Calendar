@@ -9,11 +9,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="images\AppBackground.jpg" />
+    <None Remove="Resources\beauty_package.gif" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="System.Data.SQLite" Version="1.0.118" />
+    <PackageReference Include="XamlAnimatedGif" Version="2.3.0" />
   </ItemGroup>
 
   <ItemGroup>
@@ -23,7 +24,23 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="images\AppBackground.jpg" />
+    <Resource Include="Resources\beauty_package.gif" />
+    <Resource Include="Resources\flowers.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Resources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 </Project>

@@ -90,5 +90,11 @@ namespace HomeCalendarGUI
         {
             throw new NotImplementedException();
         }
+
+        public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        {
+            throw new NotImplementedException();
+        }
+
     }
 }

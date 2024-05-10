@@ -6,7 +6,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Calendar;
 using static System.Net.WebRequestMethods;
-﻿using Calendar;
 using System.Data.Entity.Migrations.Model;
 using System.Printing;
 using TeamHeavyWeight_HomeCalendarApp;
@@ -39,8 +38,23 @@ namespace HomeCalendarGUI
         /// <param name="dbFile">File path to the database</param>
         public Presenter(IView v,string dbFile)
         {
-            model = new HomeCalendar(dbFile,false);
-            view = v;
+            view = v; 
+            try
+            {
+                model = new HomeCalendar(dbFile, false);
+            }
+            catch (FileNotFoundException ex)
+            {
+                // Notify the view to display an error message
+                view.DisplayErrorMessage("Database file could not be loaded. Please check the database path.");
+                model = null;
+            }
+            catch (Exception ex)
+            {
+                // Handle other unexpected exceptions
+                view.DisplayErrorMessage("An unexpected error occurred during initialization.");
+                model = null;
+            }
         }
 
         /// <summary>
@@ -50,6 +64,11 @@ namespace HomeCalendarGUI
         {
             List<Category> categories = model.categories.List();
             view.ShowCategoriesOnComboBox(categories);
+        }
+
+        public List<Category> RetrieveCategories()
+        {
+            return model.categories.List().OrderBy(c => c.Description).ToList();
         }
 
         /// <summary>
@@ -102,6 +121,11 @@ namespace HomeCalendarGUI
         /// </summary>
         public void GetCalendarItems()
         {
+            if (model == null)
+            {
+                view.DisplayErrorMessage("Unable to load calendar items because the model is not initialized.");
+                return;
+            }
             view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null,null,false,0));
         }
 
@@ -153,6 +177,11 @@ namespace HomeCalendarGUI
             }
 
             view.ShowCalendarItemsFilteredByMonth(itemsByMonthAndTime);
+        }
+        public void GetEventsFilteredByCategory(int categoryId)
+        {
+            var filteredEvents = model.GetCalendarItems(null, null, true, categoryId);
+            view.ShowCalendarItemsWithCategoryFiltersOn(filteredEvents);
         }
 
 
