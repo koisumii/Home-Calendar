@@ -96,6 +96,7 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="DeleteEvent" Header="Delete"/>
+                    <MenuItem Click="UpdateEvent" Header="Update"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

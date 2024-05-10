@@ -330,6 +330,11 @@ namespace HomeCalendarGUI
             }
         }
 
+        private void UpdateEvent(object sender, RoutedEventArgs e)
+        {
+            //show another window with update info?
+        }
+
         private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)
         {
             if (DateFilterCheckBox.IsChecked == true)
