@@ -68,8 +68,7 @@ namespace HomeCalendarGUI
 
         public void SetTodaysDateOnDatePicker()
         {
-            StartDate.DisplayDateStart = DateTime.Now;
-            EndDate.DisplayDateStart = DateTime.Now;
+            StartDate.DisplayDateStart = DateTime.Now;           
         }
 
         public void DisplayErrorMessage(string msg)
@@ -241,15 +240,16 @@ namespace HomeCalendarGUI
 
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
         {
+
             //verifying input data for events 
             if (StartDate.SelectedDate == null)
             {
                 DisplayErrorMessage("Please select a start date for the event.");
                 return;
             }
-            if (EndDate.SelectedDate == null)
+            if (!DateTime.TryParse(StartTime.Text, out DateTime time))
             {
-                DisplayErrorMessage("Please select an end date for the event.");
+                DisplayErrorMessage("Time isn't provided in the right format");
                 return;
             }
             if (catsComboBox.SelectedItem == null)
@@ -262,23 +262,22 @@ namespace HomeCalendarGUI
                 DisplayErrorMessage("Please enter a description for the event.");
                 return;
             }
-            if (EndTime.Text == null)
+            if (DurationInMinutes.Text == null)
             {
                 DisplayErrorMessage("Please choose a duration in minutes for your event.");
                 return;
             }
+            
 
-            DateTime startDate = StartDate.SelectedDate.Value;
-            DateTime endDate = EndDate.SelectedDate.Value;
 
-            if (endDate < startDate)
-            {
-                DisplayErrorMessage("The end date cannot be before the start date.");
-                return;
-            }
+            //Add the time
+            DateTime startDate = StartDate.SelectedDate.Value;            
+            startDate = startDate.AddHours(time.Hour);
+            startDate = startDate.AddMinutes(time.Minute);
+            startDate = startDate.AddSeconds(time.Second);
 
             //getting duration in minutes
-            if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
+            if (!double.TryParse(DurationInMinutes.Text, out double endTimeInMinutes))
             {
                 DisplayErrorMessage("Please enter a number for your duration in minutes.");
                 return;
@@ -293,13 +292,15 @@ namespace HomeCalendarGUI
             Category selectedCategory = (Category)catsComboBox.SelectedItem;
             string description = EventDescriptionBox.Text;
 
-            presenter.AddNewEvent(startDate, endDate, selectedCategory.Id, description, endTimeInMinutes);
+            presenter.AddNewEvent(startDate, selectedCategory.Id, description, endTimeInMinutes);
 
             // Clear the input fields
-            StartDate.SelectedDate = null;
-            EndDate.SelectedDate = null;
+            StartDate.SelectedDate = null;            
             catsComboBox.SelectedIndex = -1;
+            StartTime.Clear();
+            DurationInMinutes.Clear();
             EventDescriptionBox.Clear();
+            
 
             DisplaySuccessfulMessage("Event added successfully.");
         }

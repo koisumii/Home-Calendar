@@ -304,14 +304,13 @@ namespace MVP_Tests
             string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
 
             Presenter presenter = new Presenter(view, databasePath);
-            DateTime startDate = new DateTime(2024, 5, 5);
-            DateTime endDate = new DateTime(2024, 5, 5);
+            DateTime startDate = new DateTime(2024, 5, 5);            
             string description = "Team Meeting";
             int categoryId = 1;
             double duration = 120;
 
             // Act
-            presenter.AddNewEvent(startDate, endDate, categoryId, description, duration);
+            presenter.AddNewEvent(startDate, categoryId, description, duration);
 
             // Assert
             Assert.True(view.calledDisplaySuccessfulMessage);
