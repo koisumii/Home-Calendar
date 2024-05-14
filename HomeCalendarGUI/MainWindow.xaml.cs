@@ -66,7 +66,7 @@ namespace HomeCalendarGUI
             SetTodaysDateOnDatePicker();
             LoadCategoriesForFiltering();
         }
-
+        #region IView
         public void SetTodaysDateOnDatePicker()
         {
             StartDate.DisplayDateStart = DateTime.Now;           
@@ -84,7 +84,7 @@ namespace HomeCalendarGUI
             message.Text = msg;
         }
 
-        public void ShowCategoriesOnComboBox(List<Category> categories)
+        public void PopulateCategoriesComboBox(List<Category> categories)
         {
             catsComboBox.Items.Clear();
             // Sort categories alphabetically by their Description
@@ -95,18 +95,24 @@ namespace HomeCalendarGUI
                 catsComboBox.Items.Add(c);
             });
             catsComboBox.SelectedIndex = DEFAULT;
-        }
+        }      
 
-        private void LoadCategoriesForFiltering()
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
-            CategoryFilter.ItemsSource = presenter.RetrieveCategories();
-            CategoryFilter.DisplayMemberPath = "Description";
-            CategoryFilter.SelectedValuePath = "Id";
-            CategoryFilter.SelectedIndex = 0;  
+            foreach (var category in categories)
+            {
+                if (categoryTypecmbBox.Items.Contains(category.Type))
+                {
+                    //ignoring event types that have already been added because we do not want duplicates
+                    continue;
+                }
+                categoryTypecmbBox.Items.Add(category.Type);
+            }
         }
 
         public void ApplyFilters_Click(object sender, RoutedEventArgs e)
         {
+            //????
             if (CategoryFilter.SelectedItem != null)
             {
                 var selectedCategory = (Category)CategoryFilter.SelectedItem;
@@ -132,20 +138,7 @@ namespace HomeCalendarGUI
                 // Clear any previous messages
                 message2.Text = "";
             }
-        }
-
-        public void ShowInformationOnCmb(List<Category> categories)
-        {
-            foreach (var category in categories)
-            {
-                if (cmbEventTypes.Items.Contains(category.Type))
-                {
-                    //ignoring event types that have already been added because we do not want duplicates
-                    continue;
-                }
-                cmbEventTypes.Items.Add(category.Type);
-            }
-        }
+        }             
 
         public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
         {
@@ -165,50 +158,7 @@ namespace HomeCalendarGUI
         {
             CalendarItemsDataGrid.ItemsSource = calendarItems;
         }
-        
-        private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
-        {
-            if (openFolderDialog.ShowDialog() == true)
-            {
-                fileDirectoryToStore = openFolderDialog.FolderName;
-                openFolderDialog.InitialDirectory = fileDirectoryToStore;
-                openFolderDialog.FolderName = "";                                             
-            }
-        }
-
-        private void RefreshMainView()
-        {
-            presenter.GetCategoriesForComboBox();
-        }
-
-        private void Button_ClickAddCategory(object sender, RoutedEventArgs e)
-        {
-            var eventTypeChoice = cmbEventTypes.SelectedItem;
-            string desc = DescriptionBox.Text;
-
-            if (eventTypeChoice != null && !string.IsNullOrEmpty(desc))
-            {
-                CategoryType type = (CategoryType)eventTypeChoice;
-
-                //checking if description is filled of numbers which would be unvalid 
-                if (!IsValidDescription(desc))
-                {
-                    DisplayErrorMessage("Please enter a valid description.");
-                    return;
-                }
-
-                presenter.AddNewCategory(desc, type);
-                DescriptionBox.Clear();
-                cmbEventTypes.SelectedIndex = -1;
-                RefreshMainView();
-                LoadCategoriesForFiltering();
-            }
-            else
-            {
-                DisplayErrorMessage("You cannot leave any fields empty.");
-            }
-        }
-
+       
         public bool IsValidDescription(string desc)
         {
             if (string.IsNullOrEmpty(desc))
@@ -239,7 +189,59 @@ namespace HomeCalendarGUI
             DGKeyColumn.Visibility = Visibility.Visible;
             DGValueColumn.Visibility = Visibility.Visible;
         }
+        #endregion
 
+        private void RefreshMainView()
+        {
+            presenter.GetCategoriesForComboBox();
+        }
+
+        private void LoadCategoriesForFiltering()
+        {
+            CategoryFilter.ItemsSource = presenter.RetrieveCategories();
+            CategoryFilter.DisplayMemberPath = "Description";
+            CategoryFilter.SelectedValuePath = "Id";
+            CategoryFilter.SelectedIndex = 0;  
+        }
+        #region Btn Operations
+        private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
+        {
+            if (openFolderDialog.ShowDialog() == true)
+            {
+                fileDirectoryToStore = openFolderDialog.FolderName;
+                openFolderDialog.InitialDirectory = fileDirectoryToStore;
+                openFolderDialog.FolderName = "";                                             
+            }
+        }
+
+        private void Button_ClickAddCategory(object sender, RoutedEventArgs e)
+        {
+            var eventTypeChoice = categoryTypecmbBox.SelectedItem;
+            string desc = DescriptionBox.Text;
+
+            if (eventTypeChoice != null && !string.IsNullOrEmpty(desc))
+            {
+                CategoryType type = (CategoryType)eventTypeChoice;
+
+                //checking if description is filled of numbers which would be unvalid 
+                if (!IsValidDescription(desc))
+                {
+                    DisplayErrorMessage("Please enter a valid description.");
+                    return;
+                }
+
+                presenter.AddNewCategory(desc, type);
+                DescriptionBox.Clear();
+                categoryTypecmbBox.SelectedIndex = -1;
+                RefreshMainView();
+                LoadCategoriesForFiltering();
+            }
+            else
+            {
+                DisplayErrorMessage("You cannot leave any fields empty.");
+            }
+        }
+        
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
         {
 
@@ -312,12 +314,7 @@ namespace HomeCalendarGUI
             EventDescriptionBox.Clear();
         }
 
-        private void CloseApplication(object sender, RoutedEventArgs e)
-        {
-            Close();
-        }
-
-        private void DeleteEvent(object sender, RoutedEventArgs e)
+        private void Btn_DeleteEvent(object sender, RoutedEventArgs e)
         {
             if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
@@ -332,24 +329,54 @@ namespace HomeCalendarGUI
                 }                
             }
         }
+        
+        private void CloseApplication(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        #endregion
 
+        #region Filters CheckBox Operations
         private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)
         {
             try
             {
+                //Check if the user is filtering by category and/or month
+                bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
+                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;                
+
                 if (DateFilterCheckBox.IsChecked == true)
                 {
-                    presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
+                    DateTime? start = Start.SelectedDate;
+                    DateTime? end = End.SelectedDate;
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilter.SelectedIndex;
+                    presenter.GetHomeCalendarItems(start,end,categoryId,filterByDate,filterByCategory,filterByMonth);
+
+                    //presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
                 }
                 else
                 {
-                    presenter.GetCalendarItems();
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilter.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null,null,categoryId,filterByDate,filterByCategory,filterByMonth);
+                    
+                    //presenter.GetCalendarItems();
                 }
             }
-            catch(Exception ex)
+            catch(InvalidOperationException ex)
             {
-                MessageBox.Show($"Error:{ex.Message}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                if(ex is InvalidOperationException)
+                {
+                    MessageBox.Show($"Date Filter Error: {ex.Message}", "DateTime Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }               
                 DateFilterCheckBox.IsChecked = false;
+                Start.SelectedDate = null;
+                End.SelectedDate = null;
             }
         }
 
@@ -357,17 +384,34 @@ namespace HomeCalendarGUI
         {
             try
             {
-                if (FilterByMonthCheckBox.IsChecked == true)
-                {
-                    DateTime start = Start.SelectedDate.Value;
-                    DateTime end = End.SelectedDate.Value;
+                //Check if the user is filtering by category and/or month
+                bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
+                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
 
-                    presenter.GetCalendarItemsFilteredByMonth(start, end);
+                if (DateFilterCheckBox.IsChecked == true)
+                {
+                    DateTime? start = Start.SelectedDate.Value;
+                    DateTime? end = End.SelectedDate.Value;
+
+
                 }
                 else
                 {
-                    presenter.GetCalendarItems();
+
                 }
+
+
+                //if (FilterByMonthCheckBox.IsChecked == true)
+                //{
+                //    DateTime start = Start.SelectedDate.Value;
+                //    DateTime end = End.SelectedDate.Value;
+
+                //    presenter.GetCalendarItemsFilteredByMonth(start, end);
+                //}
+                //else
+                //{
+                //    presenter.GetCalendarItems();
+                //}
             }
             catch (Exception ex)
             {
@@ -387,5 +431,6 @@ namespace HomeCalendarGUI
                 FilterByCategoryCheckBox.IsChecked = false;
             }
         }
+        #endregion
     }
 }

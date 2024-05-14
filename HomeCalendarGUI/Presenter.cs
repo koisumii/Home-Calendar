@@ -12,6 +12,7 @@ using TeamHeavyWeight_HomeCalendarApp;
 using static Calendar.Category;
 using System.Collections;
 using System.Data;
+using System.Windows;
 
 namespace HomeCalendarGUI
 {
@@ -66,7 +67,7 @@ namespace HomeCalendarGUI
         public void GetCategoriesForComboBox()
         {
             List<Category> categories = model.categories.List();
-            view.ShowCategoriesOnComboBox(categories);
+            view.PopulateCategoriesComboBox(categories);
         }
 
         public List<Category> RetrieveCategories()
@@ -115,7 +116,7 @@ namespace HomeCalendarGUI
         /// </summary>
         public void GetCategoriesTypeInList() 
         {
-            view.ShowInformationOnCmb(model.categories.List());
+            view.PopulateCategoryTypesComboBox(model.categories.List());
         }
 
         /// <summary>
@@ -196,8 +197,21 @@ namespace HomeCalendarGUI
         /// <param name="dateFilter">If true, filters by specified date</param>
         /// <param name="filterByCategory">If true, filters by category</param>
         /// <param name="filterByMonth">If true,filters by month</param>        
-        public void GetHomeCalendarItems(DateTime startDate, DateTime endDate, int categoryId, bool dateFilter ,bool filterByCategory, bool filterByMonth)
+        public void GetHomeCalendarItems(DateTime? startDate, DateTime? endDate, int categoryId, bool dateFilter ,bool filterByCategory, bool filterByMonth)
         {
+            //if dateFilter is set to true, throw if the start and end dates values are null
+            // or when the end date is before the start date.
+            if (dateFilter)
+            {
+                if(startDate == null || endDate == null)
+                {
+                    throw new InvalidOperationException("Must provide a start and end date");
+                }
+                else if(endDate < startDate)
+                {
+                    throw new InvalidOperationException("End date cannot be set before the starting date");
+                }
+            }
 
             //If the user wants to filter by category and month, get dictionary while considering the date filter flag
             if (filterByCategory && filterByMonth)
@@ -244,11 +258,11 @@ namespace HomeCalendarGUI
                 List<CalendarItem> items;
                 if (dateFilter)
                 {
-                    items = model.GetCalendarItems(startDate, endDate, false, 0);
+                    items = model.GetCalendarItems(startDate, endDate, false, categoryId);
                 }
                 else
                 {
-                    items = model.GetCalendarItems(null, null, false, 0);
+                    items = model.GetCalendarItems(null, null, false, categoryId);
                 }                
                 view.ShowCalendarItemsWithDateFiltersOn(items);
             }

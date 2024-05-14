@@ -39,7 +39,7 @@ namespace MVP_Tests
         //    }
         //}
 
-        public void ShowCategoriesOnComboBox(List<Category> categories)
+        public void PopulateCategoriesComboBox(List<Category> categories)
         {
             calledShowCategoriesOnComboBox = true;
             this.categories = categories;
@@ -55,7 +55,7 @@ namespace MVP_Tests
             calledDisplaySuccessfulMessage = true;
         }
 
-        public void ShowInformationOnCmb(List<Category> categories)
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
             calledShowInfoOnCmb = true;
         }

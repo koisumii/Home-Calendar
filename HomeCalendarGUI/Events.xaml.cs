@@ -52,7 +52,7 @@ namespace HomeCalendarGUI
             EndDate.DisplayDateStart = DateTime.Now;
         }
 
-        public void ShowInformationOnCmb(List<Category> categories)
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
             //List<Category> categories = _presenter.GetCategoriesList();
             for (int i = 0; i < categories.Count; i++)
@@ -61,7 +61,7 @@ namespace HomeCalendarGUI
             }
         }
 
-        public void ShowCategoriesOnComboBox(List<Category> categories)
+        public void PopulateCategoriesComboBox(List<Category> categories)
         {
             throw new NotImplementedException();
         }
