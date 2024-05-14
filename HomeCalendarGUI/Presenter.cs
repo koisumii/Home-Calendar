@@ -264,7 +264,10 @@ namespace HomeCalendarGUI
                 {
                     items = model.GetCalendarItems(null, null, false, categoryId);
                 }                
-                view.ShowCalendarItemsWithDateFiltersOn(items);
+                
+                view.ShowCalendarItems(items);
+                
+                //view.ShowCalendarItemsWithDateFiltersOn(items);
             }
         }
 

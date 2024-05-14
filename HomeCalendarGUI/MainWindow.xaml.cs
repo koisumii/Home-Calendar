@@ -189,6 +189,28 @@ namespace HomeCalendarGUI
             DGKeyColumn.Visibility = Visibility.Visible;
             DGValueColumn.Visibility = Visibility.Visible;
         }
+
+        public void ShowCalendarItems(List<CalendarItem> items)
+        {
+            CalendarItemsDataGrid.ItemsSource = items;
+        }
+
+        public void ShowCalendarItemsByMonth(List<CalendarItemsByMonth> itemsByMonth)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsByCategory(List<CalendarItemsByCategory> itemsByCategory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        {
+            throw new NotImplementedException();
+        }
+
+
         #endregion
 
         private void RefreshMainView()

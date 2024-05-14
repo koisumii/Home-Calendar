@@ -96,5 +96,24 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
+        public void ShowCalendarItems(List<CalendarItem> items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsByMonth(List<CalendarItemsByMonth> itemsByMonth)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsByCategory(List<CalendarItemsByCategory> itemsByCategory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
