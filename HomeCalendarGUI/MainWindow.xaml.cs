@@ -17,6 +17,7 @@ using System.Xml.Linq;
 using System.Windows.Interop;
 using static Calendar.Category;
 using System.Windows.Markup;
+using System.CodeDom;
 
 
 namespace HomeCalendarGUI
@@ -132,6 +133,7 @@ namespace HomeCalendarGUI
                 message2.Text = "";
             }
         }
+
         public void ShowInformationOnCmb(List<Category> categories)
         {
             foreach (var category in categories)
@@ -333,17 +335,25 @@ namespace HomeCalendarGUI
 
         private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)
         {
-            if (DateFilterCheckBox.IsChecked == true)
+            try
             {
-                presenter.GetEventsFilteredByDateRange(Start.SelectedDate,End.SelectedDate);
+                if (DateFilterCheckBox.IsChecked == true)
+                {
+                    presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
+                }
+                else
+                {
+                    presenter.GetCalendarItems();
+                }
             }
-            else
+            catch(Exception ex)
             {
-                presenter.GetCalendarItems();
+                MessageBox.Show($"Error:{ex.Message}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                DateFilterCheckBox.IsChecked = false;
             }
         }
 
-        private void CheckBox_ByMonthFilterCheckBox(object sender, RoutedEventArgs e)
+        private void FilterByMonthCheckBox_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -363,6 +373,18 @@ namespace HomeCalendarGUI
             {
                 MessageBox.Show("Must select a Start and End Date.","Start or End date not selected",MessageBoxButton.OK,MessageBoxImage.Error);
                 FilterByMonthCheckBox.IsChecked = false;
+            }
+        }
+
+        private void FilterByCategoryCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+
+            }
+            catch(Exception ex)
+            {
+                FilterByCategoryCheckBox.IsChecked = false;
             }
         }
     }

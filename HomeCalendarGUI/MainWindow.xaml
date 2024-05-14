@@ -71,14 +71,15 @@
             <TextBlock x:Name="message2" FontWeight="Bold" Margin="10"/>
             <WrapPanel>
                 <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
-                <CheckBox x:Name="FilterByMonthCheckBox" Click="CheckBox_ByMonthFilterCheckBox" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Month</CheckBox>
+                <CheckBox x:Name="FilterByMonthCheckBox" Click="FilterByMonthCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Month</CheckBox>
                 <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
                 <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
             </WrapPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Filter by Category:" Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="AliceBlue"/>
                 <ComboBox x:Name="CategoryFilter" DisplayMemberPath="Description" SelectedValuePath="Id" Width="150" Margin="5"/>
-                <Button Content="Apply Filters" Click="ApplyFilters_Click" Margin="5"/>
+                <CheckBox x:Name="FilterByCategoryCheckBox" Click="FilterByCategoryCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Category</CheckBox>
+                <!--<Button Content="Apply Filters" Click="ApplyFilters_Click" Margin="5"/>-->
             </StackPanel>
         </StackPanel>
 

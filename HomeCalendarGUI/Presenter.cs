@@ -45,15 +45,18 @@ namespace HomeCalendarGUI
             }
             catch (FileNotFoundException ex)
             {
-                // Notify the view to display an error message
-                view.DisplayErrorMessage("Database file could not be loaded. Please check the database path.");
-                model = null;
-            }
-            catch (Exception ex)
-            {
-                // Handle other unexpected exceptions
-                view.DisplayErrorMessage("An unexpected error occurred during initialization.");
-                model = null;
+                if (ex is FileNotFoundException)
+                {
+                    // Notify the view to display an error message
+                    view.DisplayErrorMessage("Database file could not be loaded. Please check the database path.");
+                    model = null;
+                }
+                else
+                {
+                    // Handle other unexpected exceptions
+                    view.DisplayErrorMessage("An unexpected error occurred during initialization.");
+                    model = null;
+                }
             }
         }
 
@@ -136,9 +139,9 @@ namespace HomeCalendarGUI
         public void GetEventsFilteredByDateRange(DateTime? startDate,DateTime? endDate)
         {
             List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
-
             view.ShowCalendarItemsWithDateFiltersOn(items);
         }
+        
         public void GetCalendarItemsFilteredByMonth(DateTime startMonth, DateTime endMonth)
         {
             if(endMonth < startMonth)
@@ -177,12 +180,79 @@ namespace HomeCalendarGUI
 
             view.ShowCalendarItemsFilteredByMonth(itemsByMonthAndTime);
         }
+        
         public void GetEventsFilteredByCategory(int categoryId)
         {
             var filteredEvents = model.GetCalendarItems(null, null, true, categoryId);
             view.ShowCalendarItemsWithCategoryFiltersOn(filteredEvents);
         }
 
+        /// <summary>
+        /// Gets CalendarItems with corresponding filters
+        /// </summary>
+        /// <param name="startDate">Start Date</param>
+        /// <param name="endDate">End Date</param>
+        /// <param name="categoryId">Category Id</param>
+        /// <param name="dateFilter">If true, filters by specified date</param>
+        /// <param name="filterByCategory">If true, filters by category</param>
+        /// <param name="filterByMonth">If true,filters by month</param>        
+        public void GetHomeCalendarItems(DateTime startDate, DateTime endDate, int categoryId, bool dateFilter ,bool filterByCategory, bool filterByMonth)
+        {
+
+            //If the user wants to filter by category and month, get dictionary while considering the date filter flag
+            if (filterByCategory && filterByMonth)
+            {
+                List<Dictionary<string, object>> itemsByCategoryAndMonth;
+                if (dateFilter)
+                {
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, true, categoryId);
+                }
+                else
+                {
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, true, categoryId);
+                }
+            }
+            else if (filterByMonth)
+            {
+                //If the user wants to filter by month, get a list of calendar items by month while considering the date filter flag
+                List<CalendarItemsByMonth> itemsByMonth;
+                if (dateFilter)
+                {
+                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, false, categoryId);
+                }
+                else
+                {
+                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, false, categoryId);
+                }                
+            }
+            else if (filterByCategory)
+            {
+                //If the user wants to filter by category, get a list of calendar items by category while considering the date filter flag
+                if (dateFilter)
+                {
+                    List<CalendarItemsByCategory> itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, true, categoryId);
+                }
+                else
+                {
+                    List<CalendarItemsByCategory> itemsByCategory = model.GetCalendarItemsByCategory(null, null, true, categoryId);
+                }
+            }
+            else
+            {
+                //If the user doesn't apply filters, get a list of calendar items while considering the date filter flag
+
+                List<CalendarItem> items;
+                if (dateFilter)
+                {
+                    items = model.GetCalendarItems(startDate, endDate, false, 0);
+                }
+                else
+                {
+                    items = model.GetCalendarItems(null, null, false, 0);
+                }                
+                view.ShowCalendarItemsWithDateFiltersOn(items);
+            }
+        }
 
         /// <summary>
         /// Deletes an event from the database
