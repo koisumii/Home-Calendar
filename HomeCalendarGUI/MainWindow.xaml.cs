@@ -406,20 +406,24 @@ namespace HomeCalendarGUI
         {
             try
             {
-                //Check if the user is filtering by category and/or month
+                //Check if the user is filtering by category and/ or month
                 bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
                 bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
 
                 if (DateFilterCheckBox.IsChecked == true)
                 {
-                    DateTime? start = Start.SelectedDate.Value;
-                    DateTime? end = End.SelectedDate.Value;
+                    DateTime? start = Start.SelectedDate;
+                    DateTime? end = End.SelectedDate;
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilter.SelectedIndex;
 
-
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, filterByCategory, filterByMonth);
                 }
                 else
                 {
-
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilter.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, filterByCategory, filterByMonth);
                 }
 
 

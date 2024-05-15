@@ -219,12 +219,13 @@ namespace HomeCalendarGUI
                 List<Dictionary<string, object>> itemsByCategoryAndMonth;
                 if (dateFilter)
                 {
-                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, true, categoryId);
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, true, categoryId);                    
                 }
                 else
                 {
                     itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, true, categoryId);
                 }
+                view.ShowCalendarItemsByMonthAndCategory(itemsByCategoryAndMonth);
             }
             else if (filterByMonth)
             {
@@ -232,24 +233,27 @@ namespace HomeCalendarGUI
                 List<CalendarItemsByMonth> itemsByMonth;
                 if (dateFilter)
                 {
-                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, false, categoryId);
+                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, false, categoryId);                   
                 }
                 else
                 {
-                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, false, categoryId);
-                }                
+                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, false, categoryId);                    
+                }
+                view.ShowCalendarItemsByMonth(itemsByMonth);
             }
             else if (filterByCategory)
             {
+                List<CalendarItemsByCategory> itemsByCategory;
                 //If the user wants to filter by category, get a list of calendar items by category while considering the date filter flag
                 if (dateFilter)
                 {
-                    List<CalendarItemsByCategory> itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, true, categoryId);
+                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, true, categoryId);                    
                 }
                 else
                 {
-                    List<CalendarItemsByCategory> itemsByCategory = model.GetCalendarItemsByCategory(null, null, true, categoryId);
+                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, true, categoryId);                   
                 }
+                view.ShowCalendarItemsByCategory(itemsByCategory);
             }
             else
             {
