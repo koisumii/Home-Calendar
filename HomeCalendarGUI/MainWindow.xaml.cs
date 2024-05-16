@@ -113,9 +113,9 @@ namespace HomeCalendarGUI
         public void ApplyFilters_Click(object sender, RoutedEventArgs e)
         {
             //????
-            if (CategoryFilter.SelectedItem != null)
+            if (CategoryFilterCmb.SelectedItem != null)
             {
-                var selectedCategory = (Category)CategoryFilter.SelectedItem;
+                var selectedCategory = (Category)CategoryFilterCmb.SelectedItem;
                 presenter.GetEventsFilteredByCategory(selectedCategory.Id);
 
             }
@@ -190,8 +190,14 @@ namespace HomeCalendarGUI
             //DGValueColumn.Visibility = Visibility.Visible;
         }
 
-        public void ShowCalendarItems(List<CalendarItem> items)
+        public void ShowCalendarItems(List<CalendarItem> items, bool filterByCategory)
         {
+            if (filterByCategory)
+            {
+                Category selectedCategory = CategoryFilterCmb.SelectedItem as Category;
+                items = items.Where(i => i.CategoryID == selectedCategory.Id).ToList();
+            }
+            
             CalendarItemsDataGrid.ItemsSource = items;
             DGBusyTime.Visibility = Visibility.Visible;
             DGStartTime.Visibility = Visibility.Visible;
@@ -206,10 +212,6 @@ namespace HomeCalendarGUI
             DGMonth.Visibility = Visibility.Hidden;
         }
         
-        public void ShowCalendarItemsByACategory(List<CalendarItemsByCategory> itemsByCategory)
-        {
-            
-        }
         
         public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
@@ -243,10 +245,10 @@ namespace HomeCalendarGUI
 
         private void LoadCategoriesForFiltering()
         {
-            CategoryFilter.ItemsSource = presenter.RetrieveCategories();
-            CategoryFilter.DisplayMemberPath = "Description";
-            CategoryFilter.SelectedValuePath = "Id";
-            CategoryFilter.SelectedIndex = 0;  
+            CategoryFilterCmb.ItemsSource = presenter.RetrieveCategories();
+            CategoryFilterCmb.DisplayMemberPath = "Description";
+            CategoryFilterCmb.SelectedValuePath = "Id";
+            CategoryFilterCmb.SelectedIndex = 0;  
         }
         #region Btn Operations
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
@@ -386,27 +388,27 @@ namespace HomeCalendarGUI
         {
             try
             {
-                //Check if the user is filtering by category and/or month
-                bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
-                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;                
+                //Check if the user is filtering by category and/ or month
+                bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
+                bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
+                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
 
                 if (DateFilterCheckBox.IsChecked == true)
                 {
                     DateTime? start = Start.SelectedDate;
                     DateTime? end = End.SelectedDate;
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
-                    int categoryId = CategoryFilter.SelectedIndex;
-                    presenter.GetHomeCalendarItems(start,end,categoryId,filterByDate,filterByCategory,filterByMonth);
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
 
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                     //presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
                 }
                 else
                 {
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
-                    int categoryId = CategoryFilter.SelectedIndex;
-                    presenter.GetHomeCalendarItems(null,null,categoryId,filterByDate,filterByCategory,filterByMonth);
-                    
-                    //presenter.GetCalendarItems();
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
+                    //presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
                 }
             }
             catch(InvalidOperationException ex)
@@ -423,14 +425,15 @@ namespace HomeCalendarGUI
                 Start.SelectedDate = null;
                 End.SelectedDate = null;
             }
-        }
+        }               
 
-        private void FilterByMonthCheckBox_Click(object sender, RoutedEventArgs e)
+        private void FilterByCategoryCheckBox_Click(object sender, RoutedEventArgs e)
         {
             try
-            {
+            {                
                 //Check if the user is filtering by category and/ or month
-                bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
+                bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
+                bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
                 bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
 
                 if (DateFilterCheckBox.IsChecked == true)
@@ -438,15 +441,54 @@ namespace HomeCalendarGUI
                     DateTime? start = Start.SelectedDate;
                     DateTime? end = End.SelectedDate;
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
-                    int categoryId = CategoryFilter.SelectedIndex;
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
 
-                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, filterByCategory, filterByMonth);
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
                 else
                 {
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
-                    int categoryId = CategoryFilter.SelectedIndex;
-                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, filterByCategory, filterByMonth);
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth,filterByCategory);
+                }
+            }
+            catch(Exception ex)
+            {
+                if (ex is InvalidOperationException)
+                {
+                    MessageBox.Show($"Date Filter Error: {ex.Message}", "DateTime Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                SummaryByCategoryCheckBox.IsChecked = false;
+            }
+        }
+
+        private void SummaryByMonthCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                //Check if the user is filtering by category and/ or month
+                bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
+                bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
+                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
+
+                if (DateFilterCheckBox.IsChecked == true)
+                {
+                    DateTime? start = Start.SelectedDate;
+                    DateTime? end = End.SelectedDate;
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
+
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
+                }
+                else
+                {
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
 
 
@@ -472,16 +514,23 @@ namespace HomeCalendarGUI
                 {
                     MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                FilterByMonthCheckBox.IsChecked = false;                
+                SummaryByMonthCheckBox.IsChecked = false;                
             }
         }
+        
+        private void SummaryByCategory_Click(object sender, RoutedEventArgs e)
+        {
 
-        private void FilterByCategoryCheckBox_Click(object sender, RoutedEventArgs e)
+        }
+        #endregion
+
+        private void CategoryFilterCmb_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             try
             {
                 //Check if the user is filtering by category and/ or month
-                bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
+                bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
+                bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
                 bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
 
                 if (DateFilterCheckBox.IsChecked == true)
@@ -489,18 +538,18 @@ namespace HomeCalendarGUI
                     DateTime? start = Start.SelectedDate;
                     DateTime? end = End.SelectedDate;
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
-                    int categoryId = CategoryFilter.SelectedIndex;
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
 
-                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, filterByCategory, filterByMonth);
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
                 else
                 {
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
-                    int categoryId = CategoryFilter.SelectedIndex;
-                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, filterByCategory, filterByMonth);
+                    int categoryId = CategoryFilterCmb.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ex is InvalidOperationException)
                 {
@@ -510,9 +559,8 @@ namespace HomeCalendarGUI
                 {
                     MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                FilterByCategoryCheckBox.IsChecked = false;
+                SummaryByCategoryCheckBox.IsChecked = false;
             }
         }
-        #endregion
     }
 }

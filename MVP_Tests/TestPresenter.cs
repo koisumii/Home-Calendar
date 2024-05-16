@@ -109,6 +109,11 @@ namespace MVP_Tests
         {
             throw new NotImplementedException();
         }
+
+        public void ShowCalendarItems(List<CalendarItem> items, bool filterByCategory)
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public class TestPresenter

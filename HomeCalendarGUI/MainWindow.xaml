@@ -71,19 +71,25 @@
             <TextBlock x:Name="message2" FontWeight="Bold" Margin="10"/>
             <WrapPanel>
                 <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
-                <CheckBox x:Name="FilterByMonthCheckBox" Click="FilterByMonthCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Month</CheckBox>
+                
                 <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
                 <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
             </WrapPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Filter by Category:" Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="AliceBlue"/>
-                <ComboBox x:Name="CategoryFilter" DisplayMemberPath="Description" SelectedValuePath="Id" Width="150" Margin="5"/>
-                <CheckBox x:Name="FilterByCategoryCheckBox" Click="FilterByCategoryCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Category</CheckBox>
+                <ComboBox x:Name="CategoryFilterCmb" SelectionChanged="CategoryFilterCmb_SelectionChanged" DisplayMemberPath="Description" SelectedValuePath="Id" Width="150" Margin="5"/>
+                <CheckBox x:Name="FilterByCategoryCheckBox" Click="FilterByCategoryCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter</CheckBox>
                 <!--<Button Content="Apply Filters" Click="ApplyFilters_Click" Margin="5"/>-->
-            </StackPanel>
+            </StackPanel>            
+            <GroupBox Header="Summary" Foreground="AliceBlue">
+                <StackPanel>
+                <CheckBox x:Name="SummaryByMonthCheckBox" Click="SummaryByMonthCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Month</CheckBox>
+                <CheckBox x:Name="SummaryByCategoryCheckBox" Click="SummaryByCategory_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Category</CheckBox>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
 
-        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,95,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
+        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,160,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="DGStartDate" Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn x:Name="DGStartTime" Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>

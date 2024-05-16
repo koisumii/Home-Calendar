@@ -195,9 +195,9 @@ namespace HomeCalendarGUI
         /// <param name="endDate">End Date</param>
         /// <param name="categoryId">Category Id</param>
         /// <param name="dateFilter">If true, filters by specified date</param>
-        /// <param name="filterByCategory">If true, filters by category</param>
-        /// <param name="filterByMonth">If true,filters by month</param>        
-        public void GetHomeCalendarItems(DateTime? startDate, DateTime? endDate, int categoryId, bool dateFilter ,bool filterByCategory, bool filterByMonth)
+        /// <param name="summaryByCategory">If true, filters by category</param>
+        /// <param name="summaryByMonth">If true,filters by month</param>        
+        public void GetHomeCalendarItems(DateTime? startDate, DateTime? endDate, int categoryId, bool dateFilter ,bool summaryByCategory, bool summaryByMonth,bool filterDataByCategory)
         {
             //if dateFilter is set to true, throw if the start and end dates values are null
             // or when the end date is before the start date.
@@ -214,7 +214,7 @@ namespace HomeCalendarGUI
             }
 
             //If the user wants to filter by category and month, get dictionary while considering the date filter flag
-            if (filterByCategory && filterByMonth)
+            if (summaryByCategory && summaryByMonth)
             {
                 List<Dictionary<string, object>> itemsByCategoryAndMonth;
                 if (dateFilter)
@@ -227,7 +227,7 @@ namespace HomeCalendarGUI
                 }
                 view.ShowTotalBusyTimeByMonthAndCategory(itemsByCategoryAndMonth);
             }
-            else if (filterByMonth)
+            else if (summaryByMonth)
             {
                 //If the user wants to filter by month, get a list of calendar items by month while considering the date filter flag
                 List<CalendarItemsByMonth> itemsByMonth;
@@ -241,7 +241,7 @@ namespace HomeCalendarGUI
                 }
                 view.ShowTotalBusyTimeByMonth(itemsByMonth);
             }
-            else if (filterByCategory)
+            else if (summaryByCategory)
             {
                 List<CalendarItemsByCategory> itemsByCategory;
                 //If the user wants to filter by category, get a list of calendar items by category while considering the date filter flag
@@ -253,7 +253,7 @@ namespace HomeCalendarGUI
                 {
                     itemsByCategory = model.GetCalendarItemsByCategory(null, null, true, categoryId);                   
                 }
-                view.ShowCalendarItemsByACategory(itemsByCategory);
+                view.ShowTotalBusyTimeByCategory(itemsByCategory);
             }
             else
             {
@@ -269,7 +269,7 @@ namespace HomeCalendarGUI
                     items = model.GetCalendarItems(null, null, false, categoryId);
                 }                
                 
-                view.ShowCalendarItems(items);
+                view.ShowCalendarItems(items,filterDataByCategory);
                 
                 //view.ShowCalendarItemsWithDateFiltersOn(items);
             }
