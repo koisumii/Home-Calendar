@@ -262,14 +262,14 @@ namespace HomeCalendarGUI
                 List<CalendarItem> items;
                 if (dateFilter)
                 {
-                    items = model.GetCalendarItems(startDate, endDate, false, categoryId);
+                    items = model.GetCalendarItems(startDate, endDate, filterDataByCategory, categoryId);
                 }
                 else
                 {
-                    items = model.GetCalendarItems(null, null, false, categoryId);
+                    items = model.GetCalendarItems(null, null, filterDataByCategory, categoryId);
                 }                
                 
-                view.ShowCalendarItems(items,filterDataByCategory);
+                view.ShowCalendarItems(items);
                 
                 //view.ShowCalendarItemsWithDateFiltersOn(items);
             }

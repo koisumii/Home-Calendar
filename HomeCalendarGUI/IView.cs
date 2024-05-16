@@ -52,7 +52,7 @@ namespace HomeCalendarGUI
         /// Displays calendar items on datagrid
         /// </summary>
         /// <param name="items">Calendar Items from the database</param>
-        public void ShowCalendarItems(List<CalendarItem> items, bool filterByCategory);
+        public void ShowCalendarItems(List<CalendarItem> items);
 
         public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth);
 

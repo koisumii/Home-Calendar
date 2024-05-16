@@ -18,6 +18,7 @@ using System.Windows.Interop;
 using static Calendar.Category;
 using System.Windows.Markup;
 using System.CodeDom;
+using System.Reflection.PortableExecutable;
 
 
 namespace HomeCalendarGUI
@@ -190,65 +191,128 @@ namespace HomeCalendarGUI
             //DGValueColumn.Visibility = Visibility.Visible;
         }
 
-        public void ShowCalendarItems(List<CalendarItem> items, bool filterByCategory)
-        {
-            if (filterByCategory)
-            {
-                Category selectedCategory = CategoryFilterCmb.SelectedItem as Category;
-                items = items.Where(i => i.CategoryID == selectedCategory.Id).ToList();
-            }
-            
+        public void ShowCalendarItems(List<CalendarItem> items)
+        {   
+            SetDataGridColumnsToDefault();
             CalendarItemsDataGrid.ItemsSource = items;
-            DGBusyTime.Visibility = Visibility.Visible;
-            DGStartTime.Visibility = Visibility.Visible;
-            DGDurationInMinutes.Visibility = Visibility.Visible;
-            DGDescription.Visibility = Visibility.Visible;
-            DGCategory.Visibility = Visibility.Visible;
-            DGStartDate.Visibility = Visibility.Visible;
+            //DGBusyTime.Visibility = Visibility.Visible;
+            //DGStartTime.Visibility = Visibility.Visible;
+            //DGDurationInMinutes.Visibility = Visibility.Visible;
+            //DGDescription.Visibility = Visibility.Visible;
+            //DGCategory.Visibility = Visibility.Visible;
+            //DGStartDate.Visibility = Visibility.Visible;
 
-            //DGKeyColumn.Visibility = Visibility.Hidden;
-            //DGValueColumn.Visibility = Visibility.Hidden;
-            DGTotalBusyTime.Visibility = Visibility.Hidden;
-            DGMonth.Visibility = Visibility.Hidden;
-        }
-        
+            ////DGKeyColumn.Visibility = Visibility.Hidden;
+            ////DGValueColumn.Visibility = Visibility.Hidden;
+            //DGTotalBusyTime.Visibility = Visibility.Hidden;
+            //DGMonth.Visibility = Visibility.Hidden;
+        }        
         
         public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
+            SetDataGridColumnsToSummaryByMonth();
             CalendarItemsDataGrid.ItemsSource = itemsByMonth;
-            DGStartDate.Visibility = Visibility.Hidden;
-            DGBusyTime.Visibility = Visibility.Hidden;
-            DGStartTime.Visibility = Visibility.Hidden;
-            DGDurationInMinutes.Visibility = Visibility.Hidden;
-            DGDescription.Visibility = Visibility.Hidden;
-            DGCategory.Visibility = Visibility.Hidden;
+            //DGStartDate.Visibility = Visibility.Hidden;
+            //DGBusyTime.Visibility = Visibility.Hidden;
+            //DGStartTime.Visibility = Visibility.Hidden;
+            //DGDurationInMinutes.Visibility = Visibility.Hidden;
+            //DGDescription.Visibility = Visibility.Hidden;
+            //DGCategory.Visibility = Visibility.Hidden;
 
-            DGTotalBusyTime.Visibility = Visibility.Visible;
-            DGMonth.Visibility = Visibility.Visible;
+            //DGTotalBusyTime.Visibility = Visibility.Visible;
+            //DGMonth.Visibility = Visibility.Visible;
         }
 
         public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory)
         {
+            SetDataGridColumnsToSummaryByCategory();
             CalendarItemsDataGrid.ItemsSource = itemsByCategory;
-            DGStartDate.Visibility = Visibility.Hidden;
-            DGBusyTime.Visibility = Visibility.Hidden;
-            DGStartTime.Visibility = Visibility.Hidden;
-            DGDurationInMinutes.Visibility = Visibility.Hidden;
-            DGDescription.Visibility = Visibility.Hidden;
+            //DGStartDate.Visibility = Visibility.Hidden;
+            //DGBusyTime.Visibility = Visibility.Hidden;
+            //DGStartTime.Visibility = Visibility.Hidden;
+            //DGDurationInMinutes.Visibility = Visibility.Hidden;
+            //DGDescription.Visibility = Visibility.Hidden;
             
-            DGCategory.Visibility = Visibility.Visible;
-            DGTotalBusyTime.Visibility = Visibility.Visible;           
+            //DGCategory.Visibility = Visibility.Visible;
+            //DGTotalBusyTime.Visibility = Visibility.Visible;           
         }
 
         public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
         {
+
+            CalendarItemsDataGrid.ItemsSource = itemsByCategoryAndMonth;
+            CalendarItemsDataGrid.Columns.Clear();
+
+            // get list of column name from first dictionary in the list
+            // and create column and bind to dictionary element
+
             
+
+            for (int i = 0; i < itemsByCategoryAndMonth.Count; i++)
+            {
+                foreach (string key in itemsByCategoryAndMonth[i].Keys)
+                {
+                    var column = new DataGridTextColumn();
+                    column.Header = key;
+                    column.Binding = new Binding($"[{key}]"); // Notice the square brackets!
+                    CalendarItemsDataGrid.Columns.Add(column);
+                }
+            }            
+
         }
         #endregion
 
         private void RefreshMainView()
         {
             presenter.GetCategoriesForComboBox();
+        }
+
+        private void SetDataGridColumnsToDefault()
+        {
+            const int StartDate = 0, StartTime = 1;
+
+            List<DataGridTextColumn> textColumns = new List<DataGridTextColumn>
+            {
+                new DataGridTextColumn {Header ="Start Date", Binding = new Binding("StartDateTime")},
+                new DataGridTextColumn {Header ="Start Time", Binding = new Binding("StartDateTime")},
+                new DataGridTextColumn {Header ="Category", Binding = new Binding("Category")},
+                new DataGridTextColumn {Header ="Description", Binding = new Binding("ShortDescription")},
+                new DataGridTextColumn {Header ="Duration", Binding = new Binding("DurationInMinutes")},
+                new DataGridTextColumn {Header ="Busy Time", Binding = new Binding("BusyTime")},
+            };
+            textColumns[StartDate].Binding.StringFormat = "yyyy/MM/dd";
+            textColumns[StartTime].Binding.StringFormat = "hh:mm:ss";
+
+
+            CalendarItemsDataGrid.Columns.Clear();     // Clear all existing columns on the DataGrid control.                                                                   
+            textColumns.ForEach(CalendarItemsDataGrid.Columns.Add);
+        }
+
+        private void SetDataGridColumnsToSummaryByMonth()
+        {
+            //< DataGridTextColumn x: Name = "DGMonth" Visibility = "Hidden" Header = "Month" Binding = "{Binding Month}" ></ DataGridTextColumn >
+            //< DataGridTextColumn x: Name = "DGTotalBusyTime" Visibility = "Hidden"  Header = "Total Busy Time" Binding = "{Binding TotalBusyTime}" ></ DataGridTextColumn >
+
+            List<DataGridTextColumn> textColumns = new List<DataGridTextColumn>
+            {
+                new DataGridTextColumn {Header ="Month", Binding = new Binding("Month")},
+                new DataGridTextColumn {Header ="Total Busy Time", Binding = new Binding("TotalBusyTime")},
+            };
+
+            CalendarItemsDataGrid.Columns.Clear();     // Clear all existing columns on the DataGrid control.                                                                   
+            textColumns.ForEach(CalendarItemsDataGrid.Columns.Add);
+        }
+
+        private void SetDataGridColumnsToSummaryByCategory()
+        {
+            List<DataGridTextColumn> textColumns = new List<DataGridTextColumn>
+            {
+                new DataGridTextColumn {Header ="Category", Binding = new Binding("Category")},
+                new DataGridTextColumn {Header ="Total Busy Time", Binding = new Binding("TotalBusyTime")},
+            };
+
+            CalendarItemsDataGrid.Columns.Clear();     // Clear all existing columns on the DataGrid control.                                                                   
+            textColumns.ForEach(CalendarItemsDataGrid.Columns.Add);
         }
 
         private void LoadCategoriesForFiltering()
