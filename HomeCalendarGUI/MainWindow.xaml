@@ -101,7 +101,7 @@
                 <!--<DataGridTextColumn x:Name="DGKeyColumn" Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
                 <DataGridTextColumn x:Name="DGValueColumn" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>-->
 
-                <DataGridTextColumn x:Name="DGMonth" Visibility="Hidden" Header="Month" Binding="{Binding Month}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGMonth" Visibility="Hidden" Header="Month" Binding="{Binding Month}"></DataGridTextColumn>                
                 <DataGridTextColumn x:Name="DGTotalBusyTime" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding TotalBusyTime}"></DataGridTextColumn>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>

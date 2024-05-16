@@ -247,11 +247,11 @@ namespace HomeCalendarGUI
                 //If the user wants to filter by category, get a list of calendar items by category while considering the date filter flag
                 if (dateFilter)
                 {
-                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, true, categoryId);                    
+                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, false, categoryId);                    
                 }
                 else
                 {
-                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, true, categoryId);                   
+                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, false, categoryId);                   
                 }
                 view.ShowTotalBusyTimeByCategory(itemsByCategory);
             }
