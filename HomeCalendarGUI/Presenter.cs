@@ -219,11 +219,11 @@ namespace HomeCalendarGUI
                 List<Dictionary<string, object>> itemsByCategoryAndMonth;
                 if (dateFilter)
                 {
-                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, true, categoryId);                    
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, false, categoryId);                    
                 }
                 else
                 {
-                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, true, categoryId);
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, false, categoryId);
                 }
                 view.ShowTotalBusyTimeByMonthAndCategory(itemsByCategoryAndMonth);
             }

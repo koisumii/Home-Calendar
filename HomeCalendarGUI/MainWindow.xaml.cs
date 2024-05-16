@@ -19,6 +19,7 @@ using static Calendar.Category;
 using System.Windows.Markup;
 using System.CodeDom;
 using System.Reflection.PortableExecutable;
+using System.Linq;
 
 
 namespace HomeCalendarGUI
@@ -246,19 +247,43 @@ namespace HomeCalendarGUI
             // get list of column name from first dictionary in the list
             // and create column and bind to dictionary element
 
-            
+            bool skipKey = false;
 
+            //Go through each section of the dictionary
             for (int i = 0; i < itemsByCategoryAndMonth.Count; i++)
-            {
+            {   
+                //Go through each key
                 foreach (string key in itemsByCategoryAndMonth[i].Keys)
                 {
+                    List<DataGridColumn> currentTextColumns = CalendarItemsDataGrid.Columns.ToList();
+                    skipKey = false;
+
+                    //Ommit the ones that have "items:"
+                    if (key.Contains("items:"))
+                    {
+                        continue;
+                    }
+
+                    //Checks if a column header from dictionary already exists
+                    foreach (var currentDGData in currentTextColumns)
+                    {
+                        if (currentDGData.Header.Equals(key))
+                        {
+                            skipKey = true;
+                        }
+                    }
+
+                    if (skipKey)
+                    {
+                        continue;
+                    }
+
                     var column = new DataGridTextColumn();
                     column.Header = key;
-                    column.Binding = new Binding($"[{key}]"); // Notice the square brackets!
+                    column.Binding = new Binding($"[{key}]");
                     CalendarItemsDataGrid.Columns.Add(column);
                 }
-            }            
-
+            }
         }
         #endregion
 
