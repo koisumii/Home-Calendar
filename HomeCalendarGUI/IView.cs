@@ -54,10 +54,12 @@ namespace HomeCalendarGUI
         /// <param name="items">Calendar Items from the database</param>
         public void ShowCalendarItems(List<CalendarItem> items);
 
-        public void ShowCalendarItemsByMonth(List<CalendarItemsByMonth> itemsByMonth);
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth);
 
-        public void ShowCalendarItemsByCategory(List<CalendarItemsByCategory> itemsByCategory);
+        public void ShowCalendarItemsByACategory(List<CalendarItemsByCategory> itemsByCategory);
 
-        public void ShowCalendarItemsByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth);
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth);
+
+        public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory);
     }
 }

@@ -18,12 +18,12 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for Events.xaml
     /// </summary>
-    public partial class Events : Window, IView
+    public partial class Events : Window
     {
         private Presenter _presenter;
         public Events()
         {
-            _presenter = new Presenter(this); 
+            //_presenter = new Presenter(this); 
             InitializeComponent();
 
             //also put this in presenter
@@ -101,7 +101,7 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsByMonth(List<CalendarItemsByMonth> itemsByMonth)
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
             throw new NotImplementedException();
         }
@@ -111,7 +111,7 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
         {
             throw new NotImplementedException();
         }

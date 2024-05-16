@@ -90,17 +90,22 @@ namespace MVP_Tests
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsByMonth(List<CalendarItemsByMonth> itemsByMonth)
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsByCategory(List<CalendarItemsByCategory> itemsByCategory)
+        public void ShowCalendarItemsByACategory(List<CalendarItemsByCategory> itemsByCategory)
         {
             throw new NotImplementedException();
         }
 
-        public void ShowCalendarItemsByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory)
         {
             throw new NotImplementedException();
         }

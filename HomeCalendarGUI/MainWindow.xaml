@@ -90,9 +90,13 @@
                 <DataGridTextColumn x:Name="DGCategory" Header="Category" Binding="{Binding Category}"/>
                 <DataGridTextColumn x:Name="DGDescription" Header="Description" Binding="{Binding ShortDescription}"/>
                 <DataGridTextColumn x:Name="DGDurationInMinutes"  Header="Duration" Binding="{Binding DurationInMinutes}"/>
-                <DataGridTextColumn x:Name="DGBusyTime" Header="Busy Time" Binding="{Binding BusyTime}"/>            
-                <DataGridTextColumn x:Name="DGKeyColumn" Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGValueColumn" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGBusyTime" Header="Busy Time" Binding="{Binding BusyTime}"/>               
+                
+                <!--<DataGridTextColumn x:Name="DGKeyColumn" Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGValueColumn" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>-->
+
+                <DataGridTextColumn x:Name="DGMonth" Visibility="Hidden" Header="Month" Binding="{Binding Month}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGTotalBusyTime" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding TotalBusyTime}"></DataGridTextColumn>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>

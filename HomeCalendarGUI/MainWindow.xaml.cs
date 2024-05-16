@@ -150,8 +150,8 @@ namespace HomeCalendarGUI
             DGCategory.Visibility = Visibility.Visible;
             DGStartDate.Visibility = Visibility.Visible;
 
-            DGKeyColumn.Visibility = Visibility.Hidden;
-            DGValueColumn.Visibility = Visibility.Hidden;
+            //DGKeyColumn.Visibility = Visibility.Hidden;
+            //DGValueColumn.Visibility = Visibility.Hidden;
         }
         
         public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
@@ -186,31 +186,54 @@ namespace HomeCalendarGUI
             DGDescription.Visibility = Visibility.Hidden;
             DGCategory.Visibility = Visibility.Hidden;
 
-            DGKeyColumn.Visibility = Visibility.Visible;
-            DGValueColumn.Visibility = Visibility.Visible;
+            //DGKeyColumn.Visibility = Visibility.Visible;
+            //DGValueColumn.Visibility = Visibility.Visible;
         }
 
         public void ShowCalendarItems(List<CalendarItem> items)
         {
             CalendarItemsDataGrid.ItemsSource = items;
-        }
+            DGBusyTime.Visibility = Visibility.Visible;
+            DGStartTime.Visibility = Visibility.Visible;
+            DGDurationInMinutes.Visibility = Visibility.Visible;
+            DGDescription.Visibility = Visibility.Visible;
+            DGCategory.Visibility = Visibility.Visible;
+            DGStartDate.Visibility = Visibility.Visible;
 
-        public void ShowCalendarItemsByMonth(List<CalendarItemsByMonth> itemsByMonth)
+            //DGKeyColumn.Visibility = Visibility.Hidden;
+            //DGValueColumn.Visibility = Visibility.Hidden;
+            DGTotalBusyTime.Visibility = Visibility.Hidden;
+            DGMonth.Visibility = Visibility.Hidden;
+        }
+        
+        public void ShowCalendarItemsByACategory(List<CalendarItemsByCategory> itemsByCategory)
         {
-            throw new NotImplementedException();
+            
         }
-
-        public void ShowCalendarItemsByCategory(List<CalendarItemsByCategory> itemsByCategory)
+        
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
-            throw new NotImplementedException();
+            CalendarItemsDataGrid.ItemsSource = itemsByMonth;
+            DGStartDate.Visibility = Visibility.Hidden;
+            DGBusyTime.Visibility = Visibility.Hidden;
+            DGStartTime.Visibility = Visibility.Hidden;
+            DGDurationInMinutes.Visibility = Visibility.Hidden;
+            DGDescription.Visibility = Visibility.Hidden;
+            DGCategory.Visibility = Visibility.Hidden;
+
+            DGTotalBusyTime.Visibility = Visibility.Visible;
+            DGMonth.Visibility = Visibility.Visible;
         }
 
-        public void ShowCalendarItemsByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory)
         {
-            throw new NotImplementedException();
+
         }
 
-
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        {
+            
+        }
         #endregion
 
         private void RefreshMainView()
@@ -441,8 +464,15 @@ namespace HomeCalendarGUI
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Must select a Start and End Date.","Start or End date not selected",MessageBoxButton.OK,MessageBoxImage.Error);
-                FilterByMonthCheckBox.IsChecked = false;
+                if (ex is InvalidOperationException)
+                {
+                    MessageBox.Show($"Date Filter Error: {ex.Message}", "DateTime Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                FilterByMonthCheckBox.IsChecked = false;                
             }
         }
 
@@ -450,10 +480,36 @@ namespace HomeCalendarGUI
         {
             try
             {
+                //Check if the user is filtering by category and/ or month
+                bool filterByMonth = (bool)FilterByMonthCheckBox.IsChecked;
+                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
 
+                if (DateFilterCheckBox.IsChecked == true)
+                {
+                    DateTime? start = Start.SelectedDate;
+                    DateTime? end = End.SelectedDate;
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilter.SelectedIndex;
+
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, filterByCategory, filterByMonth);
+                }
+                else
+                {
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    int categoryId = CategoryFilter.SelectedIndex;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, filterByCategory, filterByMonth);
+                }
             }
             catch(Exception ex)
             {
+                if (ex is InvalidOperationException)
+                {
+                    MessageBox.Show($"Date Filter Error: {ex.Message}", "DateTime Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
                 FilterByCategoryCheckBox.IsChecked = false;
             }
         }

@@ -225,7 +225,7 @@ namespace HomeCalendarGUI
                 {
                     itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, true, categoryId);
                 }
-                view.ShowCalendarItemsByMonthAndCategory(itemsByCategoryAndMonth);
+                view.ShowTotalBusyTimeByMonthAndCategory(itemsByCategoryAndMonth);
             }
             else if (filterByMonth)
             {
@@ -239,7 +239,7 @@ namespace HomeCalendarGUI
                 {
                     itemsByMonth = model.GetCalendarItemsByMonth(null, null, false, categoryId);                    
                 }
-                view.ShowCalendarItemsByMonth(itemsByMonth);
+                view.ShowTotalBusyTimeByMonth(itemsByMonth);
             }
             else if (filterByCategory)
             {
@@ -253,7 +253,7 @@ namespace HomeCalendarGUI
                 {
                     itemsByCategory = model.GetCalendarItemsByCategory(null, null, true, categoryId);                   
                 }
-                view.ShowCalendarItemsByCategory(itemsByCategory);
+                view.ShowCalendarItemsByACategory(itemsByCategory);
             }
             else
             {
