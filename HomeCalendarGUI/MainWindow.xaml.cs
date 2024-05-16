@@ -28,6 +28,7 @@ namespace HomeCalendarGUI
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
+        private UpdateEventsWindow updateEvents; 
 
         private OpenFolderDialog openFolderDialog;
         private string fileDirectoryToStore;
@@ -333,6 +334,9 @@ namespace HomeCalendarGUI
         private void UpdateEvent(object sender, RoutedEventArgs e)
         {
             //show another window with update info?
+            updateEvents = new UpdateEventsWindow();
+            updateEvents.Show();
+            this.Close();   
         }
 
         private void DateFilterCheckBoxClick(object sender, RoutedEventArgs e)
