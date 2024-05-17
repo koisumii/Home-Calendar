@@ -204,7 +204,7 @@ namespace HomeCalendarGUI
             if (dateFilter)
             {
                 if(startDate == null || endDate == null)
-                {
+                {                   
                     throw new InvalidOperationException("Must provide a start and end date");
                 }
                 else if(endDate < startDate)
