@@ -38,7 +38,7 @@
                         <TextBlock Text="Description:" FontWeight="Bold"/>
                         <TextBox x:Name="DescriptionBox" Height="30" Margin="0,5"/>
                         <TextBlock Text="Event Type:" FontWeight="Bold"/>
-                        <ComboBox x:Name="cmbEventTypes" Height="30" Margin="0,5" BorderBrush="OrangeRed" BorderThickness="4" FontFamily="Comfortaa"/>
+                        <ComboBox x:Name="categoryTypecmbBox" Height="30" Margin="0,5" BorderBrush="OrangeRed" BorderThickness="4" FontFamily="Comfortaa"/>
                         <Button Content="Add Category" Click="Button_ClickAddCategory" Margin="0,10" Width="100" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown"/>
                     </StackPanel>
                 </GroupBox>
@@ -49,10 +49,10 @@
                         <TextBox x:Name="EventDescriptionBox" Height="30" Margin="0,5"/>
                         <TextBlock Text="Start Date:" Margin="0,5,0,0" FontWeight="Bold"/>
                         <DatePicker x:Name="StartDate" />
-                        <TextBlock Text="End Date:" Margin="0,5,0,0" FontWeight="Bold"/>
-                        <DatePicker x:Name="EndDate" />
+                        <TextBlock Text="Start Time:" Margin="0,5,0,0" FontWeight="Bold"/>
+                        <TextBox x:Name="StartTime"></TextBox>
                         <TextBlock Margin="0,5,0,0" FontWeight="Bold">Enter a duration in minutes for this event:</TextBlock>
-                        <TextBox x:Name="EndTime"></TextBox>
+                        <TextBox x:Name="DurationInMinutes"></TextBox>
                         <TextBlock Text="Available Categories:" Margin="0,5,0,0" FontWeight="Bold"></TextBlock>
                         <ComboBox x:Name="catsComboBox" FontFamily="Comfortaa" BorderBrush="Red" BorderThickness="2" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0.5,15,0.5,0.5" Text="Categories" DisplayMemberPath="Description"/>
                         <Button Content="Add Event" FontFamily="Comfortaa" FontWeight="DemiBold" BorderBrush="Red" Background="#FFCCCCED" Foreground="Brown" Click="Button_ClickAddEvent" Margin="0,10" Width="100"/>
@@ -71,31 +71,42 @@
             <TextBlock x:Name="message2" FontWeight="Bold" Margin="10"/>
             <WrapPanel>
                 <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
-                <CheckBox x:Name="FilterByMonthCheckBox" Click="CheckBox_ByMonthFilterCheckBox" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Month</CheckBox>
+                
                 <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
                 <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
             </WrapPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Filter by Category:" Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="AliceBlue"/>
-                <ComboBox x:Name="CategoryFilter" DisplayMemberPath="Description" SelectedValuePath="Id" Width="150" Margin="5"/>
-                <Button Content="Apply Filters" Click="ApplyFilters_Click" Margin="5"/>
-            </StackPanel>
+                <ComboBox x:Name="CategoryFilterCmb" SelectionChanged="CategoryFilterCmb_SelectionChanged" DisplayMemberPath="Description" SelectedValuePath="Id" Width="150" Margin="5"/>
+                <CheckBox x:Name="FilterByCategoryCheckBox" Click="FilterByCategoryCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter</CheckBox>
+                <!--<Button Content="Apply Filters" Click="ApplyFilters_Click" Margin="5"/>-->
+            </StackPanel>            
+            <GroupBox Header="Summary" Foreground="AliceBlue">
+                <StackPanel>
+                <CheckBox x:Name="SummaryByMonthCheckBox" Click="SummaryByMonthCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Month</CheckBox>
+                <CheckBox x:Name="SummaryByCategoryCheckBox" Click="SummaryByCategory_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Category</CheckBox>
+                </StackPanel>
+            </GroupBox>
         </StackPanel>
 
-        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,95,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
+        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,160,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="DGStartDate" Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn x:Name="DGStartTime" Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>
                 <DataGridTextColumn x:Name="DGCategory" Header="Category" Binding="{Binding Category}"/>
                 <DataGridTextColumn x:Name="DGDescription" Header="Description" Binding="{Binding ShortDescription}"/>
                 <DataGridTextColumn x:Name="DGDurationInMinutes"  Header="Duration" Binding="{Binding DurationInMinutes}"/>
-                <DataGridTextColumn x:Name="DGBusyTime" Header="Busy Time" Binding="{Binding BusyTime}"/>            
-                <DataGridTextColumn x:Name="DGKeyColumn" Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
-                <DataGridTextColumn x:Name="DGValueColumn" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGBusyTime" Header="Busy Time" Binding="{Binding BusyTime}"/>               
+                
+                <!--<DataGridTextColumn x:Name="DGKeyColumn" Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGValueColumn" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>-->
+
+                <DataGridTextColumn x:Name="DGMonth" Visibility="Hidden" Header="Month" Binding="{Binding Month}"></DataGridTextColumn>                
+                <DataGridTextColumn x:Name="DGTotalBusyTime" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding TotalBusyTime}"></DataGridTextColumn>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>
                 <ContextMenu>
-                    <MenuItem Click="DeleteEvent" Header="Delete"/>
+                    <MenuItem Click="Btn_DeleteEvent" Header="Delete"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
