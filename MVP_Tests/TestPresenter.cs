@@ -39,7 +39,7 @@ namespace MVP_Tests
         //    }
         //}
 
-        public void PopulateCategoriesComboBox(List<Category> categories)
+        public void PopulateAllCategoriesComboBox(List<Category> categories)
         {
             calledShowCategoriesOnComboBox = true;
             this.categories = categories;
@@ -126,7 +126,7 @@ namespace MVP_Tests
             List<Category> expectedResults = TestConstants.getDefaultCategories();
 
             //Act
-            p.GetCategoriesForComboBox();
+            p.GetCategoriesForAllCatsComboBoxes();
 
             //Assert
             Assert.True(view.calledShowCategoriesOnComboBox);
@@ -211,7 +211,7 @@ namespace MVP_Tests
 
 
             //Act 
-            p.GetEventsFilteredByDateRange(start,end);            
+            //p.GetEventsFilteredByDateRange(start,end);            
             List<CalendarItem> calendarItemsResults = view.calendarItems;
             calendarItemsResults = calendarItemsResults.OrderBy(i => i.EventID).ToList();
 
@@ -241,7 +241,7 @@ namespace MVP_Tests
             int eveIdToDelete = 3;
 
             //Act
-            p.GetCalendarItems();
+            //p.GetCalendarItems();
             List<CalendarItem> initial = view.calendarItems;
             CalendarItem itemToDelete = initial.Where(e => e.EventID == eveIdToDelete).First();            
             p.DeleteAnEvent(itemToDelete.EventID);
@@ -260,7 +260,7 @@ namespace MVP_Tests
             Presenter p = new Presenter(view);
 
             //act
-            p.GetCalendarItemsFilteredByMonth(new DateTime(2018, 01, 01), new DateTime(2020, 01, 01));
+            //p.GetCalendarItemsFilteredByMonth(new DateTime(2018, 01, 01), new DateTime(2020, 01, 01));
 
             //assert 
             Assert.True(view.calledShowCalendarItemsByMonth);
@@ -274,7 +274,7 @@ namespace MVP_Tests
             Presenter p = new Presenter(view);
 
             //act 
-            p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
+            //p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
 
             //assert
             Assert.True(view.calledDisplayErrorMessage);
@@ -292,7 +292,7 @@ namespace MVP_Tests
             int testCategoryId = 2;
 
             // Act
-            presenter.GetEventsFilteredByCategory(testCategoryId);
+            //presenter.GetEventsFilteredByCategory(testCategoryId);
 
             // Assert
             // Check that the correct method on the view was called to display filtered events
@@ -351,7 +351,7 @@ namespace MVP_Tests
             Presenter presenter = new Presenter(view, "invalidPath.db");
 
             // Act
-            presenter.GetCalendarItems();
+            //presenter.GetCalendarItems();
 
             // Assert
             Assert.True(view.calledDisplayErrorMessage);

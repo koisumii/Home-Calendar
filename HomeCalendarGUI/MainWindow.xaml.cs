@@ -62,18 +62,13 @@ namespace HomeCalendarGUI
                 presenter = new Presenter(this, filePath);
             }
 
-            presenter.GetCategoriesForComboBox();
-            presenter.GetCategoriesTypeInList();
-            presenter.GetCalendarItems();
-            SetTodaysDateOnDatePicker();
-            LoadCategoriesForFiltering();
-        }
-        #region IView
-        public void SetTodaysDateOnDatePicker()
-        {
-            StartDate.DisplayDateStart = DateTime.Now;           
+            presenter.GetCategoriesForAllCatsComboBoxes();
+            presenter.GetCategoriesTypeInList();            
+            presenter.GetHomeCalendarItems(null,null,0,false,false,false,false);
+            SetTodaysDateOnDatePicker();            
         }
 
+        #region IView
         public void DisplayErrorMessage(string msg)
         {
             message.Foreground = Brushes.Red;
@@ -86,17 +81,21 @@ namespace HomeCalendarGUI
             message.Text = msg;
         }
 
-        public void PopulateCategoriesComboBox(List<Category> categories)
+        public void PopulateAllCategoriesComboBox(List<Category> categories)
         {
             catsComboBox.Items.Clear();
+            CategoryFilterCmb.Items.Clear();
+            
             // Sort categories alphabetically by their Description
             var sortedCategories = categories.OrderBy(c => c.Description).ToList();
 
             const int DEFAULT = 0;
             sortedCategories.ForEach(c => {
                 catsComboBox.Items.Add(c);
+                CategoryFilterCmb.Items.Add(c);
             });
             catsComboBox.SelectedIndex = DEFAULT;
+            CategoryFilterCmb.SelectedIndex = DEFAULT;
         }      
 
         public void PopulateCategoryTypesComboBox(List<Category> categories)
@@ -110,86 +109,6 @@ namespace HomeCalendarGUI
                 }
                 categoryTypecmbBox.Items.Add(category.Type);
             }
-        }
-
-        public void ApplyFilters_Click(object sender, RoutedEventArgs e)
-        {
-            //????
-            if (CategoryFilterCmb.SelectedItem != null)
-            {
-                var selectedCategory = (Category)CategoryFilterCmb.SelectedItem;
-                presenter.GetEventsFilteredByCategory(selectedCategory.Id);
-
-            }
-            else
-            {
-                DisplayErrorMessage("Please select a category to filter by.");
-            }
-        }
-
-        public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
-        {
-            if (calendarItems.Count == 0)
-            {
-                message2.Text = "No events found for this category.";
-                message2.Foreground = Brushes.Red;
-            }
-            else
-            {
-                CalendarItemsDataGrid.ItemsSource = calendarItems;
-                // Clear any previous messages
-                message2.Text = "";
-            }
-        }             
-
-        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
-        {
-            CalendarItemsDataGrid.ItemsSource = calendarItems;
-            DGBusyTime.Visibility = Visibility.Visible;
-            DGStartTime.Visibility = Visibility.Visible;
-            DGDurationInMinutes.Visibility = Visibility.Visible;
-            DGDescription.Visibility = Visibility.Visible;
-            DGCategory.Visibility = Visibility.Visible;
-            DGStartDate.Visibility = Visibility.Visible;
-
-            //DGKeyColumn.Visibility = Visibility.Hidden;
-            //DGValueColumn.Visibility = Visibility.Hidden;
-        }
-        
-        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
-        {
-            CalendarItemsDataGrid.ItemsSource = calendarItems;
-        }
-       
-        public bool IsValidDescription(string desc)
-        {
-            if (string.IsNullOrEmpty(desc))
-            {
-                return false;
-            }
-            if (string.IsNullOrWhiteSpace(desc))
-            {
-                return false;   
-            }
-            if (float.TryParse(desc, out float s))
-            {
-                return false; 
-            }
-            return true;    
-        }
-
-        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, Double> itemsByMonthAndTime)
-        {
-            CalendarItemsDataGrid.ItemsSource = itemsByMonthAndTime;
-            DGStartDate.Visibility = Visibility.Hidden;
-            DGBusyTime.Visibility = Visibility.Hidden;
-            DGStartTime.Visibility = Visibility.Hidden;
-            DGDurationInMinutes.Visibility = Visibility.Hidden;
-            DGDescription.Visibility = Visibility.Hidden;
-            DGCategory.Visibility = Visibility.Hidden;
-
-            //DGKeyColumn.Visibility = Visibility.Visible;
-            //DGValueColumn.Visibility = Visibility.Visible;
         }
 
         public void ShowCalendarItems(List<CalendarItem> items)
@@ -289,7 +208,44 @@ namespace HomeCalendarGUI
 
         private void RefreshMainView()
         {
-            presenter.GetCategoriesForComboBox();
+            presenter.GetCategoriesTypeInList();
+            presenter.GetCategoriesForAllCatsComboBoxes();            
+            
+            try
+            {
+                //Check if the user is filtering by category and/ or month
+                bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
+                bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
+                bool filterByCategory = (bool)FilterByCategoryCheckBox.IsChecked;
+
+                if (DateFilterCheckBox.IsChecked == true)
+                {
+                    DateTime? start = Start.SelectedDate;
+                    DateTime? end = End.SelectedDate;
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    Category cat = CategoryFilterCmb.SelectedItem as Category;
+                    int categoryId = cat.Id;
+
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
+                    
+                }
+                else
+                {
+                    bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
+                    Category cat = CategoryFilterCmb.SelectedItem as Category;
+                    int categoryId = cat.Id;
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);                    
+                }
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show($"An unknown error occured: {ex.Message}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+            }
+        }
+
+        private void SetTodaysDateOnDatePicker()
+        {
+            StartDate.DisplayDateStart = DateTime.Now;
         }
 
         private void SetDataGridColumnsToDefault()
@@ -340,13 +296,23 @@ namespace HomeCalendarGUI
             textColumns.ForEach(CalendarItemsDataGrid.Columns.Add);
         }
 
-        private void LoadCategoriesForFiltering()
+        private bool IsValidDescription(string desc)
         {
-            CategoryFilterCmb.ItemsSource = presenter.RetrieveCategories();
-            CategoryFilterCmb.DisplayMemberPath = "Description";
-            CategoryFilterCmb.SelectedValuePath = "Id";
-            CategoryFilterCmb.SelectedIndex = 0;  
+            if (string.IsNullOrEmpty(desc))
+            {
+                return false;
+            }
+            if (string.IsNullOrWhiteSpace(desc))
+            {
+                return false;
+            }
+            if (float.TryParse(desc, out float s))
+            {
+                return false;
+            }
+            return true;
         }
+
         #region Btn Operations
         private void Btn_SaveCalendarFileTo(object sender, RoutedEventArgs e)
         {
@@ -377,8 +343,7 @@ namespace HomeCalendarGUI
                 presenter.AddNewCategory(desc, type);
                 DescriptionBox.Clear();
                 categoryTypecmbBox.SelectedIndex = -1;
-                RefreshMainView();
-                LoadCategoriesForFiltering();
+                RefreshMainView();                
             }
             else
             {
@@ -414,8 +379,7 @@ namespace HomeCalendarGUI
             {
                 DisplayErrorMessage("Please choose a duration in minutes for your event.");
                 return;
-            }
-            
+            }            
 
 
             //Add the time
@@ -447,10 +411,9 @@ namespace HomeCalendarGUI
             catsComboBox.SelectedIndex = -1;
             StartTime.Clear();
             DurationInMinutes.Clear();
-            EventDescriptionBox.Clear();
-            
-
+            EventDescriptionBox.Clear();   
             DisplaySuccessfulMessage("Event added successfully.");
+            RefreshMainView();
         }
 
         private void Button_ClickCancelEvent(object sender, RoutedEventArgs e)
@@ -470,7 +433,8 @@ namespace HomeCalendarGUI
                 catch (SQLiteException ex)
                 {
                     MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Hand);
-                }                
+                }
+                RefreshMainView();
             }
         }
         
@@ -677,7 +641,7 @@ namespace HomeCalendarGUI
                     DateTime? end = End.SelectedDate;
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
-                    int categoryId = cat.Id;
+                    int categoryId = cat == null ? 0 : cat.Id;
 
                     presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
@@ -685,7 +649,7 @@ namespace HomeCalendarGUI
                 {
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
-                    int categoryId = cat.Id;
+                    int categoryId = cat == null ? 0 : cat.Id;
                     presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
             }

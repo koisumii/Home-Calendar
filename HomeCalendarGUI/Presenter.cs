@@ -62,20 +62,6 @@ namespace HomeCalendarGUI
         }
 
         /// <summary>
-        /// Gets all categories listed in the database
-        /// </summary>
-        public void GetCategoriesForComboBox()
-        {
-            List<Category> categories = model.categories.List();
-            view.PopulateCategoriesComboBox(categories);
-        }
-
-        public List<Category> RetrieveCategories()
-        {
-            return model.categories.List().OrderBy(c => c.Description).ToList();
-        }
-
-        /// <summary>
         /// Adds a new category to the database with the details and the type the user provided.
         /// </summary>
         /// <param name="desc"> A string that holds the details about this category. </param>
@@ -107,8 +93,7 @@ namespace HomeCalendarGUI
             model.events.Add(startDate, categoryId, duration, description);
 
             // You might want to call a method to update the UI or a list of events here as well
-            view.DisplaySuccessfulMessage("Event added successfully.");
-            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
+            view.DisplaySuccessfulMessage("Event added successfully.");            
         }
 
         /// <summary>
@@ -120,72 +105,12 @@ namespace HomeCalendarGUI
         }
 
         /// <summary>
-        /// Gets all events from the database
+        /// Gets all categories listed in the database
         /// </summary>
-        public void GetCalendarItems()
+        public void GetCategoriesForAllCatsComboBoxes()
         {
-            if (model == null)
-            {
-                view.DisplayErrorMessage("Unable to load calendar items because the model is not initialized.");
-                return;
-            }
-            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null,null,false,0));
-        }
-
-        /// <summary>
-        /// Filters events by date
-        /// </summary>
-        /// <param name="startDate">Start date of events</param>
-        /// <param name="endDate">End date of events</param>
-        public void GetEventsFilteredByDateRange(DateTime? startDate,DateTime? endDate)
-        {
-            List<CalendarItem> items =  model.GetCalendarItems(startDate,endDate,false,0);
-            view.ShowCalendarItemsWithDateFiltersOn(items);
-        }
-        
-        public void GetCalendarItemsFilteredByMonth(DateTime startMonth, DateTime endMonth)
-        {
-            if(endMonth < startMonth)
-            {
-                view.DisplayErrorMessage("End month must be after start month. ");
-                return; 
-            }
-
-            //good
-            List<string> months = new List<string>();
-            List<Double> totalBusyTimes = new List<Double>();
-            List<Dictionary<string, object>> itemsByMonth = model.GetCalendarDictionaryByCategoryAndMonth(startMonth, endMonth, false, 0);
-
-            for (int i = 0; i < itemsByMonth.Count - 1; i++)
-            {
-                foreach (var item in itemsByMonth[i])
-                {
-                    if (item.Key == "Month")
-                    {
-                        months.Add(item.Value.ToString());
-                    }
-                    else if (item.Key == "TotalBusyTime")
-                    {
-                        totalBusyTimes.Add((Double)item.Value); 
-                    }
-                    continue;
-                }
-            }
-
-            //making dictionary
-            Dictionary<string, Double> itemsByMonthAndTime = new Dictionary<string, Double>(); 
-            for(int i = 0; i < months.Count; i++)
-            {
-                itemsByMonthAndTime[$"{months[i]}"] = totalBusyTimes[i]; 
-            }
-
-            view.ShowCalendarItemsFilteredByMonth(itemsByMonthAndTime);
-        }
-        
-        public void GetEventsFilteredByCategory(int categoryId)
-        {
-            var filteredEvents = model.GetCalendarItems(null, null, true, categoryId);
-            view.ShowCalendarItemsWithCategoryFiltersOn(filteredEvents);
+            List<Category> categories = model.categories.List();
+            view.PopulateAllCategoriesComboBox(categories);
         }
 
         /// <summary>
@@ -219,11 +144,11 @@ namespace HomeCalendarGUI
                 List<Dictionary<string, object>> itemsByCategoryAndMonth;
                 if (dateFilter)
                 {
-                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, false, categoryId);                    
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, filterDataByCategory, categoryId);                    
                 }
                 else
                 {
-                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, false, categoryId);
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(null, null, filterDataByCategory, categoryId);
                 }
                 view.ShowTotalBusyTimeByMonthAndCategory(itemsByCategoryAndMonth);
             }
@@ -233,11 +158,11 @@ namespace HomeCalendarGUI
                 List<CalendarItemsByMonth> itemsByMonth;
                 if (dateFilter)
                 {
-                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, false, categoryId);                   
+                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, filterDataByCategory, categoryId);                   
                 }
                 else
                 {
-                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, false, categoryId);                    
+                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, filterDataByCategory, categoryId);                    
                 }
                 view.ShowTotalBusyTimeByMonth(itemsByMonth);
             }
@@ -247,11 +172,11 @@ namespace HomeCalendarGUI
                 //If the user wants to filter by category, get a list of calendar items by category while considering the date filter flag
                 if (dateFilter)
                 {
-                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, false, categoryId);                    
+                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, filterDataByCategory, categoryId);                    
                 }
                 else
                 {
-                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, false, categoryId);                   
+                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, filterDataByCategory, categoryId);                   
                 }
                 view.ShowTotalBusyTimeByCategory(itemsByCategory);
             }
@@ -280,8 +205,7 @@ namespace HomeCalendarGUI
         /// </summary>
         public void DeleteAnEvent(int eventId)
         {
-            model.events.DeleteEvent(eventId);
-            view.ShowCalendarItemsOnDataGrid(model.GetCalendarItems(null, null, false, 0));
+            model.events.DeleteEvent(eventId);            
         }
     }
 }
