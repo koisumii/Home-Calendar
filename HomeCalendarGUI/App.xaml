@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:HomeCalendarGUI"
              StartupUri="OpenFileWindowOnInitialization.xaml">
     <Application.Resources>
-         
+
     </Application.Resources>
 </Application>

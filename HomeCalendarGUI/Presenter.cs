@@ -20,13 +20,13 @@ namespace HomeCalendarGUI
     {
         private readonly HomeCalendar model;
         private readonly IView view;
-        
+
 
         /// <summary>
         /// Initiates presenter with default settings
         /// </summary>
         /// <param name="v">IView interface implemented class</param>
-        public Presenter(IView v) 
+        public Presenter(IView v)
         {
             model = new HomeCalendar();
             view = v;
@@ -37,9 +37,9 @@ namespace HomeCalendarGUI
         /// </summary>
         /// <param name="v">IView interface implemented class</param>
         /// <param name="dbFile">File path to the database</param>
-        public Presenter(IView v,string dbFile)
+        public Presenter(IView v, string dbFile)
         {
-            view = v; 
+            view = v;
             try
             {
                 model = new HomeCalendar(dbFile, false);
@@ -70,14 +70,14 @@ namespace HomeCalendarGUI
         {
             if (desc == null || type == null)
             {
-                view.DisplayErrorMessage("You can not leave any empty boxes."); 
+                view.DisplayErrorMessage("You can not leave any empty boxes.");
             }
             else
             {
                 model.categories.Add(desc, type);
                 view.DisplaySuccessfulMessage("Category has been successfully added!");
             }
-            
+
         }
 
         /// <summary>
@@ -93,13 +93,13 @@ namespace HomeCalendarGUI
             model.events.Add(startDate, categoryId, duration, description);
 
             // You might want to call a method to update the UI or a list of events here as well
-            view.DisplaySuccessfulMessage("Event added successfully.");            
+            view.DisplaySuccessfulMessage("Event added successfully.");
         }
 
         /// <summary>
         /// Gets the all the types of activity to display it. 
         /// </summary>
-        public void GetCategoriesTypeInList() 
+        public void GetCategoriesTypeInList()
         {
             view.PopulateCategoryTypesComboBox(model.categories.List());
         }
@@ -122,17 +122,17 @@ namespace HomeCalendarGUI
         /// <param name="dateFilter">If true, filters by specified date</param>
         /// <param name="summaryByCategory">If true, filters by category</param>
         /// <param name="summaryByMonth">If true,filters by month</param>        
-        public void GetHomeCalendarItems(DateTime? startDate, DateTime? endDate, int categoryId, bool dateFilter ,bool summaryByCategory, bool summaryByMonth,bool filterDataByCategory)
+        public void GetHomeCalendarItems(DateTime? startDate, DateTime? endDate, int categoryId, bool dateFilter, bool summaryByCategory, bool summaryByMonth, bool filterDataByCategory)
         {
             //if dateFilter is set to true, throw if the start and end dates values are null
             // or when the end date is before the start date.
             if (dateFilter)
             {
-                if(startDate == null || endDate == null)
-                {                   
+                if (startDate == null || endDate == null)
+                {
                     throw new InvalidOperationException("Must provide a start and end date");
                 }
-                else if(endDate < startDate)
+                else if (endDate < startDate)
                 {
                     throw new InvalidOperationException("End date cannot be set before the starting date");
                 }
@@ -144,7 +144,7 @@ namespace HomeCalendarGUI
                 List<Dictionary<string, object>> itemsByCategoryAndMonth;
                 if (dateFilter)
                 {
-                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, filterDataByCategory, categoryId);                    
+                    itemsByCategoryAndMonth = model.GetCalendarDictionaryByCategoryAndMonth(startDate, endDate, filterDataByCategory, categoryId);
                 }
                 else
                 {
@@ -158,11 +158,11 @@ namespace HomeCalendarGUI
                 List<CalendarItemsByMonth> itemsByMonth;
                 if (dateFilter)
                 {
-                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, filterDataByCategory, categoryId);                   
+                    itemsByMonth = model.GetCalendarItemsByMonth(startDate, endDate, filterDataByCategory, categoryId);
                 }
                 else
                 {
-                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, filterDataByCategory, categoryId);                    
+                    itemsByMonth = model.GetCalendarItemsByMonth(null, null, filterDataByCategory, categoryId);
                 }
                 view.ShowTotalBusyTimeByMonth(itemsByMonth);
             }
@@ -172,11 +172,11 @@ namespace HomeCalendarGUI
                 //If the user wants to filter by category, get a list of calendar items by category while considering the date filter flag
                 if (dateFilter)
                 {
-                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, filterDataByCategory, categoryId);                    
+                    itemsByCategory = model.GetCalendarItemsByCategory(startDate, endDate, filterDataByCategory, categoryId);
                 }
                 else
                 {
-                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, filterDataByCategory, categoryId);                   
+                    itemsByCategory = model.GetCalendarItemsByCategory(null, null, filterDataByCategory, categoryId);
                 }
                 view.ShowTotalBusyTimeByCategory(itemsByCategory);
             }
@@ -192,10 +192,10 @@ namespace HomeCalendarGUI
                 else
                 {
                     items = model.GetCalendarItems(null, null, filterDataByCategory, categoryId);
-                }                
-                
+                }
+
                 view.ShowCalendarItems(items);
-                
+
                 //view.ShowCalendarItemsWithDateFiltersOn(items);
             }
         }
@@ -205,7 +205,7 @@ namespace HomeCalendarGUI
         /// </summary>
         public void DeleteAnEvent(int eventId)
         {
-            model.events.DeleteEvent(eventId);            
+            model.events.DeleteEvent(eventId);
         }
     }
 }

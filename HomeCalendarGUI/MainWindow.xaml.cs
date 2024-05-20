@@ -1,4 +1,5 @@
-﻿using Calendar;
+﻿
+using Calendar;
 using System.Data.SQLite;
 using System.Text;
 using System.Windows;
@@ -37,7 +38,7 @@ namespace HomeCalendarGUI
 
         public MainWindow(bool useDefaultDb, string filePath = null)
         {
-            InitializeComponent();            
+            InitializeComponent();
 
             //Create Calendar directory if it doesn't exist
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar"))
@@ -63,9 +64,9 @@ namespace HomeCalendarGUI
             }
 
             presenter.GetCategoriesForAllCatsComboBoxes();
-            presenter.GetCategoriesTypeInList();            
-            presenter.GetHomeCalendarItems(null,null,0,false,false,false,false);
-            SetTodaysDateOnDatePicker();            
+            presenter.GetCategoriesTypeInList();
+            presenter.GetHomeCalendarItems(null, null, 0, false, false, false, false);
+            SetTodaysDateOnDatePicker();
         }
 
         #region IView
@@ -85,7 +86,7 @@ namespace HomeCalendarGUI
         {
             catsComboBox.Items.Clear();
             CategoryFilterCmb.Items.Clear();
-            
+
             // Sort categories alphabetically by their Description
             var sortedCategories = categories.OrderBy(c => c.Description).ToList();
 
@@ -96,7 +97,7 @@ namespace HomeCalendarGUI
             });
             catsComboBox.SelectedIndex = DEFAULT;
             CategoryFilterCmb.SelectedIndex = DEFAULT;
-        }      
+        }
 
         public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
@@ -112,7 +113,7 @@ namespace HomeCalendarGUI
         }
 
         public void ShowCalendarItems(List<CalendarItem> items)
-        {   
+        {
             SetDataGridColumnsToDefault();
             CalendarItemsDataGrid.ItemsSource = items;
             //DGBusyTime.Visibility = Visibility.Visible;
@@ -126,8 +127,8 @@ namespace HomeCalendarGUI
             ////DGValueColumn.Visibility = Visibility.Hidden;
             //DGTotalBusyTime.Visibility = Visibility.Hidden;
             //DGMonth.Visibility = Visibility.Hidden;
-        }        
-        
+        }
+
         public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
             SetDataGridColumnsToSummaryByMonth();
@@ -152,7 +153,7 @@ namespace HomeCalendarGUI
             //DGStartTime.Visibility = Visibility.Hidden;
             //DGDurationInMinutes.Visibility = Visibility.Hidden;
             //DGDescription.Visibility = Visibility.Hidden;
-            
+
             //DGCategory.Visibility = Visibility.Visible;
             //DGTotalBusyTime.Visibility = Visibility.Visible;           
         }
@@ -170,7 +171,7 @@ namespace HomeCalendarGUI
 
             //Go through each section of the dictionary
             for (int i = 0; i < itemsByCategoryAndMonth.Count; i++)
-            {   
+            {
                 //Go through each key
                 foreach (string key in itemsByCategoryAndMonth[i].Keys)
                 {
@@ -209,8 +210,8 @@ namespace HomeCalendarGUI
         private void RefreshMainView()
         {
             presenter.GetCategoriesTypeInList();
-            presenter.GetCategoriesForAllCatsComboBoxes();            
-            
+            presenter.GetCategoriesForAllCatsComboBoxes();
+
             try
             {
                 //Check if the user is filtering by category and/ or month
@@ -227,19 +228,19 @@ namespace HomeCalendarGUI
                     int categoryId = cat.Id;
 
                     presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
-                    
+
                 }
                 else
                 {
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
                     int categoryId = cat.Id;
-                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);                    
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
             }
             catch (InvalidOperationException ex)
             {
-                MessageBox.Show($"An unknown error occured: {ex.Message}","Error",MessageBoxButton.OK,MessageBoxImage.Error);
+                MessageBox.Show($"An unknown error occured: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -320,7 +321,7 @@ namespace HomeCalendarGUI
             {
                 fileDirectoryToStore = openFolderDialog.FolderName;
                 openFolderDialog.InitialDirectory = fileDirectoryToStore;
-                openFolderDialog.FolderName = "";                                             
+                openFolderDialog.FolderName = "";
             }
         }
 
@@ -343,14 +344,14 @@ namespace HomeCalendarGUI
                 presenter.AddNewCategory(desc, type);
                 DescriptionBox.Clear();
                 categoryTypecmbBox.SelectedIndex = -1;
-                RefreshMainView();                
+                RefreshMainView();
             }
             else
             {
                 DisplayErrorMessage("You cannot leave any fields empty.");
             }
         }
-        
+
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
         {
 
@@ -379,11 +380,11 @@ namespace HomeCalendarGUI
             {
                 DisplayErrorMessage("Please choose a duration in minutes for your event.");
                 return;
-            }            
+            }
 
 
             //Add the time
-            DateTime startDate = StartDate.SelectedDate.Value;            
+            DateTime startDate = StartDate.SelectedDate.Value;
             startDate = startDate.AddHours(time.Hour);
             startDate = startDate.AddMinutes(time.Minute);
             startDate = startDate.AddSeconds(time.Second);
@@ -407,11 +408,11 @@ namespace HomeCalendarGUI
             presenter.AddNewEvent(startDate, selectedCategory.Id, description, endTimeInMinutes);
 
             // Clear the input fields
-            StartDate.SelectedDate = null;            
+            StartDate.SelectedDate = null;
             catsComboBox.SelectedIndex = -1;
             StartTime.Clear();
             DurationInMinutes.Clear();
-            EventDescriptionBox.Clear();   
+            EventDescriptionBox.Clear();
             DisplaySuccessfulMessage("Event added successfully.");
             RefreshMainView();
         }
@@ -423,21 +424,21 @@ namespace HomeCalendarGUI
 
         private void Btn_DeleteEvent(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;                
+                CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
                 try
                 {
                     presenter.DeleteAnEvent(item.EventID);
                 }
                 catch (SQLiteException ex)
                 {
-                    MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Hand);
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Hand);
                 }
                 RefreshMainView();
             }
         }
-        
+
         private void CloseApplication(object sender, RoutedEventArgs e)
         {
             Close();
@@ -474,26 +475,26 @@ namespace HomeCalendarGUI
                     //presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
                 }
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
-                if(ex is InvalidOperationException)
+                if (ex is InvalidOperationException)
                 {
                     MessageBox.Show($"Date Filter Error: {ex.Message}", "DateTime Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
                     MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }               
+                }
                 DateFilterCheckBox.IsChecked = false;
                 Start.SelectedDate = null;
                 End.SelectedDate = null;
             }
-        }               
+        }
 
         private void FilterByCategoryCheckBox_Click(object sender, RoutedEventArgs e)
         {
             try
-            {                
+            {
                 //Check if the user is filtering by category and/ or month
                 bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
                 bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
@@ -514,10 +515,10 @@ namespace HomeCalendarGUI
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
                     int categoryId = cat.Id;
-                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth,filterByCategory);
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ex is InvalidOperationException)
                 {
@@ -581,10 +582,10 @@ namespace HomeCalendarGUI
                 {
                     MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                SummaryByMonthCheckBox.IsChecked = false;                
+                SummaryByMonthCheckBox.IsChecked = false;
             }
         }
-        
+
         private void SummaryByCategory_Click(object sender, RoutedEventArgs e)
         {
             try
