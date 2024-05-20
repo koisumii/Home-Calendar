@@ -110,7 +110,7 @@ namespace HomeCalendarGUI
         public void GetCategoriesForAllCatsComboBoxes()
         {
             List<Category> categories = model.categories.List();
-            view.PopulateAllCategoriesComboBox(categories);
+            view.PopulateCategoriesInAllCatsComboBox(categories);
         }
 
         /// <summary>

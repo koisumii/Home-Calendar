@@ -81,7 +81,7 @@ namespace HomeCalendarGUI
             message.Text = msg;
         }
 
-        public void PopulateAllCategoriesComboBox(List<Category> categories)
+        public void PopulateCategoriesInAllCatsComboBox(List<Category> categories)
         {
             catsComboBox.Items.Clear();
             CategoryFilterCmb.Items.Clear();
@@ -340,7 +340,15 @@ namespace HomeCalendarGUI
                     return;
                 }
 
-                presenter.AddNewCategory(desc, type);
+                try
+                {
+                    presenter.AddNewCategory(desc, type);
+                }
+                catch
+                {
+                    DisplayErrorMessage("There was an error. Please try again.");
+                }
+                
                 DescriptionBox.Clear();
                 categoryTypecmbBox.SelectedIndex = -1;
                 RefreshMainView();                
@@ -353,7 +361,7 @@ namespace HomeCalendarGUI
         
         private void Button_ClickAddEvent(object sender, RoutedEventArgs e)
         {
-
+            #region Validation
             //verifying input data for events 
             if (StartDate.SelectedDate == null)
             {
@@ -400,19 +408,27 @@ namespace HomeCalendarGUI
                 DisplayErrorMessage("The duration of your event must not be negative.");
                 return;
             }
+            #endregion
 
-            Category selectedCategory = (Category)catsComboBox.SelectedItem;
-            string description = EventDescriptionBox.Text;
+            try
+            {
+                Category selectedCategory = (Category)catsComboBox.SelectedItem;
+                string description = EventDescriptionBox.Text;
 
-            presenter.AddNewEvent(startDate, selectedCategory.Id, description, endTimeInMinutes);
+                presenter.AddNewEvent(startDate, selectedCategory.Id, description, endTimeInMinutes);
+            }
+            catch
+            {
+                DisplayErrorMessage("There was an error. Please try again.");
+                //MessageBox.Show("Unable to add this event: "+ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
 
-            // Clear the input fields
-            StartDate.SelectedDate = null;            
+            // Clear the input fields 
+            StartDate.SelectedDate = null;
             catsComboBox.SelectedIndex = -1;
             StartTime.Clear();
             DurationInMinutes.Clear();
-            EventDescriptionBox.Clear();   
-            DisplaySuccessfulMessage("Event added successfully.");
+            EventDescriptionBox.Clear();
             RefreshMainView();
         }
 
@@ -428,11 +444,16 @@ namespace HomeCalendarGUI
                 CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;                
                 try
                 {
+                    if(item == null)
+                    {
+                        throw new Exception("This event does not exist");
+                    }
+
                     presenter.DeleteAnEvent(item.EventID);
                 }
-                catch (SQLiteException ex)
+                catch (Exception ex)
                 {
-                    MessageBox.Show(ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Hand);
+                    MessageBox.Show("Unable to delete this calendar item: "+ex.Message,"Error",MessageBoxButton.OK,MessageBoxImage.Hand);
                 }
                 RefreshMainView();
             }

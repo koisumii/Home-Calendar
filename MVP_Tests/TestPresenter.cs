@@ -37,7 +37,7 @@ namespace MVP_Tests
         //public bool calledShowCalendarItemsByMonth = false;
 
 
-        public void PopulateAllCategoriesComboBox(List<Category> categories)
+        public void PopulateCategoriesInAllCatsComboBox(List<Category> categories)
         {
             calledPopulateAllCategoriesComboBox = true;
             this.categories = categories;
@@ -192,40 +192,6 @@ namespace MVP_Tests
         }
 
         [Fact]
-        public void Test_ShowCalendarItemsWithDateFiltersOn()
-        {
-            //Arrange
-            String folder = TestConstants.GetSolutionDir();
-            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";            
-            TestView view = new TestView();
-            Presenter p = new Presenter(view, existingDB);
-            List<Event> expectedEventsResults = TestConstants.filteredbyYear2018();
-            expectedEventsResults = expectedEventsResults.OrderBy(e => e.Id).ToList();
-
-            int expectedNumberOfItems = 3;
-            DateTime? start = DateTime.Parse("January 1 2018");
-            DateTime? end = DateTime.Parse("December 31 2018");
-
-
-            //Act 
-            //p.GetEventsFilteredByDateRange(start,end);            
-            List<CalendarItem> calendarItemsResults = view.calendarItems;
-            calendarItemsResults = calendarItemsResults.OrderBy(i => i.EventID).ToList();
-
-
-            //Assert
-            Assert.Equal(expectedEventsResults.Count, calendarItemsResults.Count);
-            for (int i = 0; i < calendarItemsResults.Count; i++)
-            {
-                Assert.Equal(expectedEventsResults[i].Category, calendarItemsResults[i].CategoryID);
-                Assert.Equal(expectedEventsResults[i].Id, calendarItemsResults[i].EventID);
-                Assert.Equal(expectedEventsResults[i].Details, calendarItemsResults[i].ShortDescription);
-                Assert.Equal(expectedEventsResults[i].StartDateTime, calendarItemsResults[i].StartDateTime);
-                Assert.Equal(expectedEventsResults[i].DurationInMinutes, calendarItemsResults[i].DurationInMinutes);  
-            }
-        }
-
-        [Fact]
         public void Test_DeleteAnEvent()
         {
             //Arrange 
@@ -261,10 +227,148 @@ namespace MVP_Tests
 
             //act
             p.GetHomeCalendarItems(null,null,0,false,false,false,false);
+            expectedResults = expectedResults.OrderBy(e => e.EventID).ToList();
+            view.calendarItems = view.calendarItems.OrderBy(e => e.EventID).ToList();
+
 
             //assert 
             Assert.True(view.calledShowCalendarItems);
             Assert.Equal(expectedResults.Count, view.calendarItems.Count);
+
+            
+            for (int i = 0; i < view.calendarItems.Count; i++)
+            {
+                Assert.Equal(expectedResults[i].CategoryID, view.calendarItems[i].CategoryID);
+                Assert.Equal(expectedResults[i].EventID, view.calendarItems[i].EventID);
+                Assert.Equal(expectedResults[i].DurationInMinutes, view.calendarItems[i].DurationInMinutes);                
+            }
+        }
+
+        [Fact]
+        public void Test_GetHomeCalendarItems_Calendar_FilterByCategory_On()
+        {
+            //arrange
+            TestView view = new TestView();
+            List<CalendarItem> expectedResults = TestConstants.getCalendarItemsByCatId2();
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+            Presenter p = new Presenter(view, databasePath);
+            int categoryId = 2;
+
+
+            //act
+            p.GetHomeCalendarItems(null, null, categoryId, false, false, false, true);
+            expectedResults = expectedResults.OrderBy(e => e.EventID).ToList();
+            view.calendarItems = view.calendarItems.OrderBy(e => e.EventID).ToList();
+
+            //assert 
+            Assert.True(view.calledShowCalendarItems);
+            Assert.Equal(expectedResults.Count, view.calendarItems.Count);
+
+            for (int i = 0; i < view.calendarItems.Count; i++)
+            {
+                Assert.Equal(expectedResults[i].CategoryID, view.calendarItems[i].CategoryID);
+                Assert.Equal(expectedResults[i].EventID, view.calendarItems[i].EventID);
+                Assert.Equal(expectedResults[i].DurationInMinutes, view.calendarItems[i].DurationInMinutes);
+            }
+        }
+
+        [Fact]
+        public void Test_GetHomeCalendarItems_Calendar_DateFilter_On()
+        {
+            //Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, existingDB);
+            List<CalendarItem> expectedResults = TestConstants.getCalendarItems2018();
+                        
+            DateTime? start = DateTime.Parse("January 1 2018");
+            DateTime? end = DateTime.Parse("December 31 2018");
+
+            //Act 
+            p.GetHomeCalendarItems(start,end,0,true,false,false,false);
+            expectedResults = expectedResults.OrderBy(e => e.EventID).ToList();
+            view.calendarItems = view.calendarItems.OrderBy(e => e.EventID).ToList();
+
+
+            //Assert
+            Assert.True(view.calledShowCalendarItems);
+            Assert.Equal(expectedResults.Count, view.calendarItems.Count);
+
+            for (int i = 0; i < view.calendarItems.Count; i++)
+            {
+                Assert.Equal(expectedResults[i].CategoryID, view.calendarItems[i].CategoryID);
+                Assert.Equal(expectedResults[i].EventID, view.calendarItems[i].EventID);
+                Assert.Equal(expectedResults[i].DurationInMinutes, view.calendarItems[i].DurationInMinutes);               
+                Assert.Equal(expectedResults[i].StartDateTime, view.calendarItems[i].StartDateTime);               
+            }
+        }
+
+        [Fact]
+        public void Test_GetHomeCalendarItems_SummaryByCategory_On()
+        {
+            //This is tested with category filter on
+
+            //Arrange
+            TestView view = new TestView();            
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+            Presenter p = new Presenter(view, databasePath);
+            List<CalendarItemsByCategory> expectedResults = TestConstants.getCalendarItemsByCategoryCat11();
+            int catId = 11;
+
+            //Act
+            p.GetHomeCalendarItems(null, null, catId, false, true, false, true);
+
+
+            //Assert
+            Assert.True(view.calledShowTotalBusyTimeByCategory);
+            Assert.Equal(expectedResults.Count, view.calendarItemsByCategory.Count);
+
+            for (int i = 0; i < view.calendarItemsByCategory.Count; i++)
+            {
+                Assert.Equal(expectedResults[i].Category, view.calendarItemsByCategory[i].Category);
+                Assert.Equal(expectedResults[i].TotalBusyTime, view.calendarItemsByCategory[i].TotalBusyTime);
+                Assert.Equal(expectedResults[i].Items.Count, view.calendarItemsByCategory[i].Items.Count);
+            }
+        }
+
+        [Fact]
+        public void Test_GetHomeCalendarItems_SummaryByMonth_On()
+        {
+            //This is tested with specific date range
+
+            //Arrange
+            TestView view = new TestView();
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+            Presenter p = new Presenter(view, databasePath);
+            List<CalendarItemsByMonth> expectedResults = TestConstants.getCalendarItemsBy2018_01();
+
+            DateTime? start = DateTime.Parse("January 1 2018");
+            DateTime? end = DateTime.Parse("January 31 2018");
+
+            //Act
+            p.GetHomeCalendarItems(start, end, 0, true, false, true, false);
+
+
+            //Assert
+            Assert.True(view.calledShowTotalBusyTimeByMonth);
+            Assert.Equal(expectedResults.Count, view.calendarItemsByMonth.Count);
+
+            for (int i = 0; i < view.calendarItemsByMonth.Count; i++)
+            {
+                Assert.Equal(expectedResults[i].Month, view.calendarItemsByMonth[i].Month);
+                Assert.Equal(expectedResults[i].TotalBusyTime, view.calendarItemsByMonth[i].TotalBusyTime);
+                Assert.Equal(expectedResults[i].Items.Count, view.calendarItemsByMonth[i].Items.Count);
+            }
+        }
+
+        [Fact]
+        public void Test_GetHomeCalendarItems_SummaryByCategory_And_Month_On()
+        {
+            //Arrange
+            TestView view = new TestView();
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+            Presenter p = new Presenter(view, databasePath);
         }
 
         [Fact]
