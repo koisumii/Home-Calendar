@@ -24,10 +24,10 @@
             for a bit of help given I've only been introduced to using gifs for
             WPF recently
         -->
-
+        
         <Image gif:AnimationBehavior.SourceUri="Resources/flowers.gif" 
                Stretch="Fill" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
-
+        
         <TextBlock Text="Home Calendar Application" FontSize="20" FontWeight="Bold"
                    HorizontalAlignment="Left" TextAlignment="Center" Padding="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="264,0,0,0" Foreground="AliceBlue"/>
 
@@ -64,14 +64,14 @@
                         <TextBlock TextAlignment="Center">Change Calendar File <LineBreak/> Location</TextBlock>
                     </Button>
                 </GroupBox>
-            </StackPanel>
+            </StackPanel> 
         </ScrollViewer>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
             <TextBlock x:Name="message2" FontWeight="Bold" Margin="10"/>
             <WrapPanel>
                 <CheckBox x:Name="DateFilterCheckBox" Click="DateFilterCheckBoxClick" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter by Date Range</CheckBox>
-
+                
                 <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
                 <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
             </WrapPanel>
@@ -80,11 +80,11 @@
                 <ComboBox x:Name="CategoryFilterCmb" SelectionChanged="CategoryFilterCmb_SelectionChanged" DisplayMemberPath="Description" SelectedValuePath="Id" Width="150" Margin="5"/>
                 <CheckBox x:Name="FilterByCategoryCheckBox" Click="FilterByCategoryCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter</CheckBox>
                 <!--<Button Content="Apply Filters" Click="ApplyFilters_Click" Margin="5"/>-->
-            </StackPanel>
+            </StackPanel>            
             <GroupBox Header="Summary" Foreground="AliceBlue">
                 <StackPanel>
-                    <CheckBox x:Name="SummaryByMonthCheckBox" Click="SummaryByMonthCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Month</CheckBox>
-                    <CheckBox x:Name="SummaryByCategoryCheckBox" Click="SummaryByCategory_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Category</CheckBox>
+                <CheckBox x:Name="SummaryByMonthCheckBox" Click="SummaryByMonthCheckBox_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Month</CheckBox>
+                <CheckBox x:Name="SummaryByCategoryCheckBox" Click="SummaryByCategory_Click" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">By Category</CheckBox>
                 </StackPanel>
             </GroupBox>
         </StackPanel>
@@ -96,12 +96,12 @@
                 <DataGridTextColumn x:Name="DGCategory" Header="Category" Binding="{Binding Category}"/>
                 <DataGridTextColumn x:Name="DGDescription" Header="Description" Binding="{Binding ShortDescription}"/>
                 <DataGridTextColumn x:Name="DGDurationInMinutes"  Header="Duration" Binding="{Binding DurationInMinutes}"/>
-                <DataGridTextColumn x:Name="DGBusyTime" Header="Busy Time" Binding="{Binding BusyTime}"/>
-
+                <DataGridTextColumn x:Name="DGBusyTime" Header="Busy Time" Binding="{Binding BusyTime}"/>               
+                
                 <!--<DataGridTextColumn x:Name="DGKeyColumn" Visibility="Hidden" Header="Month" Binding="{Binding Key}"></DataGridTextColumn>
                 <DataGridTextColumn x:Name="DGValueColumn" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding Value}"></DataGridTextColumn>-->
 
-                <DataGridTextColumn x:Name="DGMonth" Visibility="Hidden" Header="Month" Binding="{Binding Month}"></DataGridTextColumn>
+                <DataGridTextColumn x:Name="DGMonth" Visibility="Hidden" Header="Month" Binding="{Binding Month}"></DataGridTextColumn>                
                 <DataGridTextColumn x:Name="DGTotalBusyTime" Visibility="Hidden"  Header="Total Busy Time" Binding="{Binding TotalBusyTime}"></DataGridTextColumn>
             </DataGrid.Columns>
             <DataGrid.ContextMenu>

@@ -25,7 +25,7 @@ namespace HomeCalendarGUI
         private OpenFileDialog fileDialog;
         public OpenFileWindowOnInitialization()
         {
-            InitializeComponent();
+            InitializeComponent();              
         }
 
         private void Btn_Use_Default_File(object sender, RoutedEventArgs e)
@@ -42,7 +42,7 @@ namespace HomeCalendarGUI
             //https://wpf-tutorial.com/dialogs/the-openfiledialog/
 
             string defaultDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-
+                        
             fileDialog = new OpenFileDialog()
             {
                 InitialDirectory = defaultDirectory,
@@ -57,7 +57,7 @@ namespace HomeCalendarGUI
             if (fileDialog.ShowDialog() == true)
             {
                 string filePath = fileDialog.FileName;
-                main = new MainWindow(false, filePath);
+                main = new MainWindow(false,filePath);
                 main.Show();
                 Close();
             }

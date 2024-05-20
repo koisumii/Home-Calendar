@@ -17,12 +17,12 @@
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="*"/>            
         </Grid.ColumnDefinitions>
 
         <Image gif:AnimationBehavior.SourceUri="Resources/beauty_package.gif" 
                Stretch="Fill" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
-
+        
         <TextBlock Text="Please select indicated options below" Foreground="Lavender" Grid.ColumnSpan="2" TextAlignment="Center" FontSize="30" FontWeight="DemiBold"></TextBlock>
 
         <Button Click="Btn_Use_Default_File" Grid.Row="1" Grid.Column="0" Margin="50" BorderBrush="#b7839c" BorderThickness="2" Foreground="#f1def3" Background="#e6a7c5" FontSize="20" FontWeight="DemiBold"  FontFamily="Calibri">Use default calendar file</Button>
