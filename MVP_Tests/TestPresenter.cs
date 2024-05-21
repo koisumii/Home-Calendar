@@ -441,7 +441,7 @@ namespace MVP_Tests
         }             
 
         [Fact]
-        public void Test_Test_GetHomeCalendarItems_Calendar_DateFilter_On_Fail()
+        public void Test_GetHomeCalendarItems_Calendar_DateFilter_On_Fail()
         {
             //Arrange
             String folder = TestConstants.GetSolutionDir();
@@ -451,6 +451,23 @@ namespace MVP_Tests
       
             //Act and Assert
             Assert.Throws<InvalidOperationException>(() => p.GetHomeCalendarItems(null, null, 0, true, false, false, false));
+        }
+
+        [Fact]
+        public void Test_GetHomeCalendarItems_Calendar_DateFilter_End_Before_Start_Fail()
+        {
+            //Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, existingDB);
+            List<CalendarItem> expectedResults = TestConstants.getCalendarItems2018();
+
+            DateTime? start = DateTime.Parse("January 1 2018");
+            DateTime? end = DateTime.Parse("December 31 2018");
+
+            //Act and Assert
+            Assert.Throws<InvalidOperationException>(() => p.GetHomeCalendarItems(end, start, 0, true, false, false, false));           
         }
 
         [Fact]
