@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Xceed.Wpf.Toolkit;
 
 namespace HomeCalendarGUI
 {
@@ -22,13 +23,36 @@ namespace HomeCalendarGUI
         private Presenter _presenter;
         public UpdateEventsWindow()
         {
-            _presenter = new Presenter(this);
+            //_presenter = new Presenter(this);
             InitializeComponent();
+
+            CreateTimePicker();
+        }
+
+        /// <summary>
+        /// Initializes the timepicker and adds it to the window
+        /// </summary>
+        public void CreateTimePicker()
+        {
+            TimePicker startTimePicker = new TimePicker();
+            startTimePicker.AllowTextInput = false;
+            startTimePicker.Name = "startTime";
+            startTimePicker.Margin = new Thickness(0, 5, 0, 0);
+
+            StartTimeGrid.Children.Add(startTimePicker);
+
+            TimePicker EndTimePicker = new TimePicker();
+            EndTimePicker.AllowTextInput = false;
+            EndTimePicker.Name = "endTime";
+            EndTimePicker.Margin = new Thickness(0, 5, 0, 0);
+
+            EndTimeGrid.Children.Add(EndTimePicker);
         }
 
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
         {
             
+
         }
     }
 }
