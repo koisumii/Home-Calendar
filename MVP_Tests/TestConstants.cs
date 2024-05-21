@@ -398,8 +398,8 @@ namespace CalendarCodeTests
 
             list.Add(new Dictionary<string, object> {
                 {"Month","2020/01"},
-                { "TotalBusyTime", CalendarItem7.DurationInMinutes + CalendarItem6.DurationInMinutes +
-                                   CalendarItem4.DurationInMinutes + CalendarItem3.DurationInMinutes +
+                { "TotalBusyTime", CalendarItem7.DurationInMinutes + CalendarItem4.DurationInMinutes 
+                                 + CalendarItem3.DurationInMinutes +
                                    CalendarItem2.DurationInMinutes },
                 {"items:Birthdays", new List<CalendarItem>{CalendarItem7} },
                 { "Birthdays",CalendarItem7.DurationInMinutes },
