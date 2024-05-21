@@ -27,17 +27,17 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for MainWindow.xaml
     /// </summary>
-
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
 
         private OpenFolderDialog openFolderDialog;
+        
         private string fileDirectoryToStore;
 
         public MainWindow(bool useDefaultDb, string filePath = null)
         {
-            InitializeComponent();            
+            InitializeComponent();
 
             //Create Calendar directory if it doesn't exist
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar"))
@@ -63,9 +63,9 @@ namespace HomeCalendarGUI
             }
 
             presenter.GetCategoriesForAllCatsComboBoxes();
-            presenter.GetCategoriesTypeInList();            
-            presenter.GetHomeCalendarItems(null,null,0,false,false,false,false);
-            SetTodaysDateOnDatePicker();            
+            presenter.GetCategoriesTypeInList();
+            presenter.GetHomeCalendarItems(null, null, 0, false, false, false, false);
+            SetTodaysDateOnDatePicker();
         }
 
         #region IView
@@ -115,46 +115,18 @@ namespace HomeCalendarGUI
         {   
             SetDataGridColumnsToDefault();
             CalendarItemsDataGrid.ItemsSource = items;
-            //DGBusyTime.Visibility = Visibility.Visible;
-            //DGStartTime.Visibility = Visibility.Visible;
-            //DGDurationInMinutes.Visibility = Visibility.Visible;
-            //DGDescription.Visibility = Visibility.Visible;
-            //DGCategory.Visibility = Visibility.Visible;
-            //DGStartDate.Visibility = Visibility.Visible;
-
-            ////DGKeyColumn.Visibility = Visibility.Hidden;
-            ////DGValueColumn.Visibility = Visibility.Hidden;
-            //DGTotalBusyTime.Visibility = Visibility.Hidden;
-            //DGMonth.Visibility = Visibility.Hidden;
         }        
         
         public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
             SetDataGridColumnsToSummaryByMonth();
             CalendarItemsDataGrid.ItemsSource = itemsByMonth;
-            //DGStartDate.Visibility = Visibility.Hidden;
-            //DGBusyTime.Visibility = Visibility.Hidden;
-            //DGStartTime.Visibility = Visibility.Hidden;
-            //DGDurationInMinutes.Visibility = Visibility.Hidden;
-            //DGDescription.Visibility = Visibility.Hidden;
-            //DGCategory.Visibility = Visibility.Hidden;
-
-            //DGTotalBusyTime.Visibility = Visibility.Visible;
-            //DGMonth.Visibility = Visibility.Visible;
         }
 
         public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory)
         {
             SetDataGridColumnsToSummaryByCategory();
             CalendarItemsDataGrid.ItemsSource = itemsByCategory;
-            //DGStartDate.Visibility = Visibility.Hidden;
-            //DGBusyTime.Visibility = Visibility.Hidden;
-            //DGStartTime.Visibility = Visibility.Hidden;
-            //DGDurationInMinutes.Visibility = Visibility.Hidden;
-            //DGDescription.Visibility = Visibility.Hidden;
-            
-            //DGCategory.Visibility = Visibility.Visible;
-            //DGTotalBusyTime.Visibility = Visibility.Visible;           
         }
 
         public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
@@ -271,8 +243,6 @@ namespace HomeCalendarGUI
 
         private void SetDataGridColumnsToSummaryByMonth()
         {
-            //< DataGridTextColumn x: Name = "DGMonth" Visibility = "Hidden" Header = "Month" Binding = "{Binding Month}" ></ DataGridTextColumn >
-            //< DataGridTextColumn x: Name = "DGTotalBusyTime" Visibility = "Hidden"  Header = "Total Busy Time" Binding = "{Binding TotalBusyTime}" ></ DataGridTextColumn >
 
             List<DataGridTextColumn> textColumns = new List<DataGridTextColumn>
             {
@@ -483,16 +453,14 @@ namespace HomeCalendarGUI
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
                     int categoryId = cat.Id;
 
-                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
-                    //presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
+                    presenter.GetHomeCalendarItems(start, end, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);                    
                 }
                 else
                 {
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
                     int categoryId = cat.Id;
-                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
-                    //presenter.GetEventsFilteredByDateRange(Start.SelectedDate, End.SelectedDate);
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);                   
                 }
             }
             catch(InvalidOperationException ex)
@@ -578,19 +546,6 @@ namespace HomeCalendarGUI
                     int categoryId = cat.Id;
                     presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
-
-
-                //if (FilterByMonthCheckBox.IsChecked == true)
-                //{
-                //    DateTime start = Start.SelectedDate.Value;
-                //    DateTime end = End.SelectedDate.Value;
-
-                //    presenter.GetCalendarItemsFilteredByMonth(start, end);
-                //}
-                //else
-                //{
-                //    presenter.GetCalendarItems();
-                //}
             }
             catch (Exception ex)
             {
@@ -687,6 +642,6 @@ namespace HomeCalendarGUI
                 SummaryByCategoryCheckBox.IsChecked = false;
             }
         }
-        #endregion        
+        #endregion
     }
 }

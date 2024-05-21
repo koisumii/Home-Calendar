@@ -16,11 +16,13 @@ using System.Windows;
 
 namespace HomeCalendarGUI
 {
+    /// <summary>
+    /// Presenter of the HomeCalendar App
+    /// </summary>
     public class Presenter
     {
         private readonly HomeCalendar model;
-        private readonly IView view;
-        
+        private readonly IView view;        
 
         /// <summary>
         /// Initiates presenter with default settings and default database
@@ -76,8 +78,7 @@ namespace HomeCalendarGUI
             {
                 model.categories.Add(desc, type);
                 view.DisplaySuccessfulMessage("Category has been successfully added!");
-            }
-            
+            }            
         }
 
         /// <summary>
