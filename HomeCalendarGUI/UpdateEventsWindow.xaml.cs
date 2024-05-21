@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Calendar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +19,17 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for UpdateEventsWindow.xaml
     /// </summary>
-    public partial class UpdateEventsWindow : Window
+    public partial class UpdateEventsWindow : Window, IView
     {
-        private Presenter _presenter;
+        private Presenter presenter;
         public UpdateEventsWindow()
         {
-            //_presenter = new Presenter(this);
+            presenter = new Presenter(this);
             InitializeComponent();
-
+            
+            presenter.GetCategoriesForAllCatsComboBoxes();
             CreateTimePicker();
+            StartDate.DisplayDate = DateTime.Now;
         }
 
         /// <summary>
@@ -47,6 +50,55 @@ namespace HomeCalendarGUI
             EndTimePicker.Margin = new Thickness(0, 5, 0, 0);
 
             EndTimeGrid.Children.Add(EndTimePicker);
+        }
+
+        public void DisplayErrorMessage(string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void DisplaySuccessfulMessage(string msg)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void PopulateAllCategoriesComboBox(List<Category> categories)
+        {
+            catsComboBox.Items.Clear();
+
+            // Sort categories alphabetically by their Description
+            var sortedCategories = categories.OrderBy(c => c.Description).ToList();
+
+            const int DEFAULT = 0;
+            sortedCategories.ForEach(c => {
+                catsComboBox.Items.Add(c);
+            });
+            catsComboBox.SelectedIndex = DEFAULT;
+        }
+
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItems(List<CalendarItem> items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        {
+            throw new NotImplementedException();
         }
 
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
