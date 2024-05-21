@@ -69,16 +69,20 @@ namespace HomeCalendarGUI
         }
 
         #region IView
-        public void DisplayErrorMessage(string msg)
+        public async void DisplayErrorMessage(string msg)
         {
             message.Foreground = Brushes.Red;
             message.Text = msg;
+            await Task.Delay(10000);
+            message.Text = null;
         }
 
-        public void DisplaySuccessfulMessage(string msg)
+        public async void DisplaySuccessfulMessage(string msg)
         {
             message.Foreground = Brushes.Green;
             message.Text = msg;
+            await Task.Delay(10000);
+            message.Text = null;
         }
 
         public void PopulateCategoriesInAllCatsComboBox(List<Category> categories)
