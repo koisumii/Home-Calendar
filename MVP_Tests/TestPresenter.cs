@@ -111,32 +111,6 @@ namespace MVP_Tests
     public class TestPresenter
     {
         [Fact]
-        public void Test_Categories_Drop_Down()
-        {
-            // Arrange
-            String folder = TestConstants.GetSolutionDir();
-            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";            
-            SQLiteConnection conn = Database.dbConnection;
-            TestView view = new TestView();
-            Presenter p = new Presenter(view, existingDB);
-            int expectedNumberOfCategories = 12;
-            List<Category> expectedResults = TestConstants.getDefaultCategories();
-
-            //Act
-            p.GetCategoriesForAllCatsComboBoxes();
-
-            //Assert
-            Assert.True(view.calledPopulateAllCategoriesComboBox);
-            Assert.Equal(expectedNumberOfCategories, view.categories.Count);
-
-            for(int i =0; i < expectedResults.Count; i++)
-            {
-                Assert.Equal(expectedResults[i].Description.ToLower(), view.categories[i].Description.ToLower());
-                Assert.Equal(expectedResults[i].Type, view.categories[i].Type);
-            }
-        }
-
-        [Fact]
         public void TestConstructor()
         {
             //arrange
@@ -147,6 +121,19 @@ namespace MVP_Tests
 
             //assert
             Assert.IsType<Presenter>(p);
+        }
+
+        [Fact]
+        public void Test_Constructor_DatabaseConnection_Failure()
+        {
+            //arrange
+            TestView view = new TestView();
+            List<CalendarItem> expectedResults = TestConstants.getCalendarItems_NoFilters();
+
+            //act and assert
+            Presenter p = new Presenter(view, "../fail.db");
+
+            Assert.True(view.calledDisplayErrorMessage);
         }
 
         [Fact]
@@ -178,6 +165,32 @@ namespace MVP_Tests
         }
 
         [Fact]
+        public void Test_Categories_Drop_Down()
+        {
+            // Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            SQLiteConnection conn = Database.dbConnection;
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, existingDB);
+            int expectedNumberOfCategories = 12;
+            List<Category> expectedResults = TestConstants.getDefaultCategories();
+
+            //Act
+            p.GetCategoriesForAllCatsComboBoxes();
+
+            //Assert
+            Assert.True(view.calledPopulateAllCategoriesComboBox);
+            Assert.Equal(expectedNumberOfCategories, view.categories.Count);
+
+            for (int i = 0; i < expectedResults.Count; i++)
+            {
+                Assert.Equal(expectedResults[i].Description.ToLower(), view.categories[i].Description.ToLower());
+                Assert.Equal(expectedResults[i].Type, view.categories[i].Type);
+            }
+        }
+
+        [Fact]
         public void TestGetCategoryTypesInList()
         {
             //arrange
@@ -204,17 +217,39 @@ namespace MVP_Tests
             int eveIdToDelete = 3;
 
             //Act
-            //p.GetCalendarItems();
+            p.GetHomeCalendarItems(null,null,0,false,false,false,false);
             List<CalendarItem> initial = view.calendarItems;
             CalendarItem itemToDelete = initial.Where(e => e.EventID == eveIdToDelete).First();            
             p.DeleteAnEvent(itemToDelete.EventID);
+            p.GetHomeCalendarItems(null, null, 0, false, false, false, false);
             List<CalendarItem> results = view.calendarItems;
 
             //Assert
-            Assert.True(results.Count < initial.Count);
-            Assert.Throws<InvalidOperationException>(() => { p.DeleteAnEvent(itemToDelete.EventID); });
+            Assert.True(results.Count < initial.Count);            
         }
 
+        [Fact]
+        public void Test_DeleteAnEvent_Fail()
+        {
+            //Arrange 
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, messyDB);
+            int eveIdToDelete = 3;
+
+            //Act
+            p.GetHomeCalendarItems(null, null, 0, false, false, false, false);
+            List<CalendarItem> initial = view.calendarItems;
+            CalendarItem itemToDelete = initial.Where(e => e.EventID == eveIdToDelete).First();
+            p.DeleteAnEvent(itemToDelete.EventID);  
+
+            //Assert            
+            Assert.Throws<InvalidOperationException>(() => { p.DeleteAnEvent(itemToDelete.EventID); });
+        }
+                 
         [Fact]
         public void Test_GetHomeCalendarItems_No_Filters()
         {
@@ -369,25 +404,75 @@ namespace MVP_Tests
             TestView view = new TestView();
             string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
             Presenter p = new Presenter(view, databasePath);
+            List<Dictionary<string, object>> expectedResults = TestConstants.getCalendarItemsByCategoryAndMonth2020();
+            DateTime? start = DateTime.Parse("January 1 2020");
+            DateTime? end = DateTime.Parse("January 31 2020");
+
+            //Act
+            p.GetHomeCalendarItems(start,end,0,true,true,true,false);
+
+            //Assert
+            Assert.True(view.calledShowTotalBusyTimeByMonthAndCategory);
+            Assert.Equal(expectedResults.Count,view.calendarItemsByCategoryAndMonth.Count);
+
+            
+            //Top Loop
+            for (int i = 0; i < view.calendarItemsByCategoryAndMonth.Count; i++)
+            {
+                //Loop through all keys
+                string[] expectedKeys = expectedResults[i].Keys.ToArray();
+                string[] resultKeys = view.calendarItemsByCategoryAndMonth[i].Keys.ToArray();                
+                for (int j = 0; j < view.calendarItemsByCategoryAndMonth[i].Keys.Count; j++)
+                {
+                    Assert.Equal(expectedKeys[j], resultKeys[j]);
+                }
+
+                //Loop through all values
+                object[] expectedValues = expectedResults[i].Values.ToArray();
+                object[] resultValues = view.calendarItemsByCategoryAndMonth[i].Values.ToArray();
+                for (int j = 0; j < view.calendarItemsByCategoryAndMonth[i].Values.Count; j++)
+                {
+                    if (resultValues[i].ToString().Contains("Count"))
+                        continue;
+
+                    Assert.Equal(expectedValues[j], resultValues[j]);
+                }
+            }
         }
 
+        //[Fact]
+        //public void Test_GetCalendarItemsFilteredByMonth_Fail()
+        //{
+        //    //arrange
+        //    TestView view = new TestView();
+        //    Presenter p = new Presenter(view);
+
+        //    //act 
+        //    //p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
+
+        //    //assert
+        //    Assert.True(view.calledDisplayErrorMessage);
+        //}
+
         [Fact]
-        public void TestGetCalendarItemsFilteredByMonth_Fail()
+        public void Test_Test_GetHomeCalendarItems_Calendar_DateFilter_On_Fail()
         {
-            //arrange
+            //Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
             TestView view = new TestView();
-            Presenter p = new Presenter(view);
-
-            //act 
-            //p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
-
-            //assert
-            Assert.True(view.calledDisplayErrorMessage);
+            Presenter p = new Presenter(view, existingDB);
+      
+            //Act and Assert
+            Assert.Throws<InvalidOperationException>(() => p.GetHomeCalendarItems(null, null, 0, true, false, false, false));
         }
 
-        [Fact]
+
+        //[Fact]
+        //Taken care of by Test_GetHomeCalendarItems_Calendar_FilterByCategory_On
         public void TestGetEventsFilteredByCategory_ShouldDisplayCorrectEvents()
         {
+
             // Arrange
             TestView view = new TestView();
             string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";

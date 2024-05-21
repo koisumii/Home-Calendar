@@ -23,7 +23,7 @@ namespace HomeCalendarGUI
         
 
         /// <summary>
-        /// Initiates presenter with default settings
+        /// Initiates presenter with default settings and default database
         /// </summary>
         /// <param name="v">IView interface implemented class</param>
         public Presenter(IView v) 
