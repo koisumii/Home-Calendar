@@ -33,6 +33,7 @@ namespace HomeCalendarGUI
         {
             presenter = p;
             itemToUpdate = item;
+            mainWindow = main;
             InitializeComponent();
 
             PopulateCategoriesComboxBox(categories);
@@ -134,6 +135,7 @@ namespace HomeCalendarGUI
                 string decription = EventDescriptionBox.Text;
                 DateTime? startDate = StartDate.SelectedDate;
                 Category category = (Category)updatedCategoriesCmb.SelectedItem;
+                int categoryId = category == null ? 12: category.Id ;
 
                 //getting duration in minutes
                 if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
@@ -142,7 +144,7 @@ namespace HomeCalendarGUI
                     return;
                 }
 
-                presenter.UpdateEvent(eventId, startDate, endTimeInMinutes, decription, category.Id);
+                presenter.UpdateEvent(eventId, startDate, endTimeInMinutes, decription, categoryId);
                 //openFileWindow = new OpenFileWindowOnInitialization();
                 //openFileWindow.Show();
 

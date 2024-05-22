@@ -217,6 +217,7 @@ namespace HomeCalendarGUI
             {
                 model.events.Update(eventId, startDate, category, duration, desc);
                 view.DisplaySuccessfulMessage("Event has been updated successfully!");
+                GetHomeCalendarItems(null, null, 0, false, false, false, false);
             }
             catch (Exception ex) 
             {

@@ -448,21 +448,12 @@ namespace HomeCalendarGUI
             CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
 
             updateEventsWindow = new UpdateEventsWindow(presenter, categories, item, this);
-            //creating update window to open it 
-            //UpdateEventsWindow updateWindow = new UpdateEventsWindow(this.presenter, item);
-
-            //creating this element because i will need this ID later to update and i can not access the updated element in the update window
-
-            //TextBlock textBlock = new TextBlock();
-            //textBlock.Text = $"{item.EventID}";
-
-            ////i do not want the user to see this, it is only for me
-            //textBlock.Visibility = Visibility.Hidden;
-
-            ////adding it to the update events window
-            //updateWindow.UpdateEventGrid.Children.Add(textBlock); 
-
             this.Hide();
+
+            DateFilterCheckBox.IsChecked = false;
+            SummaryByMonthCheckBox.IsChecked = false;
+            SummaryByCategoryCheckBox.IsChecked = false;
+
             updateEventsWindow.Show();
         }
 
