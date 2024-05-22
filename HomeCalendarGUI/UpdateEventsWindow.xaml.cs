@@ -57,12 +57,14 @@ namespace HomeCalendarGUI
 
         public void DisplayErrorMessage(string msg)
         {
-            throw new NotImplementedException();
+            message.Text = msg;
+            message.Foreground = Brushes.Red;
         }
 
         public void DisplaySuccessfulMessage(string msg)
         {
-            throw new NotImplementedException();
+            message.Text = msg;
+            message.Foreground = Brushes.Green;
         }
 
         public void PopulateAllCategoriesComboBox(List<Category> categories)
@@ -78,6 +80,8 @@ namespace HomeCalendarGUI
             });
             catsComboBox.SelectedIndex = DEFAULT;
         }
+
+        #region UnusedViewMethods
 
         public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
@@ -104,8 +108,11 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
+        #endregion
+
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
         {
+
             //duration of the event
             //casting to TimePicker objects because when retrieving them, they are not.
             try
@@ -123,7 +130,7 @@ namespace HomeCalendarGUI
                 Category category = (Category)catsComboBox.SelectedItem;
                 double durationInMinutes = 0;
 
-                if (startTimePicker != null && endTimePicker != null)
+                if (startTimePicker.Value != null && endTimePicker.Value != null)
                 {
                     DateTime? start = startTimePicker.Value;
                     DateTime? end = endTimePicker.Value;
@@ -132,12 +139,18 @@ namespace HomeCalendarGUI
                     durationInMinutes = duration.TotalMinutes;
 
                 }
+                else
+                {
+                    DisplayErrorMessage("End time and start time must be filled out.");
+                    return;
+                }
 
                 presenter.UpdateEvent(eventId, startDate, durationInMinutes, decription, category.Id);
+                DisplaySuccessfulMessage("Event has been updated successfully!");
             }
             catch(Exception ex)
             {
-                System.Windows.MessageBox.Show("Something went wrong while updatig event: " + ex);
+                System.Windows.MessageBox.Show("Something went wrong while updating the event: " + ex.ToString());
             }
             
 
