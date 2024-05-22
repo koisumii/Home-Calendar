@@ -32,6 +32,8 @@ namespace HomeCalendarGUI
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
+        private UpdateEventsWindow updateEventsWindow;
+        private List<Category> categories; 
 
         private OpenFolderDialog openFolderDialog;
         private string fileDirectoryToStore;
@@ -61,12 +63,17 @@ namespace HomeCalendarGUI
             else
             {
                 presenter = new Presenter(this, filePath);
+
             }
+
+            
 
             presenter.GetCategoriesForAllCatsComboBoxes();
             presenter.GetCategoriesTypeInList();
             presenter.GetHomeCalendarItems(null, null, 0, false, false, false, false);
             SetTodaysDateOnDatePicker();
+
+            
         }
 
         #region IView
@@ -84,6 +91,7 @@ namespace HomeCalendarGUI
 
         public void PopulateAllCategoriesComboBox(List<Category> categories)
         {
+            this.categories = categories;
             catsComboBox.Items.Clear();
             CategoryFilterCmb.Items.Clear();
 
@@ -441,22 +449,25 @@ namespace HomeCalendarGUI
 
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
         {
+            CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
+
+            updateEventsWindow = new UpdateEventsWindow(presenter, categories, item, this);
             //creating update window to open it 
-            UpdateEventsWindow updateWindow = new UpdateEventsWindow();
+            //UpdateEventsWindow updateWindow = new UpdateEventsWindow(this.presenter, item);
 
             //creating this element because i will need this ID later to update and i can not access the updated element in the update window
-            CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
-            TextBlock textBlock = new TextBlock();
-            textBlock.Text = $"{item.EventID}";
 
-            //i do not want the user to see this, it is only for me
-            textBlock.Visibility = Visibility.Hidden;
+            //TextBlock textBlock = new TextBlock();
+            //textBlock.Text = $"{item.EventID}";
 
-            //adding it to the update events window
-            updateWindow.UpdateEventGrid.Children.Add(textBlock); 
+            ////i do not want the user to see this, it is only for me
+            //textBlock.Visibility = Visibility.Hidden;
+
+            ////adding it to the update events window
+            //updateWindow.UpdateEventGrid.Children.Add(textBlock); 
 
             this.Hide();
-            updateWindow.Show();
+            updateEventsWindow.Show();
         }
 
         private void CloseApplication(object sender, RoutedEventArgs e)

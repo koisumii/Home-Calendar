@@ -25,7 +25,7 @@
             <TextBlock Margin="0,5,0,0" FontWeight="Bold">Enter a duration in minutes for this event:</TextBlock>
             <TextBox x:Name="EndTime"></TextBox>
             <TextBlock Text="Available Categories:" Margin="0,5,0,0" FontWeight="Bold"></TextBlock>
-            <ComboBox x:Name="catsComboBox" FontFamily="Comfortaa" BorderBrush="Red" BorderThickness="2" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0,5,0,0" Text="Categories" DisplayMemberPath="Description"/>
+            <ComboBox x:Name="updatedCategoriesCmb" FontFamily="Comfortaa" BorderBrush="Red" BorderThickness="2" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0,5,0,0" Text="Categories" DisplayMemberPath="Description"/>
             <Button Content="Update Event" Margin="0,5,0,0" Width="100" Click="Btn_UpdateEvent"></Button>
             <TextBlock x:Name="message" FontWeight="Bold" FontSize="14"></TextBlock>
         </StackPanel>

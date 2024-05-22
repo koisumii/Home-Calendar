@@ -23,17 +23,29 @@ namespace HomeCalendarGUI
     public partial class UpdateEventsWindow : Window, IView
     {
         private Presenter presenter;
-        private MainWindow main;
-        private OpenFileWindowOnInitialization openFileWindow; 
+        private CalendarItem itemToUpdate;
+        
+        private MainWindow mainWindow;
+        private OpenFileWindowOnInitialization openFileWindow;
 
-        public UpdateEventsWindow()
+
+        public UpdateEventsWindow(Presenter p, List<Category> categories, CalendarItem item, MainWindow main)
         {
-            presenter = new Presenter(this);
+            presenter = p;
+            itemToUpdate = item;
             InitializeComponent();
-            
-            presenter.GetCategoriesForAllCatsComboBoxes();
+
+            PopulateCategoriesComboxBox(categories);
             CreateTimePicker();
             StartDate.DisplayDateStart = DateTime.Now;
+        }
+
+        public void PopulateCategoriesComboxBox(List<Category> categories)
+        {
+            foreach (Category category in categories) 
+            { 
+                updatedCategoriesCmb.Items.Add(category);
+            }
         }
 
         /// <summary>
@@ -47,13 +59,6 @@ namespace HomeCalendarGUI
             startTimePicker.Margin = new Thickness(0, 5, 0, 0);
 
             StartTimeGrid.Children.Add(startTimePicker);
-
-            //TimePicker EndTimePicker = new TimePicker();
-            //EndTimePicker.AllowTextInput = false;
-            //EndTimePicker.Name = "endTime";
-            //EndTimePicker.Margin = new Thickness(0, 5, 0, 0);
-
-            //EndTimeGrid.Children.Add(EndTimePicker);
 
         }
 
@@ -71,16 +76,16 @@ namespace HomeCalendarGUI
 
         public void PopulateAllCategoriesComboBox(List<Category> categories)
         {
-            catsComboBox.Items.Clear();
+            updatedCategoriesCmb.Items.Clear();
 
             // Sort categories alphabetically by their Description
             var sortedCategories = categories.OrderBy(c => c.Description).ToList();
 
             const int DEFAULT = 0;
             sortedCategories.ForEach(c => {
-                catsComboBox.Items.Add(c);
+                updatedCategoriesCmb.Items.Add(c);
             });
-            catsComboBox.SelectedIndex = DEFAULT;
+            updatedCategoriesCmb.SelectedIndex = DEFAULT;
         }
 
         #region UnusedViewMethods
@@ -120,16 +125,15 @@ namespace HomeCalendarGUI
             try
             {
                 //this is a must
-                var eventIDtemp = (TextBlock)UpdateEventGrid.Children[1];
-                int eventId = int.Parse(eventIDtemp.Text);
+                
+                int eventId = itemToUpdate.EventID;
 
                 var startTimePicker = (TimePicker)StartTimeGrid.Children[0];
-                //var endTimePicker = (TimePicker)EndTimeGrid.Children[0];
 
                 //getting all other fields of an event
                 string decription = EventDescriptionBox.Text;
                 DateTime? startDate = StartDate.SelectedDate;
-                Category category = (Category)catsComboBox.SelectedItem;
+                Category category = (Category)updatedCategoriesCmb.SelectedItem;
 
                 //getting duration in minutes
                 if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
@@ -139,11 +143,12 @@ namespace HomeCalendarGUI
                 }
 
                 presenter.UpdateEvent(eventId, startDate, endTimeInMinutes, decription, category.Id);
-                openFileWindow = new OpenFileWindowOnInitialization();
-                openFileWindow.Show();
-                //main = new MainWindow(false);
-                //main.Show();
-                //DisplaySuccessfulMessage("Event has been updated successfully!");
+                //openFileWindow = new OpenFileWindowOnInitialization();
+                //openFileWindow.Show();
+
+                mainWindow.Show();
+                this.Close();
+                
                 
             }
             catch(Exception ex)
