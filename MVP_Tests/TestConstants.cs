@@ -17,7 +17,8 @@ namespace CalendarCodeTests
         {
             CategoryID = Event1.Category,
             EventID = Event1.Id,
-            DurationInMinutes = Event1.DurationInMinutes
+            DurationInMinutes = Event1.DurationInMinutes,
+            StartDateTime = Event1.StartDateTime
         };
 
         private static Event Event2 = new Event(2, new DateTime(2020, 1, 9), 9, 1440, "Honolulu");
@@ -25,15 +26,17 @@ namespace CalendarCodeTests
         {
             CategoryID = Event2.Category,
             EventID = Event2.Id,
-            DurationInMinutes = Event2.DurationInMinutes
+            DurationInMinutes = Event2.DurationInMinutes,
+            StartDateTime = Event2.StartDateTime
         };
 
-
+        private static Event Event3 = new Event(3, new DateTime(2020, 1, 10), 9, 1440, "Honolulu");
         private static CalendarItem CalendarItem3 = new CalendarItem
         {
-            CategoryID = 9,
-            EventID = 3,
-            DurationInMinutes = 1440
+            CategoryID = Event3.Category,
+            EventID = Event3.Id,
+            DurationInMinutes = Event3.DurationInMinutes,
+            StartDateTime = Event3.StartDateTime
         };
 
         private static Event Event4 = new Event(4, new DateTime(2020, 1, 20), 7, 180, "On call security");
@@ -41,7 +44,8 @@ namespace CalendarCodeTests
         {
             CategoryID = Event4.Category,
             EventID = Event4.Id,
-            DurationInMinutes = Event4.DurationInMinutes
+            DurationInMinutes = Event4.DurationInMinutes,
+            StartDateTime = Event4.StartDateTime
         };
 
 
@@ -50,14 +54,17 @@ namespace CalendarCodeTests
         {
             CategoryID = Event5.Category,
             EventID = Event5.Id,
-            DurationInMinutes = Event5.DurationInMinutes
+            DurationInMinutes = Event5.DurationInMinutes,
+            StartDateTime = Event5.StartDateTime
         };
 
+        private static Event Event6 = new Event(6, new DateTime(2020, 1, 1), 8, 1440, "New Year's");
         private static CalendarItem CalendarItem6 = new CalendarItem
         {
-            CategoryID = 8,
-            EventID = 6,
-            DurationInMinutes = 1440
+            CategoryID = Event6.Category,
+            EventID = Event6.Id,
+            DurationInMinutes = Event6.DurationInMinutes,
+            StartDateTime = Event6.StartDateTime
         };
 
         private static Event Event7 = new Event(7, new DateTime(2020, 1, 12), 11, 1440, "Wendy's birthday");
@@ -65,7 +72,8 @@ namespace CalendarCodeTests
         {
             CategoryID = Event7.Category,
             EventID = Event7.Id,
-            DurationInMinutes = Event7.DurationInMinutes
+            DurationInMinutes = Event7.DurationInMinutes,
+            StartDateTime = Event7.StartDateTime
         };
 
 
@@ -74,16 +82,20 @@ namespace CalendarCodeTests
         {
             CategoryID = Event8.Category,
             EventID = Event8.Id,
-            DurationInMinutes = Event8.DurationInMinutes
+            DurationInMinutes = Event8.DurationInMinutes,
+            StartDateTime = Event8.StartDateTime
         };
 
         private static Event Event9 = new Event(9, new DateTime(2019, 1, 11, 9, 30, 0), 2, 60, "training");
         private static CalendarItem CalendarItem9 = new CalendarItem
         {
-            CategoryID = 2,
-            EventID = 9,
-            DurationInMinutes = 60
+            CategoryID = Event9.Category,
+            EventID = Event9.Id,
+            DurationInMinutes = Event9.DurationInMinutes,
+            StartDateTime = Event9.StartDateTime
         };
+
+
         //changing because we are not using files anymore??, original: 12
         public static int numberOfCategoriesInFile = 12;
         public static String testCategoriesInputFile = "test_categories.cats";
@@ -142,6 +154,7 @@ namespace CalendarCodeTests
         public static CalendarItemsByMonth CalendarItemsByMonth_FirstRecord_FilteredCat9 = getCalendarItemsBy2020_01_filteredByCat9()[0];
         public static int CalendarItemsByMonth_2018_FilteredByCat2_number = 1;
 
+        //Get all calendar items
         public static List<CalendarItem> getCalendarItems_NoFilters()
         {
             return new List<CalendarItem>
@@ -158,6 +171,26 @@ namespace CalendarCodeTests
             };
         }
 
+        //Get calendar items with category id 2
+        public static List<CalendarItem> getCalendarItemsByCatId2()
+        {
+            return new List<CalendarItem>
+            {
+                CalendarItem5,
+                CalendarItem8,
+                CalendarItem9
+            };
+        }
+
+        public static List<CalendarItem> getCalendarItems2018()
+        {
+            return new List<CalendarItem>
+            {
+                CalendarItem1,
+                CalendarItem5,
+                CalendarItem8
+            };
+        }
 
         public static List<CalendarItemsByMonth> getCalendarItemsBy2018_01()
         {
@@ -365,8 +398,8 @@ namespace CalendarCodeTests
 
             list.Add(new Dictionary<string, object> {
                 {"Month","2020/01"},
-                { "TotalBusyTime", CalendarItem7.DurationInMinutes + CalendarItem6.DurationInMinutes +
-                                   CalendarItem4.DurationInMinutes + CalendarItem3.DurationInMinutes +
+                { "TotalBusyTime", CalendarItem7.DurationInMinutes + CalendarItem4.DurationInMinutes 
+                                 + CalendarItem3.DurationInMinutes +
                                    CalendarItem2.DurationInMinutes },
                 {"items:Birthdays", new List<CalendarItem>{CalendarItem7} },
                 { "Birthdays",CalendarItem7.DurationInMinutes },
