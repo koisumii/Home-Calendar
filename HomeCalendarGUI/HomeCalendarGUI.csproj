@@ -6,10 +6,15 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>owl_themed_RZE_icon.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
     <None Remove="Resources\beauty_package.gif" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="owl_themed_RZE_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
