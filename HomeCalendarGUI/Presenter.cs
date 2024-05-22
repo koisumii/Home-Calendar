@@ -14,6 +14,7 @@ using static Calendar.Category;
 using System.Collections;
 using System.Data;
 using System.Windows;
+using System.ComponentModel.DataAnnotations;
 
 namespace HomeCalendarGUI
 {
@@ -215,10 +216,11 @@ namespace HomeCalendarGUI
             try
             {
                 model.events.Update(eventId, startDate, category, duration, desc);
+                view.DisplaySuccessfulMessage("Event has been updated successfully!");
             }
             catch (Exception ex) 
             {
-                MessageBox.Show("Something went wrong: "+ex);
+                view.DisplayErrorMessage($"Something went wrong while updating: {ex}");
             }
         }
     }

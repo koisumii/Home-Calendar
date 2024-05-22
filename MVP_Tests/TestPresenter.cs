@@ -379,5 +379,33 @@ namespace MVP_Tests
         //    Assert.True(view.calledShowCalendarItemOnDataGrid);
         //    Assert.Equal(1000, view.calendarItems.Count(e => e.ShortDescription.StartsWith("Stress Test Event")));
         //}
+
+        [Fact]
+        public void TestUpdateEvent_Success()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.UpdateEvent(1, null, 60, "updated description", null);
+
+            //assert 
+            Assert.True(view.calledDisplaySuccessfulMessage);
+        }
+
+        [Fact]
+        public void TestUpdateEvent_Fail()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.UpdateEvent(56, null, 60, "updated description", null);
+
+            //assert 
+            Assert.True(view.calledDisplayErrorMessage);
+        }
     }
 }

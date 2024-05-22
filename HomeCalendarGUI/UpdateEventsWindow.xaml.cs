@@ -132,26 +132,11 @@ namespace HomeCalendarGUI
                 Category category = (Category)catsComboBox.SelectedItem;
 
                 //getting duration in minutes
-                if (!double.TryParse(endTime.Text, out double endTimeInMinutes))
+                if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
                 {
                     DisplayErrorMessage("Please enter a number for your duration in minutes.");
                     return;
                 }
-
-                //if (startTimePicker.Value != null && endTimePicker.Value != null)
-                //{
-                //    DateTime? start = startTimePicker.Value;
-                //    DateTime? end = endTimePicker.Value;
-
-                //    TimeSpan duration = end.Value - start.Value;
-                //    durationInMinutes = duration.TotalMinutes;
-
-                //}
-                //else
-                //{
-                //    DisplayErrorMessage("End time and start time must be filled out.");
-                //    return;
-                //}
 
                 presenter.UpdateEvent(eventId, startDate, endTimeInMinutes, decription, category.Id);
                 openFileWindow = new OpenFileWindowOnInitialization();
