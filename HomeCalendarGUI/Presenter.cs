@@ -208,5 +208,14 @@ namespace HomeCalendarGUI
         {
             model.events.DeleteEvent(eventId);
         }
+
+
+        public void UpdateEvent(DateTime? startDate, double? duration, string? desc, int? category)
+        {
+            if (startDate != null)
+            {
+
+            }
+        }
     }
 }

@@ -22,6 +22,7 @@ namespace HomeCalendarGUI
     public partial class UpdateEventsWindow : Window, IView
     {
         private Presenter presenter;
+
         public UpdateEventsWindow()
         {
             presenter = new Presenter(this);
@@ -103,8 +104,8 @@ namespace HomeCalendarGUI
 
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
         {
+            //duration of the event
             
-
         }
     }
 }
