@@ -23,6 +23,8 @@ namespace HomeCalendarGUI
     public partial class UpdateEventsWindow : Window, IView
     {
         private Presenter presenter;
+        private MainWindow main;
+        private OpenFileWindowOnInitialization openFileWindow; 
 
         public UpdateEventsWindow()
         {
@@ -46,12 +48,12 @@ namespace HomeCalendarGUI
 
             StartTimeGrid.Children.Add(startTimePicker);
 
-            TimePicker EndTimePicker = new TimePicker();
-            EndTimePicker.AllowTextInput = false;
-            EndTimePicker.Name = "endTime";
-            EndTimePicker.Margin = new Thickness(0, 5, 0, 0);
+            //TimePicker EndTimePicker = new TimePicker();
+            //EndTimePicker.AllowTextInput = false;
+            //EndTimePicker.Name = "endTime";
+            //EndTimePicker.Margin = new Thickness(0, 5, 0, 0);
 
-            EndTimeGrid.Children.Add(EndTimePicker);
+            //EndTimeGrid.Children.Add(EndTimePicker);
 
         }
 
@@ -122,31 +124,42 @@ namespace HomeCalendarGUI
                 int eventId = int.Parse(eventIDtemp.Text);
 
                 var startTimePicker = (TimePicker)StartTimeGrid.Children[0];
-                var endTimePicker = (TimePicker)EndTimeGrid.Children[0];
+                //var endTimePicker = (TimePicker)EndTimeGrid.Children[0];
 
                 //getting all other fields of an event
                 string decription = EventDescriptionBox.Text;
                 DateTime? startDate = StartDate.SelectedDate;
                 Category category = (Category)catsComboBox.SelectedItem;
-                double durationInMinutes = 0;
 
-                if (startTimePicker.Value != null && endTimePicker.Value != null)
+                //getting duration in minutes
+                if (!double.TryParse(endTime.Text, out double endTimeInMinutes))
                 {
-                    DateTime? start = startTimePicker.Value;
-                    DateTime? end = endTimePicker.Value;
-
-                    TimeSpan duration = end.Value - start.Value;
-                    durationInMinutes = duration.TotalMinutes;
-
-                }
-                else
-                {
-                    DisplayErrorMessage("End time and start time must be filled out.");
+                    DisplayErrorMessage("Please enter a number for your duration in minutes.");
                     return;
                 }
 
-                presenter.UpdateEvent(eventId, startDate, durationInMinutes, decription, category.Id);
-                DisplaySuccessfulMessage("Event has been updated successfully!");
+                //if (startTimePicker.Value != null && endTimePicker.Value != null)
+                //{
+                //    DateTime? start = startTimePicker.Value;
+                //    DateTime? end = endTimePicker.Value;
+
+                //    TimeSpan duration = end.Value - start.Value;
+                //    durationInMinutes = duration.TotalMinutes;
+
+                //}
+                //else
+                //{
+                //    DisplayErrorMessage("End time and start time must be filled out.");
+                //    return;
+                //}
+
+                presenter.UpdateEvent(eventId, startDate, endTimeInMinutes, decription, category.Id);
+                openFileWindow = new OpenFileWindowOnInitialization();
+                openFileWindow.Show();
+                //main = new MainWindow(false);
+                //main.Show();
+                //DisplaySuccessfulMessage("Event has been updated successfully!");
+                
             }
             catch(Exception ex)
             {

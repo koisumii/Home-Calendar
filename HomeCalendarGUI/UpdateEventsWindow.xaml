@@ -17,13 +17,13 @@
                 
             </Grid>
 
-            <TextBlock Text="End time of the event:" FontWeight="Bold" Margin="0,5,0,0"></TextBlock>
+            <!--<TextBlock Text="End time of the event:" FontWeight="Bold" Margin="0,5,0,0"></TextBlock>
             <Grid x:Name="EndTimeGrid">
                 
-            </Grid>
+            </Grid>-->
             
-            <!--<TextBlock Margin="0,5,0,0" FontWeight="Bold">Enter a duration in minutes for this event:</TextBlock>
-            <TextBox x:Name="EndTime"></TextBox>-->
+            <TextBlock Margin="0,5,0,0" FontWeight="Bold">Enter a duration in minutes for this event:</TextBlock>
+            <TextBox x:Name="EndTime"></TextBox>
             <TextBlock Text="Available Categories:" Margin="0,5,0,0" FontWeight="Bold"></TextBlock>
             <ComboBox x:Name="catsComboBox" FontFamily="Comfortaa" BorderBrush="Red" BorderThickness="2" MaxDropDownHeight="100" ScrollViewer.VerticalScrollBarVisibility="Visible" Grid.Row="1" Grid.Column="2" Margin="0,5,0,0" Text="Categories" DisplayMemberPath="Description"/>
             <Button Content="Update Event" Margin="0,5,0,0" Width="100" Click="Btn_UpdateEvent"></Button>
