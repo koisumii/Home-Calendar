@@ -447,14 +447,15 @@ namespace HomeCalendarGUI
             //creating this element because i will need this ID later to update and i can not access the updated element in the update window
             CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
             TextBlock textBlock = new TextBlock();
-            textBlock.Name = "EventID";
             textBlock.Text = $"{item.EventID}";
 
-            //adding it to the update events window
-            //updateWindow.UpdateEventGrid.Children.Add(textBlock); 
+            //i do not want the user to see this, it is only for me
+            textBlock.Visibility = Visibility.Hidden;
 
-            this.Hide();    
-            updateWindow.IsEnabled = true;
+            //adding it to the update events window
+            updateWindow.UpdateEventGrid.Children.Add(textBlock); 
+
+            this.Hide();
             updateWindow.Show();
         }
 

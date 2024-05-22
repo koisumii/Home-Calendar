@@ -111,7 +111,7 @@ namespace HomeCalendarGUI
             try
             {
                 //this is a must
-                var eventIDtemp = (TextBlock)UpdateEventGrid.Children[0];
+                var eventIDtemp = (TextBlock)UpdateEventGrid.Children[1];
                 int eventId = int.Parse(eventIDtemp.Text);
 
                 var startTimePicker = (TimePicker)StartTimeGrid.Children[0];
