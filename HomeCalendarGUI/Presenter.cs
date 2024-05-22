@@ -210,11 +210,15 @@ namespace HomeCalendarGUI
         }
 
 
-        public void UpdateEvent(DateTime? startDate, double? duration, string? desc, int? category)
+        public void UpdateEvent(int eventId, DateTime? startDate, double? duration, string? desc, int? category)
         {
-            if (startDate != null)
+            try
             {
-
+                model.events.Update(eventId, startDate, category, duration, desc);
+            }
+            catch (Exception ex) 
+            {
+                MessageBox.Show("Something went wrong: "+ex);
             }
         }
     }

@@ -439,6 +439,25 @@ namespace HomeCalendarGUI
             }
         }
 
+        private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
+        {
+            //creating update window to open it 
+            UpdateEventsWindow updateWindow = new UpdateEventsWindow();
+
+            //creating this element because i will need this ID later to update and i can not access the updated element in the update window
+            CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
+            TextBlock textBlock = new TextBlock();
+            textBlock.Name = "EventID";
+            textBlock.Text = $"{item.EventID}";
+
+            //adding it to the update events window
+            //updateWindow.UpdateEventGrid.Children.Add(textBlock); 
+
+            this.Hide();    
+            updateWindow.IsEnabled = true;
+            updateWindow.Show();
+        }
+
         private void CloseApplication(object sender, RoutedEventArgs e)
         {
             Close();

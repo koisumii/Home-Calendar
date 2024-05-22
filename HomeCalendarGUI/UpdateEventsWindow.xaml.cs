@@ -1,5 +1,6 @@
 ﻿using Calendar;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -30,7 +31,7 @@ namespace HomeCalendarGUI
             
             presenter.GetCategoriesForAllCatsComboBoxes();
             CreateTimePicker();
-            StartDate.DisplayDate = DateTime.Now;
+            StartDate.DisplayDateStart = DateTime.Now;
         }
 
         /// <summary>
@@ -51,6 +52,7 @@ namespace HomeCalendarGUI
             EndTimePicker.Margin = new Thickness(0, 5, 0, 0);
 
             EndTimeGrid.Children.Add(EndTimePicker);
+
         }
 
         public void DisplayErrorMessage(string msg)
@@ -105,7 +107,41 @@ namespace HomeCalendarGUI
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
         {
             //duration of the event
+            //casting to TimePicker objects because when retrieving them, they are not.
+            try
+            {
+                //this is a must
+                var eventIDtemp = (TextBlock)UpdateEventGrid.Children[0];
+                int eventId = int.Parse(eventIDtemp.Text);
+
+                var startTimePicker = (TimePicker)StartTimeGrid.Children[0];
+                var endTimePicker = (TimePicker)EndTimeGrid.Children[0];
+
+                //getting all other fields of an event
+                string decription = EventDescriptionBox.Text;
+                DateTime? startDate = StartDate.SelectedDate;
+                Category category = (Category)catsComboBox.SelectedItem;
+                double durationInMinutes = 0;
+
+                if (startTimePicker != null && endTimePicker != null)
+                {
+                    DateTime? start = startTimePicker.Value;
+                    DateTime? end = endTimePicker.Value;
+
+                    TimeSpan duration = end.Value - start.Value;
+                    durationInMinutes = duration.TotalMinutes;
+
+                }
+
+                presenter.UpdateEvent(eventId, startDate, durationInMinutes, decription, category.Id);
+            }
+            catch(Exception ex)
+            {
+                System.Windows.MessageBox.Show("Something went wrong while updatig event: " + ex);
+            }
             
+
+
         }
     }
 }

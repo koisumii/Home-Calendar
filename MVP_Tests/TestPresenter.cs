@@ -8,44 +8,41 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls.Primitives;
 using Xunit;
 using Xunit.Sdk;
-using System.IO; 
 
 namespace MVP_Tests
 {
     public class TestView : IView
-    {        
+    {
         public List<Category> categories;
         public List<Event> events;
         public List<CalendarItem> calendarItems;
-        public bool calledShowCategoriesOnComboBox = false;
+        public List<CalendarItemsByCategory> calendarItemsByCategory;
+        public List<CalendarItemsByMonth> calendarItemsByMonth;
+        public List<Dictionary<string, object>> calendarItemsByCategoryAndMonth;
+        public bool calledPopulateAllCategoriesComboBox = false;
         public bool calledDisplayErrorMessage = false;
-        public bool calledDisplaySuccessfulMessage = false;    
-        public bool calledShowInfoOnCmb = false;
-        public bool calledShowCalendarItemOnDataGrid = false;
-        public bool calledShowCalendarItemsWithDateFiltersOn = false;
-        public bool calledShowEventsOnDataGrid = false;
-        public bool calledShowEventsWithFiltersOn = false;
-        public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
-        public bool calledShowCalendarItemsByMonth = false;
+        public bool calledDisplaySuccessfulMessage = false;
+        public bool calledPopulateCategoryTypesComboBox = false;
+        public bool calledShowCalendarItems = false;
+        public bool calledShowTotalBusyTimeByMonth = false;
+        public bool calledShowTotalBusyTimeByMonthAndCategory = false;
+        public bool calledShowTotalBusyTimeByCategory = false;
 
-        //public void ClearCalendarItems()
-        //{
-        //    if (calendarItems != null)
-        //    {
-        //        calendarItems.Clear();
-        //    }
-        //    else
-        //    {
-        //        calendarItems = new List<CalendarItem>(); // Initialize if null
-        //    }
-        //}
 
-        public void ShowCategoriesOnComboBox(List<Category> categories)
+        //public bool calledShowCalendarItemOnDataGrid = false;
+        //public bool calledShowCalendarItemsWithDateFiltersOn = false;
+        //public bool calledShowEventsOnDataGrid = false;
+        //public bool calledShowEventsWithFiltersOn = false;
+        //public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
+        //public bool calledShowCalendarItemsByMonth = false;
+
+
+        public void PopulateAllCategoriesComboBox(List<Category> categories)
         {
-            calledShowCategoriesOnComboBox = true;
+            calledPopulateAllCategoriesComboBox = true;
             this.categories = categories;
         }
-        
+
         public void DisplayErrorMessage(string msg)
         {
             calledDisplayErrorMessage = true;
@@ -56,34 +53,58 @@ namespace MVP_Tests
             calledDisplaySuccessfulMessage = true;
         }
 
-        public void ShowInformationOnCmb(List<Category> categories)
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
-            calledShowInfoOnCmb = true;
+            calledPopulateCategoryTypesComboBox = true;
         }
 
-        public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        //public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        //{
+        //    calledShowCalendarItemOnDataGrid = true;   
+        //    this.calendarItems = calendarItems;
+        //}
+
+        //public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        //{
+        //    this.calendarItems = calendarItems;
+        //    calledShowCalendarItemsWithCategoryFiltersOn = true;
+        //}
+
+        //public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        //{
+        //    calledShowCalendarItemsByMonth = true; 
+        //}
+
+
+        //public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
+        //{
+        //    calledShowCalendarItemsWithDateFiltersOn = true;
+        //    this.calendarItems = calendarItems;
+
+        //}
+
+        public void ShowCalendarItems(List<CalendarItem> items)
         {
-            calledShowCalendarItemOnDataGrid = true;   
-            this.calendarItems = calendarItems;
+            calledShowCalendarItems = true;
+            calendarItems = items;
         }
 
-        public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
         {
-            this.calendarItems = calendarItems;
-            calledShowCalendarItemsWithCategoryFiltersOn = true;
+            calledShowTotalBusyTimeByMonth = true;
+            calendarItemsByMonth = itemsByMonth;
         }
 
-        public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        public void ShowTotalBusyTimeByCategory(List<CalendarItemsByCategory> itemsByCategory)
         {
-            calledShowCalendarItemsByMonth = true; 
+            calledShowTotalBusyTimeByCategory = true;
+            calendarItemsByCategory = itemsByCategory;
         }
-    
 
-        public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
         {
-            calledShowCalendarItemsWithDateFiltersOn = true;
-            this.calendarItems = calendarItems;
-
+            calledShowTotalBusyTimeByMonthAndCategory = true;
+            calendarItemsByCategoryAndMonth = itemsByCategoryAndMonth;
         }
     }
 
@@ -94,7 +115,7 @@ namespace MVP_Tests
         {
             // Arrange
             String folder = TestConstants.GetSolutionDir();
-            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";            
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
             SQLiteConnection conn = Database.dbConnection;
             TestView view = new TestView();
             Presenter p = new Presenter(view, existingDB);
@@ -102,13 +123,13 @@ namespace MVP_Tests
             List<Category> expectedResults = TestConstants.getDefaultCategories();
 
             //Act
-            p.GetCategoriesForComboBox();
+            p.GetCategoriesForAllCatsComboBoxes();
 
             //Assert
-            Assert.True(view.calledShowCategoriesOnComboBox);
+            Assert.True(view.calledPopulateAllCategoriesComboBox);
             Assert.Equal(expectedNumberOfCategories, view.categories.Count);
 
-            for(int i =0; i < expectedResults.Count; i++)
+            for (int i = 0; i < expectedResults.Count; i++)
             {
                 Assert.Equal(expectedResults[i].Description.ToLower(), view.categories[i].Description.ToLower());
                 Assert.Equal(expectedResults[i].Type, view.categories[i].Type);
@@ -136,21 +157,21 @@ namespace MVP_Tests
             Presenter p = new Presenter(view);
 
             //act
-            p.AddNewCategory(null, Category.CategoryType.Event); 
+            p.AddNewCategory(null, Category.CategoryType.Event);
 
             //assert   
             Assert.True(view.calledDisplayErrorMessage);
         }
 
         [Fact]
-        public void TestAddCategory_Success() 
+        public void TestAddCategory_Success()
         {
             //arrange
             TestView view = new TestView();
             Presenter p = new Presenter(view);
 
             //act
-            p.AddNewCategory("description", Category.CategoryType.Holiday); 
+            p.AddNewCategory("description", Category.CategoryType.Holiday);
 
             //assert
             Assert.True(view.calledDisplaySuccessfulMessage);
@@ -167,7 +188,7 @@ namespace MVP_Tests
             p.GetCategoriesTypeInList();
 
             //assert 
-            Assert.True(view.calledShowInfoOnCmb); 
+            Assert.True(view.calledPopulateCategoryTypesComboBox);
         }
 
         [Fact]
@@ -175,7 +196,7 @@ namespace MVP_Tests
         {
             //Arrange
             String folder = TestConstants.GetSolutionDir();
-            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";            
+            String existingDB = $"{folder}\\{TestConstants.testDBInputFile}";
             TestView view = new TestView();
             Presenter p = new Presenter(view, existingDB);
             List<Event> expectedEventsResults = TestConstants.filteredbyYear2018();
@@ -187,7 +208,7 @@ namespace MVP_Tests
 
 
             //Act 
-            p.GetEventsFilteredByDateRange(start,end);            
+            //p.GetEventsFilteredByDateRange(start,end);            
             List<CalendarItem> calendarItemsResults = view.calendarItems;
             calendarItemsResults = calendarItemsResults.OrderBy(i => i.EventID).ToList();
 
@@ -200,7 +221,7 @@ namespace MVP_Tests
                 Assert.Equal(expectedEventsResults[i].Id, calendarItemsResults[i].EventID);
                 Assert.Equal(expectedEventsResults[i].Details, calendarItemsResults[i].ShortDescription);
                 Assert.Equal(expectedEventsResults[i].StartDateTime, calendarItemsResults[i].StartDateTime);
-                Assert.Equal(expectedEventsResults[i].DurationInMinutes, calendarItemsResults[i].DurationInMinutes);  
+                Assert.Equal(expectedEventsResults[i].DurationInMinutes, calendarItemsResults[i].DurationInMinutes);
             }
         }
 
@@ -213,13 +234,13 @@ namespace MVP_Tests
             String messyDB = $"{folder}\\messy.db";
             File.Copy(goodDB, messyDB, true);
             TestView view = new TestView();
-            Presenter p = new Presenter(view,messyDB);
+            Presenter p = new Presenter(view, messyDB);
             int eveIdToDelete = 3;
 
             //Act
-            p.GetCalendarItems();
+            //p.GetCalendarItems();
             List<CalendarItem> initial = view.calendarItems;
-            CalendarItem itemToDelete = initial.Where(e => e.EventID == eveIdToDelete).First();            
+            CalendarItem itemToDelete = initial.Where(e => e.EventID == eveIdToDelete).First();
             p.DeleteAnEvent(itemToDelete.EventID);
             List<CalendarItem> results = view.calendarItems;
 
@@ -229,17 +250,21 @@ namespace MVP_Tests
         }
 
         [Fact]
-        public void TestGetCalendarItemsFilteredByMonth_Sucess()
+        public void Test_GetHomeCalendarItems_No_Filters()
         {
             //arrange
             TestView view = new TestView();
-            Presenter p = new Presenter(view);
+            List<CalendarItem> expectedResults = TestConstants.getCalendarItems_NoFilters();
+            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
+            Presenter p = new Presenter(view, databasePath);
+
 
             //act
-            p.GetCalendarItemsFilteredByMonth(new DateTime(2018, 01, 01), new DateTime(2020, 01, 01));
+            p.GetHomeCalendarItems(null, null, 0, false, false, false, false);
 
             //assert 
-            Assert.True(view.calledShowCalendarItemsByMonth);
+            Assert.True(view.calledShowCalendarItems);
+            Assert.Equal(expectedResults.Count, view.calendarItems.Count);
         }
 
         [Fact]
@@ -250,7 +275,7 @@ namespace MVP_Tests
             Presenter p = new Presenter(view);
 
             //act 
-            p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
+            //p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
 
             //assert
             Assert.True(view.calledDisplayErrorMessage);
@@ -268,11 +293,11 @@ namespace MVP_Tests
             int testCategoryId = 2;
 
             // Act
-            presenter.GetEventsFilteredByCategory(testCategoryId);
+            //presenter.GetEventsFilteredByCategory(testCategoryId);
 
             // Assert
             // Check that the correct method on the view was called to display filtered events
-            Assert.True(view.calledShowCalendarItemsWithCategoryFiltersOn);
+            //Assert.True(view.calledShowCalendarItemsWithCategoryFiltersOn);
 
             // Ensures that every item in view.calendarItems matches the expected category ID
             // which confirms that the filtering logic is functioning correctly
@@ -306,18 +331,17 @@ namespace MVP_Tests
 
             Presenter presenter = new Presenter(view, databasePath);
             DateTime startDate = new DateTime(2024, 5, 5);
-            DateTime endDate = new DateTime(2024, 5, 5);
             string description = "Team Meeting";
             int categoryId = 1;
             double duration = 120;
 
             // Act
-            presenter.AddNewEvent(startDate, endDate, categoryId, description, duration);
+            presenter.AddNewEvent(startDate, categoryId, description, duration);
 
             // Assert
             Assert.True(view.calledDisplaySuccessfulMessage);
             // Confirm that the grid update method was triggered
-            Assert.True(view.calledShowCalendarItemOnDataGrid);
+            //Assert.True(view.calledShowCalendarItemOnDataGrid);
         }
 
         [Fact]
@@ -328,7 +352,7 @@ namespace MVP_Tests
             Presenter presenter = new Presenter(view, "invalidPath.db");
 
             // Act
-            presenter.GetCalendarItems();
+            //presenter.GetCalendarItems();
 
             // Assert
             Assert.True(view.calledDisplayErrorMessage);

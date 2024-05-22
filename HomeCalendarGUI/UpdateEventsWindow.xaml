@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:HomeCalendarGUI"
         mc:Ignorable="d"
         Title="UpdateEventsWindow" Height="350" Width="600">
-    <Grid>
+    <Grid x:Name="UpdateEventGrid">
         <StackPanel Margin="10">
             <TextBlock Text="Event Description:" FontWeight="Bold"/>
             <TextBox x:Name="EventDescriptionBox" Height="30" Margin="0,5"/>
