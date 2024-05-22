@@ -35,10 +35,15 @@ namespace HomeCalendarGUI
         
         private string fileDirectoryToStore;
 
+        /// <summary>
+        /// Main Menu of Home Calendar App
+        /// </summary>
+        /// <param name="useDefaultDb">If true, an empty database will automatically be created for the user</param>
+        /// <param name="filePath">File path to the database</param>
         public MainWindow(bool useDefaultDb, string filePath = null)
         {
             InitializeComponent();
-
+            
             //Create Calendar directory if it doesn't exist
             if (!Directory.Exists(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments) + "\\Calendar"))
             {

@@ -28,15 +28,6 @@ namespace MVP_Tests
         public bool calledShowTotalBusyTimeByMonthAndCategory = false;
         public bool calledShowTotalBusyTimeByCategory = false;
 
-
-        //public bool calledShowCalendarItemOnDataGrid = false;
-        //public bool calledShowCalendarItemsWithDateFiltersOn = false;
-        //public bool calledShowEventsOnDataGrid = false;
-        //public bool calledShowEventsWithFiltersOn = false;
-        //public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
-        //public bool calledShowCalendarItemsByMonth = false;
-
-
         public void PopulateCategoriesInAllCatsComboBox(List<Category> categories)
         {
             calledPopulateAllCategoriesComboBox = true;
@@ -57,31 +48,6 @@ namespace MVP_Tests
         {
             calledPopulateCategoryTypesComboBox = true;
         }
-
-        //public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
-        //{
-        //    calledShowCalendarItemOnDataGrid = true;   
-        //    this.calendarItems = calendarItems;
-        //}
-
-        //public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
-        //{
-        //    this.calendarItems = calendarItems;
-        //    calledShowCalendarItemsWithCategoryFiltersOn = true;
-        //}
-
-        //public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
-        //{
-        //    calledShowCalendarItemsByMonth = true; 
-        //}
-    
-
-        //public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
-        //{
-        //    calledShowCalendarItemsWithDateFiltersOn = true;
-        //    this.calendarItems = calendarItems;
-
-        //}
 
         public void ShowCalendarItems(List<CalendarItem> items)
         {
@@ -106,6 +72,40 @@ namespace MVP_Tests
             calledShowTotalBusyTimeByMonthAndCategory = true;
             calendarItemsByCategoryAndMonth = itemsByCategoryAndMonth;
         }
+
+        #region Dead Code
+        //public bool calledShowCalendarItemOnDataGrid = false;
+        //public bool calledShowCalendarItemsWithDateFiltersOn = false;
+        //public bool calledShowEventsOnDataGrid = false;
+        //public bool calledShowEventsWithFiltersOn = false;
+        //public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
+        //public bool calledShowCalendarItemsByMonth = false;
+
+        //public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
+        //{
+        //    calledShowCalendarItemOnDataGrid = true;   
+        //    this.calendarItems = calendarItems;
+        //}
+
+        //public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
+        //{
+        //    this.calendarItems = calendarItems;
+        //    calledShowCalendarItemsWithCategoryFiltersOn = true;
+        //}
+
+        //public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
+        //{
+        //    calledShowCalendarItemsByMonth = true; 
+        //}
+
+
+        //public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
+        //{
+        //    calledShowCalendarItemsWithDateFiltersOn = true;
+        //    this.calendarItems = calendarItems;
+
+        //}
+        #endregion
     }
 
     public class TestPresenter

@@ -25,7 +25,7 @@ namespace HomeCalendarGUI
         private readonly IView view;        
 
         /// <summary>
-        /// Initiates presenter with default settings and default database
+        /// Instantiates presenter with default settings and default database
         /// </summary>
         /// <param name="v">IView interface implemented class</param>
         public Presenter(IView v) 
@@ -82,12 +82,12 @@ namespace HomeCalendarGUI
         }
 
         /// <summary>
-        /// Adds new events to database
+        /// Adds a new event to database
         /// </summary>
-        /// <param name="startDate">Start date of event</param>        
-        /// <param name="categoryId">Category Id of event</param>
-        /// <param name="description">Description of event</param>
-        /// <param name="duration">Duration of event</param>
+        /// <param name="startDate">Start date of the event</param>        
+        /// <param name="categoryId">Category Id of the event</param>
+        /// <param name="description">Description of the event</param>
+        /// <param name="duration">Duration of the event</param>
         public void AddNewEvent(DateTime startDate, int categoryId, string description, double duration)
         {
             // Here we call the Add method of the Events class from your model
@@ -98,7 +98,7 @@ namespace HomeCalendarGUI
         }
 
         /// <summary>
-        /// Gets the all the types of activity to display it. 
+        /// Gets all category types 
         /// </summary>
         public void GetCategoriesTypeInList() 
         {
@@ -115,13 +115,13 @@ namespace HomeCalendarGUI
         }
 
         /// <summary>
-        /// Gets CalendarItems with corresponding filters
+        /// Gets calendar items with corresponding filters
         /// </summary>
         /// <param name="startDate">Start Date</param>
         /// <param name="endDate">End Date</param>
         /// <param name="categoryId">Category Id</param>
-        /// <param name="dateFilter">If true, filters by specified date</param>
-        /// <param name="summaryByCategory">If true, filters by category</param>
+        /// <param name="dateFilter">If true, it filters by specified date</param>
+        /// <param name="summaryByCategory">If true, it filters by category</param>
         /// <param name="summaryByMonth">If true,filters by month</param>        
         public void GetHomeCalendarItems(DateTime? startDate, DateTime? endDate, int categoryId, bool dateFilter ,bool summaryByCategory, bool summaryByMonth,bool filterDataByCategory)
         {
