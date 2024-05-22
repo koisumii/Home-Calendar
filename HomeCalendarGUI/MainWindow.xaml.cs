@@ -74,13 +74,15 @@ namespace HomeCalendarGUI
 
         public void DisplayErrorMessage(string msg)
         {
-            message.Foreground = Brushes.Red;
+            message.Foreground = Brushes.PaleVioletRed;
+            message.FontWeight = FontWeights.ExtraBold;
             message.Text = msg;
         }
 
         public void DisplaySuccessfulMessage(string msg)
         {
-            message.Foreground = Brushes.Green;
+            message.Foreground = Brushes.LightGreen;
+            message.FontWeight = FontWeights.ExtraBold;
             message.Text = msg;
         }
 
@@ -124,7 +126,7 @@ namespace HomeCalendarGUI
             if (calendarItems.Count == 0)
             {
                 message2.Text = "No events found for this category.";
-                message2.Foreground = Brushes.Red;
+                message2.Foreground = Brushes.PaleVioletRed;
             }
             else
             {

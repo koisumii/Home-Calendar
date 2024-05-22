@@ -10,7 +10,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\beauty_package.gif" />
+    <None Remove="images\flowers.png" />
+    <None Remove="images\main.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,8 +30,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\beauty_package.gif" />
-    <Resource Include="Resources\flowers.gif" />
+    <Resource Include="images\flowers.png" />
+    <Resource Include="images\main.png" />
   </ItemGroup>
 
   <ItemGroup>
