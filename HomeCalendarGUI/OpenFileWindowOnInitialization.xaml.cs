@@ -46,7 +46,7 @@ namespace HomeCalendarGUI
             fileDialog = new OpenFileDialog()
             {
                 InitialDirectory = defaultDirectory,
-                Filter = "Database files (*.db)|*.db|All Files|*.*",
+                Filter = "Database files (*.db)|*.db",
                 CheckFileExists = true,
                 CheckPathExists = true,
                 RestoreDirectory = true,

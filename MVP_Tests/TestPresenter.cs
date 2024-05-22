@@ -21,7 +21,7 @@ namespace MVP_Tests
         public List<Dictionary<string, object>> calendarItemsByCategoryAndMonth;
         public bool calledPopulateAllCategoriesComboBox = false;
         public bool calledDisplayErrorMessage = false;
-        public bool calledDisplaySuccessfulMessage = false;
+        public bool calledDisplaySuccessfulMessage = false;    
         public bool calledPopulateCategoryTypesComboBox = false;
         public bool calledShowCalendarItems = false;
         public bool calledShowTotalBusyTimeByMonth = false;
@@ -74,7 +74,7 @@ namespace MVP_Tests
         //{
         //    calledShowCalendarItemsByMonth = true; 
         //}
-
+    
 
         //public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
         //{
@@ -85,7 +85,7 @@ namespace MVP_Tests
 
         public void ShowCalendarItems(List<CalendarItem> items)
         {
-            calledShowCalendarItems = true;
+            calledShowCalendarItems=true;
             calendarItems = items;
         }
 
@@ -188,7 +188,7 @@ namespace MVP_Tests
             p.GetCategoriesTypeInList();
 
             //assert 
-            Assert.True(view.calledPopulateCategoryTypesComboBox);
+            Assert.True(view.calledPopulateCategoryTypesComboBox); 
         }
 
         [Fact]
@@ -256,11 +256,11 @@ namespace MVP_Tests
             TestView view = new TestView();
             List<CalendarItem> expectedResults = TestConstants.getCalendarItems_NoFilters();
             string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
-            Presenter p = new Presenter(view, databasePath);
+            Presenter p = new Presenter(view,databasePath);
 
 
             //act
-            p.GetHomeCalendarItems(null, null, 0, false, false, false, false);
+            p.GetHomeCalendarItems(null,null,0,false,false,false,false);
 
             //assert 
             Assert.True(view.calledShowCalendarItems);
@@ -330,7 +330,7 @@ namespace MVP_Tests
             string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
 
             Presenter presenter = new Presenter(view, databasePath);
-            DateTime startDate = new DateTime(2024, 5, 5);
+            DateTime startDate = new DateTime(2024, 5, 5);            
             string description = "Team Meeting";
             int categoryId = 1;
             double duration = 120;

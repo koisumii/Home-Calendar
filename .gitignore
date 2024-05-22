@@ -6,6 +6,7 @@
 # ignoring some databases
 messy.db
 newdb.db
+defaultDB.db
 
 # User-specific files
 *.rsuser
@@ -366,8 +367,8 @@ MigrationBackup/
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
 /HomeCalendarGUI/dlls/Model
-*.db
 /HomeCalendarGUI/dlls
 /HomeCalendar
 /Milestone3_tests/messy.db
 /Milestone3_tests/messyDB
+/Milestone3_tests
