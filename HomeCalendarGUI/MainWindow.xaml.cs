@@ -80,7 +80,8 @@ namespace HomeCalendarGUI
         #region IView
         public async void DisplayErrorMessage(string msg)
         {
-            message.Foreground = Brushes.Red;
+            message.Foreground = Brushes.PaleVioletRed;
+            message.FontWeight = FontWeights.ExtraBold;
             message.Text = msg;
             await Task.Delay(10000);
             message.Text = null;
@@ -88,7 +89,8 @@ namespace HomeCalendarGUI
 
         public async void DisplaySuccessfulMessage(string msg)
         {
-            message.Foreground = Brushes.Green;
+            message.Foreground = Brushes.LightGreen;
+            message.FontWeight = FontWeights.ExtraBold;
             message.Text = msg;
             await Task.Delay(10000);
             message.Text = null;

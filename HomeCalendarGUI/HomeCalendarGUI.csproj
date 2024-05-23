@@ -6,11 +6,17 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>owl_themed_RZE_icon.ico</ApplicationIcon>
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Resources\beauty_package.gif" />
+    <None Remove="images\flowers.png" />
+    <None Remove="images\main.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="owl_themed_RZE_icon.ico" />
   </ItemGroup>
 
   <ItemGroup>
@@ -26,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Resources\beauty_package.gif" />
-    <Resource Include="Resources\flowers.gif" />
+    <Resource Include="images\flowers.png" />
+    <Resource Include="images\main.png" />
   </ItemGroup>
 
   <ItemGroup>

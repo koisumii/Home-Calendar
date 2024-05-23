@@ -59,25 +59,5 @@ namespace HomeCalendarGUI.Properties {
                 resourceCulture = value;
             }
         }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] beauty_package {
-            get {
-                object obj = ResourceManager.GetObject("beauty_package", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Byte[].
-        /// </summary>
-        internal static byte[] flowers {
-            get {
-                object obj = ResourceManager.GetObject("flowers", resourceCulture);
-                return ((byte[])(obj));
-            }
-        }
     }
 }
