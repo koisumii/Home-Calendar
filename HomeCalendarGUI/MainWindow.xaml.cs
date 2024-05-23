@@ -325,16 +325,8 @@ namespace HomeCalendarGUI
                     DisplayErrorMessage("Please enter a valid description.");
                     return;
                 }
-
-                try
-                {
-                    presenter.AddNewCategory(desc, type);
-                }
-                catch
-                {
-                    DisplayErrorMessage("There was an error. Please try again.");
-                }
                 
+                presenter.AddNewCategory(desc, type);                
                 DescriptionBox.Clear();
                 categoryTypecmbBox.SelectedIndex = -1;
                 RefreshMainView();                
@@ -405,8 +397,7 @@ namespace HomeCalendarGUI
             }
             catch
             {
-                DisplayErrorMessage("There was an error. Please try again.");
-                //MessageBox.Show("Unable to add this event: "+ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                DisplayErrorMessage("There was an error. Please try again.");                
             }
 
             // Clear the input fields 

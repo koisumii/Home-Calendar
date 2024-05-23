@@ -78,8 +78,15 @@ namespace HomeCalendarGUI
             }
             else
             {
-                model.categories.Add(desc, type);
-                view.DisplaySuccessfulMessage("Category has been successfully added!");
+                try
+                {
+                    model.categories.Add(desc, type);
+                    view.DisplaySuccessfulMessage("Category has been successfully added!");
+                }
+                catch
+                {
+                    view.DisplayErrorMessage("There was an error. Please try again.");
+                }                
             }     
         }
 
@@ -92,11 +99,18 @@ namespace HomeCalendarGUI
         /// <param name="duration">Duration of the event</param>
         public void AddNewEvent(DateTime startDate, int categoryId, string description, double duration)
         {
-            // Here we call the Add method of the Events class from your model
-            model.events.Add(startDate, categoryId, duration, description);
-
-            // You might want to call a method to update the UI or a list of events here as well
-            view.DisplaySuccessfulMessage("Event added successfully.");            
+            try
+            {
+                // Here we call the Add method of the Events class from your model
+                model.events.Add(startDate, categoryId, duration, description);
+                
+                // You might want to call a method to update the UI or a list of events here as well
+                view.DisplaySuccessfulMessage("Event added successfully.");
+            }
+            catch
+            {
+                view.DisplayErrorMessage("There was an error. Please try again.");
+            }
         }
 
         /// <summary>
@@ -197,9 +211,7 @@ namespace HomeCalendarGUI
                     items = model.GetCalendarItems(null, null, filterDataByCategory, categoryId);
                 }                
                 
-                view.ShowCalendarItems(items);
-                
-                //view.ShowCalendarItemsWithDateFiltersOn(items);
+                view.ShowCalendarItems(items);              
             }
         }
 
@@ -211,7 +223,14 @@ namespace HomeCalendarGUI
             model.events.DeleteEvent(eventId);
         }
 
-
+        /// <summary>
+        /// Updates an event on the database
+        /// </summary>
+        /// <param name="eventId">Event Id</param>
+        /// <param name="startDate">Start Date of the event</param>
+        /// <param name="duration">Duration of the event</param>
+        /// <param name="desc">Description of the event</param>
+        /// <param name="category">Category of the event</param>
         public void UpdateEvent(int eventId, DateTime? startDate, double? duration, string? desc, int? category)
         {
             try

@@ -8,13 +8,14 @@ using System.Runtime.CompilerServices;
 using System.Windows.Controls.Primitives;
 using Xunit;
 using Xunit.Sdk;
+using System.Diagnostics.Contracts;
 
 namespace MVP_Tests
 {
     public class TestView : IView
     {
         public List<Category> categories;
-        public List<Event> events;
+        //public List<Event> events;
         public List<CalendarItem> calendarItems;
         public List<CalendarItemsByCategory> calendarItemsByCategory;
         public List<CalendarItemsByMonth> calendarItemsByMonth;
@@ -34,6 +35,11 @@ namespace MVP_Tests
             this.categories = categories;
         }
 
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
+        {
+            calledPopulateCategoryTypesComboBox = true;            
+        }
+
         public void DisplayErrorMessage(string msg)
         {
             calledDisplayErrorMessage = true;
@@ -42,11 +48,6 @@ namespace MVP_Tests
         public void DisplaySuccessfulMessage(string msg)
         {
             calledDisplaySuccessfulMessage = true;
-        }
-
-        public void PopulateCategoryTypesComboBox(List<Category> categories)
-        {
-            calledPopulateCategoryTypesComboBox = true;
         }
 
         public void ShowCalendarItems(List<CalendarItem> items)
@@ -72,40 +73,6 @@ namespace MVP_Tests
             calledShowTotalBusyTimeByMonthAndCategory = true;
             calendarItemsByCategoryAndMonth = itemsByCategoryAndMonth;
         }
-
-        #region Dead Code
-        //public bool calledShowCalendarItemOnDataGrid = false;
-        //public bool calledShowCalendarItemsWithDateFiltersOn = false;
-        //public bool calledShowEventsOnDataGrid = false;
-        //public bool calledShowEventsWithFiltersOn = false;
-        //public bool calledShowCalendarItemsWithCategoryFiltersOn = false;
-        //public bool calledShowCalendarItemsByMonth = false;
-
-        //public void ShowCalendarItemsOnDataGrid(List<CalendarItem> calendarItems)
-        //{
-        //    calledShowCalendarItemOnDataGrid = true;   
-        //    this.calendarItems = calendarItems;
-        //}
-
-        //public void ShowCalendarItemsWithCategoryFiltersOn(List<CalendarItem> calendarItems)
-        //{
-        //    this.calendarItems = calendarItems;
-        //    calledShowCalendarItemsWithCategoryFiltersOn = true;
-        //}
-
-        //public void ShowCalendarItemsFilteredByMonth(Dictionary<string, double> itemsByMonthAndTime)
-        //{
-        //    calledShowCalendarItemsByMonth = true; 
-        //}
-
-
-        //public void ShowCalendarItemsWithDateFiltersOn(List<CalendarItem> calendarItems)
-        //{
-        //    calledShowCalendarItemsWithDateFiltersOn = true;
-        //    this.calendarItems = calendarItems;
-
-        //}
-        #endregion
     }
 
     public class TestPresenter
@@ -210,6 +177,70 @@ namespace MVP_Tests
 
             //assert 
             Assert.True(view.calledPopulateCategoryTypesComboBox); 
+        }
+
+        [Fact]
+        public void Test_AddAnEvent_Success()
+        {
+            //Arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, messyDB);
+
+            //act
+            p.AddNewEvent(DateTime.Parse("January 11,2013"), 1,"App Dev finalization", 30);           
+
+            //assert
+            Assert.True(view.calledDisplaySuccessfulMessage);
+        }
+
+        [Fact]
+        public void Test_AddAnEvent_Fail()
+        {
+            //Arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.AddNewEvent(DateTime.Parse("January 11,2013"), -1, "App Dev finalization", 30);
+
+            //assert
+            Assert.True(view.calledDisplayErrorMessage);
+        }
+
+        [Fact]
+        public void TestUpdateEvent_Success()
+        {
+            //arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, messyDB);
+
+            //act
+            p.UpdateEvent(1, new DateTime(2024, 05, 11), 60, "updated description", 12);
+
+            //assert 
+            Assert.True(view.calledDisplaySuccessfulMessage);
+        }
+
+        [Fact]
+        public void TestUpdateEvent_Fail()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.UpdateEvent(56, null, 60, "updated description", null);
+
+            //assert 
+            Assert.True(view.calledDisplayErrorMessage);
         }
 
         [Fact]
@@ -491,141 +522,5 @@ namespace MVP_Tests
             // Assert
             Assert.True(view.calledDisplayErrorMessage);
         }
-
-        [Fact]
-        public void TestUpdateEvent_Success()
-        {
-            //arrange
-            String folder = TestConstants.GetSolutionDir();
-            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
-            String messyDB = $"{folder}\\messy.db";
-            File.Copy(goodDB, messyDB, true);
-            TestView view = new TestView();
-            Presenter p = new Presenter(view, messyDB);
-
-            //act
-            p.UpdateEvent(1, new DateTime(2024, 05, 11), 60, "updated description", 12);
-
-            //assert 
-            Assert.True(view.calledDisplaySuccessfulMessage);
-        }
-
-        [Fact]
-        public void TestUpdateEvent_Fail()
-        {
-            //arrange
-            TestView view = new TestView();
-            Presenter p = new Presenter(view);
-
-            //act
-            p.UpdateEvent(56, null, 60, "updated description", null);
-
-            //assert 
-            Assert.True(view.calledDisplayErrorMessage);
-        }
-
-        #region DeadCode
-        //[Fact]
-        //public void Test_GetCalendarItemsFilteredByMonth_Fail()
-        //{
-        //    //arrange
-        //    TestView view = new TestView();
-        //    Presenter p = new Presenter(view);
-
-        //    //act 
-        //    //p.GetCalendarItemsFilteredByMonth(new DateTime(2020, 01, 01), new DateTime(2018, 01, 01));
-
-        //    //assert
-        //    Assert.True(view.calledDisplayErrorMessage);
-        //}
-
-
-        //[Fact]
-        //Taken care of by Test_GetHomeCalendarItems_Calendar_FilterByCategory_On
-        //public void TestGetEventsFilteredByCategory_ShouldDisplayCorrectEvents()
-        //{
-
-        //    // Arrange
-        //    TestView view = new TestView();
-        //    string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
-
-        //    Presenter presenter = new Presenter(view, databasePath);
-
-        //    int testCategoryId = 2;
-
-        //    // Act
-        //    //presenter.GetEventsFilteredByCategory(testCategoryId);
-
-        //    // Assert
-        //    // Check that the correct method on the view was called to display filtered events
-        //    //Assert.True(view.calledShowCalendarItemsWithCategoryFiltersOn);
-
-        //    // Ensures that every item in view.calendarItems matches the expected category ID
-        //    // which confirms that the filtering logic is functioning correctly
-        //    Assert.All(view.calendarItems, item => Assert.Equal(testCategoryId, item.CategoryID));
-        //}
-
-        /*
-        [Fact]
-        public void TestFilterByCategoryWithNoEventsYet()
-        {
-            // Arrange
-            string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
-            TestView view = new TestView();
-            Presenter presenter = new Presenter(view, databasePath);
-            int newCategoryId = ..;  // category ID that currently has no events
-            // confused when creating this test because I am not able to fetch any newly created id
-
-            // Act
-            presenter.GetEventsFilteredByCategory(newCategoryId);
-
-            // Assert
-            Assert.True(view.calledShowCalendarItemsWithCategoryFiltersOn);
-            Assert.Empty(view.calendarItems);  // Check if no events are displayed
-        }
-        */
-        //public void TestRealTimeUpdatesOnUI()
-        //{
-        //    // Arrange
-        //    TestView view = new TestView();
-        //    string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
-
-        //    Presenter presenter = new Presenter(view, databasePath);
-        //    DateTime startDate = new DateTime(2024, 5, 5);            
-        //    string description = "Team Meeting";
-        //    int categoryId = 1;
-        //    double duration = 120;
-
-        //    // Act
-        //    presenter.AddNewEvent(startDate, categoryId, description, duration);
-
-        //    // Assert
-        //    Assert.True(view.calledDisplaySuccessfulMessage);
-        //    // Confirm that the grid update method was triggered
-        //    //Assert.True(view.calledShowCalendarItemOnDataGrid);
-        //}
-
-        //[Fact]
-        //public void TestUILoadUnderHeavyUse()
-        //{
-        // welp... this failed 
-        //    // Arrange
-        //    TestView view = new TestView();
-        //    view.ClearCalendarItems();
-        //    string databasePath = $"{TestConstants.GetSolutionDir()}\\{TestConstants.testDBInputFile}";
-
-        //    Presenter presenter = new Presenter(view, databasePath);
-
-        //    // Act
-        //    for (int i = 0; i < 1000; i++)
-        //    {
-        //        presenter.AddNewEvent(DateTime.Now, DateTime.Now.AddHours(1), 1, "Stress Test Event " + i, 60);
-        //    }
-
-        //    // Assert
-        //    Assert.True(view.calledShowCalendarItemOnDataGrid);
-        //    Assert.Equal(1000, view.calendarItems.Count(e => e.ShortDescription.StartsWith("Stress Test Event")));
-        //}
-        #endregion
     }
 }
