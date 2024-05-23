@@ -139,9 +139,13 @@ namespace MVP_Tests
         [Fact]
         public void TestAddCategory_Fail()
         {
-            //arrange 
+            //arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
             TestView view = new TestView();
-            Presenter p = new Presenter(view);
+            Presenter p = new Presenter(view, messyDB);
 
             //act
             p.AddNewCategory(null, Category.CategoryType.Event);
@@ -154,8 +158,12 @@ namespace MVP_Tests
         public void TestAddCategory_Success()
         {
             //arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
             TestView view = new TestView();
-            Presenter p = new Presenter(view);
+            Presenter p = new Presenter(view, messyDB);
 
             //act
             p.AddNewCategory("description", Category.CategoryType.Holiday);
@@ -484,6 +492,38 @@ namespace MVP_Tests
             Assert.True(view.calledDisplayErrorMessage);
         }
 
+        [Fact]
+        public void TestUpdateEvent_Success()
+        {
+            //arrange
+            String folder = TestConstants.GetSolutionDir();
+            String goodDB = $"{folder}\\{TestConstants.testDBInputFile}";
+            String messyDB = $"{folder}\\messy.db";
+            File.Copy(goodDB, messyDB, true);
+            TestView view = new TestView();
+            Presenter p = new Presenter(view, messyDB);
+
+            //act
+            p.UpdateEvent(1, new DateTime(2024, 05, 11), 60, "updated description", 12);
+
+            //assert 
+            Assert.True(view.calledDisplaySuccessfulMessage);
+        }
+
+        [Fact]
+        public void TestUpdateEvent_Fail()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.UpdateEvent(56, null, 60, "updated description", null);
+
+            //assert 
+            Assert.True(view.calledDisplayErrorMessage);
+        }
+
         #region DeadCode
         //[Fact]
         //public void Test_GetCalendarItemsFilteredByMonth_Fail()
@@ -586,34 +626,6 @@ namespace MVP_Tests
         //    Assert.True(view.calledShowCalendarItemOnDataGrid);
         //    Assert.Equal(1000, view.calendarItems.Count(e => e.ShortDescription.StartsWith("Stress Test Event")));
         //}
-
-        [Fact]
-        public void TestUpdateEvent_Success()
-        {
-            //arrange
-            TestView view = new TestView();
-            Presenter p = new Presenter(view);
-
-            //act
-            p.UpdateEvent(1, new DateTime(2024, 05, 11), 60, "updated description", 12);
-
-            //assert 
-            Assert.True(view.calledDisplaySuccessfulMessage);
-        }
-
-        [Fact]
-        public void TestUpdateEvent_Fail()
-        {
-            //arrange
-            TestView view = new TestView();
-            Presenter p = new Presenter(view);
-
-            //act
-            p.UpdateEvent(56, null, 60, "updated description", null);
-
-            //assert 
-            Assert.True(view.calledDisplayErrorMessage);
-        }
         #endregion
     }
 }
