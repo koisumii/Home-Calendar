@@ -12,7 +12,7 @@ namespace CalendarCodeTests
     public class TestConstants
     {
 
-        private static Event Event1 = new Event(1, new DateTime(2018, 1, 10, 10,00,00), 3, 40, "App Dev Homework");
+        private static Event Event1 = new Event(1, new DateTime(2018, 1, 10, 10, 00, 00), 3, 40, "App Dev Homework");
         private static CalendarItem CalendarItem1 = new CalendarItem
         {
             CategoryID = Event1.Category,
@@ -462,7 +462,7 @@ namespace CalendarCodeTests
 
         static public List<Category> getDefaultCategories()
         {
-            return new List<Category> { 
+            return new List<Category> {
             new Category(1,"School", Category.CategoryType.Event),
             new Category(2,"Work", Category.CategoryType.Event),
             new Category(3,"Fun", Category.CategoryType.Event),
@@ -493,7 +493,3 @@ namespace CalendarCodeTests
 
     }
 }
-
-
-
-

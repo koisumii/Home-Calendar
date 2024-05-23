@@ -24,10 +24,10 @@
             for a bit of help given I've only been introduced to using gifs for
             WPF recently
         -->
-        
+
         <Image gif:AnimationBehavior.SourceUri="Resources/flowers.gif" 
                Stretch="Fill" Grid.RowSpan="3" Grid.ColumnSpan="2"/>
-        
+
         <TextBlock Text="Home Calendar Application" FontSize="20" FontWeight="Bold"
                    HorizontalAlignment="Left" TextAlignment="Center" Padding="10" Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2" Margin="264,0,0,0" Foreground="AliceBlue"/>
 
@@ -64,7 +64,7 @@
                         <TextBlock TextAlignment="Center">Change Calendar File <LineBreak/> Location</TextBlock>
                     </Button>
                 </GroupBox>
-            </StackPanel> 
+            </StackPanel>
         </ScrollViewer>
 
         <StackPanel Grid.Row="1" Grid.Column="1">
@@ -107,6 +107,7 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="Btn_DeleteEvent" Header="Delete"/>
+                    <MenuItem Click="Btn_UpdateEvent" Header="Update"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>

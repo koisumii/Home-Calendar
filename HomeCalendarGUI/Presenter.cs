@@ -1,3 +1,4 @@
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -13,6 +14,7 @@ using static Calendar.Category;
 using System.Collections;
 using System.Data;
 using System.Windows;
+using System.ComponentModel.DataAnnotations;
 
 namespace HomeCalendarGUI
 {
@@ -22,13 +24,13 @@ namespace HomeCalendarGUI
     public class Presenter
     {
         private readonly HomeCalendar model;
-        private readonly IView view;        
+        private readonly IView view;       
 
         /// <summary>
         /// Instantiates presenter with default settings and default database
         /// </summary>
         /// <param name="v">IView interface implemented class</param>
-        public Presenter(IView v) 
+        public Presenter(IView v)
         {
             model = new HomeCalendar();
             view = v;
@@ -39,9 +41,9 @@ namespace HomeCalendarGUI
         /// </summary>
         /// <param name="v">IView interface implemented class</param>
         /// <param name="dbFile">File path to the database</param>
-        public Presenter(IView v,string dbFile)
+        public Presenter(IView v, string dbFile)
         {
-            view = v; 
+            view = v;
             try
             {
                 model = new HomeCalendar(dbFile, false);
@@ -72,13 +74,13 @@ namespace HomeCalendarGUI
         {
             if (desc == null || type == null)
             {
-                view.DisplayErrorMessage("You can not leave any empty boxes."); 
+                view.DisplayErrorMessage("You can not leave any empty boxes.");
             }
             else
             {
                 model.categories.Add(desc, type);
                 view.DisplaySuccessfulMessage("Category has been successfully added!");
-            }            
+            }     
         }
 
         /// <summary>
@@ -100,7 +102,7 @@ namespace HomeCalendarGUI
         /// <summary>
         /// Gets all category types 
         /// </summary>
-        public void GetCategoriesTypeInList() 
+        public void GetCategoriesTypeInList()
         {
             view.PopulateCategoryTypesComboBox(model.categories.List());
         }
@@ -206,7 +208,22 @@ namespace HomeCalendarGUI
         /// </summary>
         public void DeleteAnEvent(int eventId)
         {
-            model.events.DeleteEvent(eventId);            
+            model.events.DeleteEvent(eventId);
+        }
+
+
+        public void UpdateEvent(int eventId, DateTime? startDate, double? duration, string? desc, int? category)
+        {
+            try
+            {
+                model.events.Update(eventId, startDate, category, duration, desc);
+                view.DisplaySuccessfulMessage("Event has been updated successfully!");
+                GetHomeCalendarItems(null, null, 0, false, false, false, false);
+            }
+            catch (Exception ex) 
+            {
+                view.DisplayErrorMessage($"Something went wrong while updating: {ex}");
+            }
         }
     }
 }

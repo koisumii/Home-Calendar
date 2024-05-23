@@ -12,7 +12,7 @@ using Xunit.Sdk;
 namespace MVP_Tests
 {
     public class TestView : IView
-    {        
+    {
         public List<Category> categories;
         public List<Event> events;
         public List<CalendarItem> calendarItems;
@@ -33,7 +33,7 @@ namespace MVP_Tests
             calledPopulateAllCategoriesComboBox = true;
             this.categories = categories;
         }
-        
+
         public void DisplayErrorMessage(string msg)
         {
             calledDisplayErrorMessage = true;
@@ -118,7 +118,7 @@ namespace MVP_Tests
 
             //act
             Presenter p = new Presenter(view);
-
+          
             //assert
             Assert.IsType<Presenter>(p);
         }
@@ -144,21 +144,21 @@ namespace MVP_Tests
             Presenter p = new Presenter(view);
 
             //act
-            p.AddNewCategory(null, Category.CategoryType.Event); 
+            p.AddNewCategory(null, Category.CategoryType.Event);
 
             //assert   
             Assert.True(view.calledDisplayErrorMessage);
         }
 
         [Fact]
-        public void TestAddCategory_Success() 
+        public void TestAddCategory_Success()
         {
             //arrange
             TestView view = new TestView();
             Presenter p = new Presenter(view);
 
             //act
-            p.AddNewCategory("description", Category.CategoryType.Holiday); 
+            p.AddNewCategory("description", Category.CategoryType.Holiday);
 
             //assert
             Assert.True(view.calledDisplaySuccessfulMessage);
@@ -225,7 +225,7 @@ namespace MVP_Tests
             List<CalendarItem> results = view.calendarItems;
 
             //Assert
-            Assert.True(results.Count < initial.Count);            
+            Assert.True(results.Count < initial.Count);        
         }
 
         [Fact]
@@ -587,6 +587,33 @@ namespace MVP_Tests
         //    Assert.Equal(1000, view.calendarItems.Count(e => e.ShortDescription.StartsWith("Stress Test Event")));
         //}
 
+        [Fact]
+        public void TestUpdateEvent_Success()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.UpdateEvent(1, new DateTime(2024, 05, 11), 60, "updated description", 12);
+
+            //assert 
+            Assert.True(view.calledDisplaySuccessfulMessage);
+        }
+
+        [Fact]
+        public void TestUpdateEvent_Fail()
+        {
+            //arrange
+            TestView view = new TestView();
+            Presenter p = new Presenter(view);
+
+            //act
+            p.UpdateEvent(56, null, 60, "updated description", null);
+
+            //assert 
+            Assert.True(view.calledDisplayErrorMessage);
+        }
         #endregion
     }
 }

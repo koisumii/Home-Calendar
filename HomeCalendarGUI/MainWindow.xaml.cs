@@ -1,4 +1,5 @@
-﻿using Calendar;
+﻿
+using Calendar;
 using System.Data.SQLite;
 using System.Text;
 using System.Windows;
@@ -30,6 +31,8 @@ namespace HomeCalendarGUI
     public partial class MainWindow : Window, IView
     {
         private readonly Presenter presenter;
+        private UpdateEventsWindow updateEventsWindow;
+        private List<Category> categories; 
 
         private OpenFolderDialog openFolderDialog;
         
@@ -65,6 +68,7 @@ namespace HomeCalendarGUI
             else
             {
                 presenter = new Presenter(this, filePath);
+
             }
 
             presenter.GetCategoriesForAllCatsComboBoxes();
@@ -92,6 +96,7 @@ namespace HomeCalendarGUI
 
         public void PopulateCategoriesInAllCatsComboBox(List<Category> categories)
         {
+            this.categories = categories;
             catsComboBox.Items.Clear();
             CategoryFilterCmb.Items.Clear();
             
@@ -299,7 +304,7 @@ namespace HomeCalendarGUI
             {
                 fileDirectoryToStore = openFolderDialog.FolderName;
                 openFolderDialog.InitialDirectory = fileDirectoryToStore;
-                openFolderDialog.FolderName = "";                                             
+                openFolderDialog.FolderName = "";
             }
         }
 
@@ -418,9 +423,9 @@ namespace HomeCalendarGUI
 
         private void Btn_DeleteEvent(object sender, RoutedEventArgs e)
         {
-            if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event",MessageBoxButton.YesNo,MessageBoxImage.Warning) == MessageBoxResult.Yes)
+            if (MessageBox.Show("Are you sure you want to permanently delete this event?", "Deleting an Event", MessageBoxButton.YesNo, MessageBoxImage.Warning) == MessageBoxResult.Yes)
             {
-                CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;                
+                CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
                 try
                 {
                     if(item == null)
@@ -437,7 +442,21 @@ namespace HomeCalendarGUI
                 RefreshMainView();
             }
         }
-        
+
+        private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
+        {
+            CalendarItem item = CalendarItemsDataGrid.SelectedItem as CalendarItem;
+
+            updateEventsWindow = new UpdateEventsWindow(presenter, categories, item, this);
+            this.Hide();
+
+            DateFilterCheckBox.IsChecked = false;
+            SummaryByMonthCheckBox.IsChecked = false;
+            SummaryByCategoryCheckBox.IsChecked = false;
+
+            updateEventsWindow.Show();
+        }
+
         private void CloseApplication(object sender, RoutedEventArgs e)
         {
             Close();
@@ -472,26 +491,26 @@ namespace HomeCalendarGUI
                     presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);                   
                 }
             }
-            catch(InvalidOperationException ex)
+            catch (InvalidOperationException ex)
             {
-                if(ex is InvalidOperationException)
+                if (ex is InvalidOperationException)
                 {
                     MessageBox.Show($"Date Filter Error: {ex.Message}", "DateTime Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
                 else
                 {
                     MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }               
+                }
                 DateFilterCheckBox.IsChecked = false;
                 Start.SelectedDate = null;
                 End.SelectedDate = null;
             }
-        }               
+        }
 
         private void FilterByCategoryCheckBox_Click(object sender, RoutedEventArgs e)
         {
             try
-            {                
+            {
                 //Check if the user is filtering by category and/ or month
                 bool summaryByMonth = (bool)SummaryByMonthCheckBox.IsChecked;
                 bool summaryByCategory = (bool)SummaryByCategoryCheckBox.IsChecked;
@@ -512,10 +531,10 @@ namespace HomeCalendarGUI
                     bool filterByDate = (bool)DateFilterCheckBox.IsChecked;
                     Category cat = CategoryFilterCmb.SelectedItem as Category;
                     int categoryId = cat.Id;
-                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth,filterByCategory);
+                    presenter.GetHomeCalendarItems(null, null, categoryId, filterByDate, summaryByCategory, summaryByMonth, filterByCategory);
                 }
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 if (ex is InvalidOperationException)
                 {
@@ -566,10 +585,10 @@ namespace HomeCalendarGUI
                 {
                     MessageBox.Show($"Unknown Error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-                SummaryByMonthCheckBox.IsChecked = false;                
+                SummaryByMonthCheckBox.IsChecked = false;
             }
         }
-        
+
         private void SummaryByCategory_Click(object sender, RoutedEventArgs e)
         {
             try
