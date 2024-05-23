@@ -142,6 +142,22 @@ namespace CalendarCodeTests
         public static CalendarItemsByMonth CalendarItemsByMonth_FirstRecord_FilteredCat9 = getCalendarItemsBy2020_01_filteredByCat9()[0];
         public static int CalendarItemsByMonth_2018_FilteredByCat2_number = 1;
 
+        public static List<CalendarItem> getCalendarItems_NoFilters()
+        {
+            return new List<CalendarItem>
+            {
+                CalendarItem1,
+                CalendarItem2,
+                CalendarItem3,
+                CalendarItem4,
+                CalendarItem5,
+                CalendarItem6,
+                CalendarItem7,
+                CalendarItem8,
+                CalendarItem9
+            };
+        }
+
 
         public static List<CalendarItemsByMonth> getCalendarItemsBy2018_01()
         {

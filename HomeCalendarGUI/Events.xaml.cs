@@ -18,12 +18,12 @@ namespace HomeCalendarGUI
     /// <summary>
     /// Interaction logic for Events.xaml
     /// </summary>
-    public partial class Events : Window, IView
+    public partial class Events : Window
     {
         private Presenter _presenter;
         public Events()
         {
-            _presenter = new Presenter(this); 
+            //_presenter = new Presenter(this); 
             InitializeComponent();
 
             //also put this in presenter
@@ -52,7 +52,7 @@ namespace HomeCalendarGUI
             EndDate.DisplayDateStart = DateTime.Now;
         }
 
-        public void ShowInformationOnCmb(List<Category> categories)
+        public void PopulateCategoryTypesComboBox(List<Category> categories)
         {
             //List<Category> categories = _presenter.GetCategoriesList();
             for (int i = 0; i < categories.Count; i++)
@@ -61,7 +61,7 @@ namespace HomeCalendarGUI
             }
         }
 
-        public void ShowCategoriesOnComboBox(List<Category> categories)
+        public void PopulateCategoriesComboBox(List<Category> categories)
         {
             throw new NotImplementedException();
         }
@@ -96,5 +96,24 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
+        public void ShowCalendarItems(List<CalendarItem> items)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowTotalBusyTimeByMonth(List<CalendarItemsByMonth> itemsByMonth)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowCalendarItemsByCategory(List<CalendarItemsByCategory> itemsByCategory)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ShowTotalBusyTimeByMonthAndCategory(List<Dictionary<string, object>> itemsByCategoryAndMonth)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
