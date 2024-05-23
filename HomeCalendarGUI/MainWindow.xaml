@@ -89,7 +89,7 @@
             </GroupBox>
         </StackPanel>
 
-        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,160,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
+        <DataGrid IsReadOnly="True" x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,160,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#3e8fec" Foreground="#10103d" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="DGStartDate" Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn x:Name="DGStartTime" Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>
