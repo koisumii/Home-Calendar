@@ -70,9 +70,6 @@
                 
                 <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
                 <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa"/>
-                <CheckBox x:Name="FilterByMonthCheckBox" Click="CheckBox_ByMonthFilterCheckBox" Margin="5,0,0,0" Foreground="AliceBlue" FontWeight="DemiBold" FontFamily="Comfortaa">Filter By Month</CheckBox>
-                <DatePicker x:Name="Start" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa" Opacity="0.8"/>
-                <DatePicker x:Name="End" Margin="5,0,0,0" FontWeight="DemiBold" FontFamily="Comfortaa" Opacity="0.8"/>
             </WrapPanel>
             <StackPanel Orientation="Horizontal">
                 <TextBlock Text="Filter by Category:" Margin="5,0,0,0" VerticalAlignment="Center" FontWeight="Bold" Foreground="AliceBlue"/>
@@ -88,7 +85,7 @@
             </GroupBox>
         </StackPanel>
 
-        <DataGrid x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,95,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#88ECD6EB" Foreground="#4F695D" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2" HorizontalAlignment="Stretch" ColumnWidth="*">
+        <DataGrid IsReadOnly="True" x:Name="CalendarItemsDataGrid" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" Grid.Column="1" Margin="10,160,40,10" Grid.Row="1" AutoGenerateColumns="False" Background="#88ECD6EB" Foreground="#4F695D" FontWeight="DemiBold" FontFamily="Comfortaa" Grid.RowSpan="2">
             <DataGrid.Columns>
                 <DataGridTextColumn x:Name="DGStartDate" Header="Start Date" Binding="{Binding StartDateTime, StringFormat=\{0:yyyy/MM/dd\}}"/>
                 <DataGridTextColumn x:Name="DGStartTime" Header="Start Time" Binding="{Binding StartDateTime, StringFormat=\{0:hh:mm:ss\}}"/>
@@ -109,6 +106,7 @@
             <DataGrid.ContextMenu>
                 <ContextMenu>
                     <MenuItem Click="Btn_DeleteEvent" Header="Delete"/>
+                    <MenuItem Click="Btn_UpdateEvent" Header="Update"/>
                 </ContextMenu>
             </DataGrid.ContextMenu>
         </DataGrid>
