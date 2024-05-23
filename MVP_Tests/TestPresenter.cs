@@ -388,7 +388,7 @@ namespace MVP_Tests
             Presenter p = new Presenter(view);
 
             //act
-            p.UpdateEvent(1, null, 60, "updated description", null);
+            p.UpdateEvent(1, new DateTime(2024, 05, 11), 60, "updated description", 12);
 
             //assert 
             Assert.True(view.calledDisplaySuccessfulMessage);
