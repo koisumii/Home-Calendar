@@ -118,6 +118,11 @@ namespace HomeCalendarGUI
             throw new NotImplementedException();
         }
 
+
+        public void PopulateCategoriesInAllCatsComboBox(List<Category> categories)
+        {
+            throw new NotImplementedException();
+        }
         #endregion
 
         private void Btn_UpdateEvent(object sender, RoutedEventArgs e)
@@ -176,5 +181,7 @@ namespace HomeCalendarGUI
 
 
         }
+
+        
     }
 }
