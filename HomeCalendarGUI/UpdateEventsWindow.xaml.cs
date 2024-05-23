@@ -2,7 +2,9 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Entity.Core.Metadata.Edm;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -126,27 +128,40 @@ namespace HomeCalendarGUI
             try
             {
                 //this is a must
-                
                 int eventId = itemToUpdate.EventID;
 
+                //retrieving the correct date and time
                 var startTimePicker = (TimePicker)StartTimeGrid.Children[0];
+                DateTime startDate = (DateTime)StartDate.SelectedDate;
 
-                //getting all other fields of an event
-                string decription = EventDescriptionBox.Text;
-                DateTime? startDate = StartDate.SelectedDate;
-                Category category = (Category)updatedCategoriesCmb.SelectedItem;
-                int categoryId = category == null ? 12: category.Id ;
-
-                //getting duration in minutes
-                if (!double.TryParse(EndTime.Text, out double endTimeInMinutes))
+                if (startTimePicker == null || startDate == null)
                 {
-                    DisplayErrorMessage("Please enter a number for your duration in minutes.");
+                    DisplayErrorMessage("Time and date must be both filled out");
                     return;
                 }
 
-                presenter.UpdateEvent(eventId, startDate, endTimeInMinutes, decription, categoryId);
-                //openFileWindow = new OpenFileWindowOnInitialization();
-                //openFileWindow.Show();
+                DateTime tmpTime = (DateTime)startTimePicker.Value;
+                TimeSpan time = new TimeSpan(tmpTime.Hour, tmpTime.Minute, tmpTime.Second);
+                DateTime dateAndTime = startDate.Add(time);
+
+                //getting all other fields of an event
+                string decription = EventDescriptionBox.Text;
+                Category category = (Category)updatedCategoriesCmb.SelectedItem;
+                int categoryId = category == null ? 12: category.Id ;
+                double duration = 0 ; 
+
+                //getting duration in minutes
+                if(EndTime.Text != "")
+                {
+                    if (!double.TryParse(EndTime.Text, out duration))
+                    {
+                        DisplayErrorMessage("Please enter a number for your duration in minutes.");
+                        return;
+                    }
+                }
+                
+                presenter.UpdateEvent(eventId, dateAndTime, duration, decription, categoryId);
+                
 
                 mainWindow.Show();
                 this.Close();
